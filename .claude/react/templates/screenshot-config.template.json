@@ -1,0 +1,21 @@
+{
+  "baseUrl": "http://127.0.0.1:5173",
+  "viewports": {
+    "mobile": { "width": 375, "height": 812 },
+    "tablet": { "width": 768, "height": 1024 }
+  },
+  "auth": {
+    "loginPath": "/login",
+    "emailSelector": "input[type=\"email\"], input[name=\"email\"]",
+    "passwordSelector": "input[type=\"password\"], input[name=\"password\"]",
+    "submitSelector": "button[type=\"submit\"]",
+    "successUrlPattern": "**/dashboard/**"
+  },
+  "contexts": {
+    "public": {
+      "credentials": null,
+      "pages": []
+    }
+  },
+  "outputDir": ".claude-project/screenshots"
+}

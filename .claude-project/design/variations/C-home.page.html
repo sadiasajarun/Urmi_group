@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urmi Group — Variation C · Cinematic Mill</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urmi-blue': '#1B4F8E',
+              'urmi-blue-deep': '#0E2748',
+              'urmi-blue-night': '#061528',
+              'wave-blue': '#5BA0DE',
+              'wave-blue-bright': '#8FCBFF',
+              'moss': '#4A7864',
+              'moss-deep': '#2D5044',
+              'cream': '#F5EFE3',
+              'cream-soft': '#EDE3D1',
+              'paper-text': '#2A1F12',
+              'night-text': '#E8EEF8',
+              'brass': '#B8924E',
+              'brass-soft': '#D4B274',
+            },
+            fontFamily: {
+              serif: ["'Playfair Display'", 'Georgia', 'serif'],
+              sans: ["'Inter'", 'system-ui', 'sans-serif'],
+              mono: ["'IBM Plex Mono'", 'ui-monospace', 'monospace'],
+              bengali: ["'Hind Siliguri'", 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body { background: #0E2748; color: #E8EEF8; font-family: 'Inter', sans-serif; font-weight: 400; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; }
+      .grain::after {
+        content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+        background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        opacity: 0.05;
+      }
+      .brass-frame::before {
+        content: ''; position: absolute; inset: 32px; border: 1px solid #B8924E;
+        pointer-events: none; z-index: 5;
+      }
+    </style>
+  </head>
+  <body class="antialiased overflow-x-hidden">
+    <div class="fixed top-4 right-4 z-[60] bg-cream text-paper-text px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] font-mono shadow-lg">
+      Variation C · Cinematic Mill
+    </div>
+
+    <!-- NAVBAR — dark, mono accents -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-transparent">
+      <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-5 flex items-center justify-between">
+        <div class="bg-cream rounded-full w-12 h-12 flex items-center justify-center font-serif text-lg text-urmi-blue-deep">U</div>
+        <div class="hidden lg:flex items-center gap-7 text-[11px] uppercase tracking-[0.18em] font-mono text-cream">
+          <a href="#" class="hover:text-brass transition-colors py-2">Home</a>
+          <a href="#about" class="hover:text-brass transition-colors py-2">About</a>
+          <a href="#craft" class="hover:text-brass transition-colors py-2">Craft</a>
+          <a href="#" class="hover:text-brass transition-colors py-2">Portfolio</a>
+          <a href="#sustainability" class="hover:text-brass transition-colors py-2">Sustainability</a>
+          <a href="#" class="hover:text-brass transition-colors py-2">Clients</a>
+          <a href="#" class="hover:text-brass transition-colors py-2">Connect</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO — cinematic photograph + brass frame + left-aligned content -->
+    <section class="relative h-screen min-h-[720px] w-full overflow-hidden grain brass-frame">
+      <!-- Photographic background (placeholder gradient simulating warm-graded river at dusk) -->
+      <div class="absolute inset-0 z-0" style="background:
+        radial-gradient(ellipse at 30% 70%, #B8924E 0%, transparent 35%),
+        linear-gradient(180deg, #061528 0%, #0E2748 35%, #1B4F8E 75%, #2D5044 100%);"></div>
+      <!-- Heavy dark overlay for text legibility -->
+      <div class="absolute inset-0 z-10 bg-gradient-to-t from-urmi-blue-night via-urmi-blue-deep/80 to-urmi-blue-deep/30 pointer-events-none"></div>
+
+      <!-- Left-aligned content at 60% from top -->
+      <div class="relative z-20 h-full flex flex-col justify-end pb-32 max-w-[90rem] mx-auto px-12 md:px-20">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-cream mb-6">ঊর্মি · URMI · EST. 1955</span>
+        <h1 class="text-cream text-[clamp(3.5rem,8vw,6.5rem)] leading-[1.05] tracking-tight max-w-[55rem] mb-6 font-serif" style="font-weight: 600;">The wave that clothes the world.</h1>
+        <p class="italic font-serif text-cream text-xl md:text-2xl max-w-xl mb-12 font-normal">Forty years on the river. Sixteen thousand hands.</p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#about" class="bg-cream text-urmi-blue-night uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-brass transition-colors">Discover Our Story</a>
+          <a href="#" class="border border-wave-blue text-wave-blue uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-wave-blue hover:text-urmi-blue-night transition-colors">Partner With Us</a>
+        </div>
+      </div>
+
+      <!-- Bottom-right frame counter -->
+      <div class="absolute bottom-12 right-12 z-20 hidden md:block">
+        <span class="font-mono text-[11px] tracking-[0.22em] text-brass">01 / 12 · ZONES OF CRAFT</span>
+      </div>
+    </section>
+
+    <!-- PILLARS — cream callout cards on full-bleed photo strip -->
+    <section id="about" class="relative bg-urmi-blue-deep text-night-text">
+      <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-24">
+        <div class="mb-14 max-w-3xl">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-brass mb-4 block">// COMPANY AT A GLANCE — ০১</span>
+          <h2 class="text-night-text text-[clamp(2.25rem,5vw,4rem)] leading-[1.1] tracking-tight">Four pillars. One promise.</h2>
+        </div>
+      </div>
+      <!-- Photo strip behind cards -->
+      <div class="relative h-[420px] grain">
+        <div class="absolute inset-0 z-0 grid grid-cols-4">
+          <div style="background: linear-gradient(135deg, #B8924E 0%, #2D5044 100%);"></div>
+          <div style="background: linear-gradient(135deg, #2D5044 0%, #0E2748 100%);"></div>
+          <div style="background: linear-gradient(135deg, #0E2748 0%, #1B4F8E 100%);"></div>
+          <div style="background: linear-gradient(135deg, #1B4F8E 0%, #B8924E 100%);"></div>
+        </div>
+        <div class="absolute inset-0 bg-urmi-blue-deep/30"></div>
+        <!-- Cream callout cards floating on top -->
+        <div class="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-6 px-6 md:px-12 py-12 mx-auto max-w-[90rem]">
+          <div class="bg-cream text-paper-text p-6 border-l-2 border-brass">
+            <span class="font-bengali text-3xl text-urmi-blue-deep block mb-2 font-medium">৪০+</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper-text/70">Years of craft</span>
+          </div>
+          <div class="bg-cream text-paper-text p-6 border-l-2 border-brass">
+            <span class="font-serif text-3xl text-urmi-blue-deep block mb-2">16,800</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper-text/70">Hands shaping every thread</span>
+          </div>
+          <div class="bg-cream text-paper-text p-6 border-l-2 border-brass">
+            <span class="font-serif text-2xl text-urmi-blue-deep block mb-2">Full Green</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper-text/70">First green factory group</span>
+          </div>
+          <div class="bg-cream text-paper-text p-6 border-l-2 border-brass">
+            <span class="font-serif text-3xl text-urmi-blue-deep block mb-2">30+</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper-text/70">Global brands</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BY THE NUMBERS — deepest background, mono captions, brass underlines -->
+    <section class="bg-urmi-blue-night text-night-text py-32 px-6 md:px-12">
+      <div class="mx-auto max-w-[90rem] grid grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-8 text-center lg:text-left">
+        <div class="flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-brass">// PRODUCTION</span>
+          <div class="font-serif text-[clamp(3.5rem,5.5vw,5.5rem)] leading-none text-cream">44+</div>
+          <div class="h-[2px] w-16 bg-brass mx-auto lg:mx-0"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-night-text/70">Tons fabric daily</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-brass">// SHIPMENT</span>
+          <div class="font-serif text-[clamp(3.5rem,5.5vw,5.5rem)] leading-none text-cream">2,50,000+</div>
+          <div class="h-[2px] w-16 bg-brass mx-auto lg:mx-0"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-night-text/70">Garments daily</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-brass">// WATER</span>
+          <div class="font-serif text-[clamp(3.5rem,5.5vw,5.5rem)] leading-none text-cream">4,000+ m³</div>
+          <div class="h-[2px] w-16 bg-brass mx-auto lg:mx-0"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-night-text/70">Wastewater purified</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-brass">// HORIZON</span>
+          <div class="font-serif text-[clamp(3.5rem,5.5vw,5.5rem)] leading-none text-cream">2030</div>
+          <div class="h-[2px] w-16 bg-brass mx-auto lg:mx-0"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-night-text/70">Decarbonization goal</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRAFTS — cinematic full-bleed with cream callout overlay -->
+    <section id="craft" class="relative">
+      <div class="bg-urmi-blue-deep text-night-text px-6 md:px-12 py-20">
+        <div class="mx-auto max-w-[90rem] max-w-3xl">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-brass mb-4 block">// CAPABILITY — ০২</span>
+          <h2 class="text-night-text text-[clamp(2.25rem,5vw,4rem)] leading-[1.1] tracking-tight">Six crafts. One conscience.</h2>
+        </div>
+      </div>
+      <!-- Cinematic photo + cream callout -->
+      <div class="relative h-[700px] grain">
+        <div class="absolute inset-0 z-0" style="background:
+          radial-gradient(ellipse at 60% 40%, #B8924E 0%, transparent 50%),
+          linear-gradient(135deg, #0E2748 0%, #1B4F8E 50%, #2D5044 100%);"></div>
+        <div class="absolute inset-0 bg-urmi-blue-night/40"></div>
+        <!-- Cream callout overlaid bottom-left -->
+        <div class="absolute bottom-12 left-12 md:left-20 max-w-[480px] bg-cream text-paper-text p-10 border border-brass/40 shadow-2xl">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-brass mb-3 block">// No. 01 · Garments</span>
+          <h3 class="font-serif text-3xl md:text-4xl text-urmi-blue-deep mb-4 leading-[1.2]">Garments</h3>
+          <p class="text-base text-paper-text/85 font-light leading-relaxed mb-6">Ninety lines. Eight thousand hands. Precision cut and sewn for the world's most exacting brands.</p>
+          <div class="border-l-2 border-brass pl-3 mb-6">
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-brass">150,000 pieces / day</span>
+          </div>
+          <a href="#" class="font-mono text-[11px] uppercase tracking-[0.22em] text-urmi-blue-deep hover:text-brass transition-colors">→ See the process</a>
+        </div>
+        <!-- Frame counter -->
+        <div class="absolute top-12 right-12 z-10">
+          <span class="font-mono text-[11px] tracking-[0.22em] text-brass">02 / 12</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUSTAINABILITY — radial with bright glow ring -->
+    <section id="sustainability" class="relative py-32 px-6 md:px-12 overflow-hidden" style="background: linear-gradient(180deg, #0E2748 0%, #2D5044 100%);">
+      <div class="mx-auto max-w-[90rem]">
+        <div class="text-center mb-20 max-w-3xl mx-auto">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue-bright mb-4 block">// SUSTAINABILITY — ০৩</span>
+          <h2 class="text-night-text text-[clamp(2.25rem,5vw,4rem)] leading-[1.1] tracking-tight">Five commitments behind every responsible thread.</h2>
+        </div>
+        <div class="flex justify-center">
+          <div class="relative w-80 h-80 lg:w-[26rem] lg:h-[26rem] flex items-center justify-center">
+            <!-- Bright glow ring — single moment of brightness -->
+            <div class="absolute inset-0 rounded-full" style="box-shadow: 0 0 80px rgba(143, 203, 255, 0.45), inset 0 0 40px rgba(91, 160, 222, 0.25);"></div>
+            <div class="absolute w-full h-full rounded-full border border-wave-blue-bright/40"></div>
+            <div class="absolute w-3/4 h-3/4 rounded-full border border-wave-blue-bright/25"></div>
+            <div class="relative bg-moss text-night-text rounded-full w-72 h-72 lg:w-80 lg:h-80 flex flex-col items-center justify-center text-center p-10 border-2 border-wave-blue-bright/40">
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-cream mb-3">// Pillar 01</span>
+              <h3 class="text-2xl text-cream leading-tight mb-4">Zero-Discharge ETP</h3>
+              <p class="text-sm text-cream/90 font-light leading-relaxed">Anaerobic biological treatment. 4,000 m³/day, zero discharge.</p>
+              <span class="mt-5 font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue-bright border-t border-wave-blue-bright/30 pt-3">4,000 m³ / day</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — deepest dark, brass frame inset -->
+    <section class="relative bg-urmi-blue-night text-night-text py-32 px-6 md:px-12 text-center brass-frame">
+      <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-brass mb-8 block">// CARRY THE WAVE — ০৯</span>
+      <h2 class="text-cream text-[clamp(2.5rem,7vw,5.75rem)] leading-[1.05] tracking-tight max-w-4xl mx-auto mb-10 font-serif" style="font-weight: 600;">The next wave is waiting.</h2>
+      <p class="italic font-serif text-night-text/80 text-lg max-w-md mx-auto mb-14">Whether you're a global buyer, a young designer, or a future colleague — there's a place for you here.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="#" class="bg-cream text-urmi-blue-night uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-brass transition-colors">→ Become a Buyer</a>
+        <a href="#" class="border border-brass text-brass uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-brass hover:text-urmi-blue-night transition-colors">→ Join the Team</a>
+        <a href="#" class="border border-brass text-brass uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-brass hover:text-urmi-blue-night transition-colors">→ Visit a Factory</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-urmi-blue-night text-night-text py-12 border-t border-night-text/10">
+      <div class="mx-auto max-w-[90rem] px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-night-text/60 font-mono uppercase tracking-[0.18em]">
+        <p>© 2026 Urmi Group. All rights reserved.</p>
+        <p class="italic font-serif normal-case tracking-normal">Crafted on the Padma.</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+phase: P1-spec
+project: urmi
+status: pass
+score: 0.95
+ambiguity_score: 0.15
+seed_file: .claude-project/status/urmi/seed-2026-05-07.yaml
+checks:
+  goal_defined: pass
+  constraints_listed: pass
+  acceptance_criteria: pass
+  ontology_stable: pass
+generated_at: 2026-05-07
+generated_by: /fullstack-pm urmi --phase P1-spec (lite, no live interview)
+notes: |
+  P1-spec executed in lite mode against the pre-existing knowledge base and as-built
+  homepage. No live interview was conducted because the source documents already
+  resolved every required seed component. Ambiguity score of 0.15 satisfies the
+  pass threshold of 0.2 from the spec.manifest.yaml gate.

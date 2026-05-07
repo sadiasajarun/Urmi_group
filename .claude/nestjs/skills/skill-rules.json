@@ -1,0 +1,246 @@
+{
+  "version": "2.0",
+  "description": "NestJS skill triggers - aligned with claude-workflow base architecture",
+  "stack": "nestjs",
+  "skills": {
+    "backend-dev-guidelines": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "backend:",
+      "category": "backend",
+      "description": "NestJS architecture patterns and guidelines",
+      "file": "../agents/backend-developer.md",
+      "promptTriggers": {
+        "keywords": ["backend", "nestjs", "api", "service", "controller", "entity", "dto", "module", "guard", "interceptor", "pipe", "decorator", "repository", "typeorm"],
+        "intentPatterns": [
+          "(create|implement|build|add|update|fix).*?(api|endpoint|route|service|controller|module)",
+          "(database|query|entity|migration|seed|repository)",
+          "(swagger|openapi|documentation).*?(api|endpoint)"
+        ]
+      }
+    },
+    "debugging": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "magicKeyword": "debug:",
+      "category": "backend",
+      "description": "Debug NestJS backend errors systematically",
+      "file": "debugging/fix-bug.md",
+      "promptTriggers": {
+        "keywords": ["backend bug", "backend debug", "nestjs error", "typescript error", "500 error", "400 error", "typeorm error", "injection error", "troubleshoot backend", "api error", "service error", "controller error"],
+        "intentPatterns": [
+          "(fix|debug|solve|resolve).*?(backend|api|nestjs).*?bug",
+          "(nestjs|typeorm|backend|api|service|controller).*?error",
+          "troubleshoot.*?(backend|api|nestjs)"
+        ]
+      }
+    },
+    "organize-types": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "category": "backend",
+      "description": "Organize DTOs, entities, and TypeORM types",
+      "file": "code-quality/organize-types.md",
+      "promptTriggers": {
+        "keywords": ["organize backend types", "dto types", "entity types", "typeorm types", "backend type organization", "refactor backend types", "nestjs types", "type structure backend"],
+        "intentPatterns": [
+          "(organize|clean|refactor|centralize).*?(backend|dto|entity|typeorm).*?types",
+          "(dto|entity|typeorm|backend).*?type.*?(organization|structure|cleanup)",
+          "(dto|entity).*?types"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": [
+          "**/dto/**/*.ts",
+          "**/entities/**/*.ts",
+          "**/types/**/*.ts"
+        ]
+      }
+    },
+    "e2e-testing": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "e2e:",
+      "category": "testing",
+      "description": "Generate backend e2e tests with Jest + Supertest",
+      "file": "e2e-testing/SKILL.md",
+      "promptTriggers": {
+        "keywords": [
+          "e2e test",
+          "backend e2e",
+          "jest e2e",
+          "nestjs test",
+          "end-to-end test",
+          "generate test",
+          "create test",
+          "write test",
+          "integration test",
+          "test controller",
+          "test endpoint",
+          "test api",
+          "jest fixtures",
+          "test fixtures",
+          "test factory",
+          "supertest",
+          "api testing",
+          "http test",
+          "endpoint testing"
+        ],
+        "intentPatterns": [
+          "(generate|create|write|add).*?(e2e|end-to-end|test|spec)",
+          "(test|testing).*?(controller|endpoint|route|api|module)",
+          "(finish|complete|done|implement).*?(controller|endpoint|api)",
+          "(create|add|write).*?(jest|test).*?fixture",
+          "fixture.*?(pattern|setup|factory)",
+          "(api|http|endpoint).*?test"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": [
+          "backend/test/**/*.ts",
+          "backend/test/e2e/**/*.ts",
+          "**/test/**/*.e2e-spec.ts",
+          "**/test/fixtures/**/*.ts",
+          "**/test/setup/**/*.ts"
+        ]
+      }
+    },
+    "api-development": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "api:",
+      "category": "backend",
+      "description": "Build NestJS endpoints (controller -> service -> entity)",
+      "file": "api-development/SKILL.md",
+      "promptTriggers": {
+        "keywords": [
+          "api development",
+          "develop api",
+          "create api",
+          "implement api",
+          "build endpoint",
+          "create endpoint",
+          "backend api",
+          "nestjs api",
+          "controller service",
+          "create controller",
+          "create service",
+          "typeorm entity",
+          "prd to api",
+          "new feature backend"
+        ],
+        "intentPatterns": [
+          "(develop|create|implement|build).*?(api|endpoint|route|controller)",
+          "(create|add|implement).*?(service|repository|entity)",
+          "prd.*?(implementation|api|backend)",
+          "(nestjs|typeorm).*?(api|endpoint|controller)"
+        ]
+      }
+    },
+    "enum-sync": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "description": "Bidirectional enum sync across all stacks (backend ↔ frontend)",
+      "file": "../../base/commands/dev/sync-enums.md",
+      "promptTriggers": {
+        "keywords": ["sync enums", "enum sync", "backend enums", "frontend enums", "shared enums", "enum pipeline", "bidirectional enum"],
+        "intentPatterns": [
+          "(sync|copy|mirror|share).*?enum",
+          "enum.*?(sync|copy|mirror|frontend|backend)",
+          "(add|create|update).*?enum.*?(backend|shared)",
+          "enum.*?pipeline"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": ["**/shared/enums/**/*.ts", "**/enums/**/*.enum.ts"]
+      }
+    },
+    "compliance-check": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "compliance:",
+      "category": "backend",
+      "description": "Audit NestJS backend against 35 mandatory architecture rules and auto-fix violations",
+      "file": "compliance-check.md",
+      "agentFile": "../agents/compliance-checker.md",
+      "ralphWorkflow": "rule-check-backend",
+      "promptTriggers": {
+        "keywords": [
+          "compliance check",
+          "rule check",
+          "architecture check",
+          "compliance audit",
+          "check rules",
+          "backend compliance",
+          "code compliance",
+          "rule violations",
+          "architecture audit",
+          "35 rules"
+        ],
+        "intentPatterns": [
+          "(run|check|audit|verify).*?(compliance|rules|architecture)",
+          "(compliance|rule).*?(check|audit|scan|verify)",
+          "(backend|nestjs).*?(compliance|rules|architecture).*?(check|audit)",
+          "(check|verify|scan).*?(violations|architecture|patterns)"
+        ]
+      }
+    },
+    "database-seeding": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "seed:",
+      "category": "backend",
+      "description": "Create database seeders and test data",
+      "file": "database-seeding/SKILL.md",
+      "promptTriggers": {
+        "keywords": [
+          "seed",
+          "seeder",
+          "database seed",
+          "create seed",
+          "test data",
+          "fixture data",
+          "seed users",
+          "seed database",
+          "populate database",
+          "sample data",
+          "mock data",
+          "seed file"
+        ],
+        "intentPatterns": [
+          "(create|generate|add|write).*?seed",
+          "(seed|populate).*?(database|data|users|categories)",
+          "test.*?data",
+          "(fixture|mock).*?data",
+          "database.*?(initialization|setup|populate)"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": [
+          "**/database/seeders/**/*.ts",
+          "**/seeds/**/*.ts",
+          "**/*.seed.ts"
+        ]
+      }
+    }
+  },
+  "guides": {
+    "_note": "Reference documents in ../guides/",
+    "architecture-overview": "../guides/architecture-overview.md",
+    "async-and-errors": "../guides/async-and-errors.md",
+    "best-practices": "../guides/best-practices.md",
+    "database-patterns": "../guides/database-patterns.md",
+    "testing-guide": "../guides/testing-guide.md",
+    "validation-patterns": "../guides/validation-patterns.md",
+    "middleware-guide": "../guides/middleware-guide.md",
+    "services-and-repositories": "../guides/services-and-repositories.md"
+  }
+}

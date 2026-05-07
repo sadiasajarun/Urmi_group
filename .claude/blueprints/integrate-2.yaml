@@ -1,0 +1,406 @@
+name: integrate-2
+description: |
+  Wire frontend to backend APIs.
+  v2 blueprint with strict artifact contracts.
+version: 2
+manifest: integrate
+
+nodes:
+  # ============================================================================
+  # TIER 1: PRE-FLIGHT (deterministic)
+  # ============================================================================
+
+  - id: pre-check
+    type: deterministic
+    description: "Verify backend controllers + frontend pages exist"
+    command: |
+      CTRL=$(find {TARGET_DIR}/{BACKEND_DIR}/src -name '*.controller.ts' 2>/dev/null | wc -l | tr -d ' ')
+      [ "$CTRL" -gt 0 ] || { echo "FAIL: no backend controllers"; exit 1; }
+      FE="{TARGET_DIR}/{FRONTEND_DIR}"
+      [ -d "$FE" ] || { echo "FAIL: frontend dir {FRONTEND_DIR} not found"; exit 1; }
+      PAGES=$(find "$FE/src" -path '*/pages/*' -name '*.tsx' 2>/dev/null | wc -l | tr -d ' ')
+      [ "$PAGES" -gt 0 ] || { echo "FAIL: no frontend pages"; exit 1; }
+      echo "Backend: $CTRL controllers, Frontend: $PAGES pages"
+    on_failure: abort
+    abort_message: "Phases 5 (backend) + 6 (frontend) must complete first"
+
+  - id: extract-api-routes
+    type: deterministic
+    description: "Generate PROJECT_API_ROUTES.md from @Controller decorators"
+    command: |
+      OUT="{TARGET_DIR}/.claude-project/docs/PROJECT_API_ROUTES.md"
+      mkdir -p "$(dirname "$OUT")"
+      {
+        echo "# Backend API Routes (Auto-generated)"
+        echo ""
+        echo "> Frontend API calls MUST use these exact paths."
+        echo ""
+        echo "| Controller | Decorator | Full Path |"
+        echo "|---|---|---|"
+      } > "$OUT"
+      ROUTE_COUNT=0
+      for f in $(find {TARGET_DIR}/{BACKEND_DIR}/src -name '*.controller.ts' 2>/dev/null); do
+        CTRL=$(basename "$f" .controller.ts)
+        PREFIX=$(grep -o "@Controller('[^']*')" "$f" 2>/dev/null | head -1 | sed "s/@Controller('\(.*\)')/\1/")
+        [ -z "$PREFIX" ] && continue
+        echo "| $CTRL | @Controller | /$PREFIX |" >> "$OUT"
+        ROUTE_COUNT=$((ROUTE_COUNT + 1))
+        grep -nE "@(Get|Post|Put|Patch|Delete)" "$f" 2>/dev/null | while IFS= read -r line; do
+          METHOD=$(echo "$line" | grep -oE '@[A-Za-z]*' | head -1)
+          SUB=$(echo "$line" | sed -n "s/.*@[A-Za-z]*('\([^']*\)').*/\1/p")
+          if [ -n "$SUB" ]; then
+            FULL="/$PREFIX/$SUB"
+          else
+            FULL="/$PREFIX"
+          fi
+          FULL=$(echo "$FULL" | sed 's|//|/|g; s|/$||')
+          echo "| $CTRL | $METHOD | $FULL |" >> "$OUT"
+        done
+      done
+      echo "" >> "$OUT"
+      echo "Total routes: $ROUTE_COUNT" >> "$OUT"
+      echo "Wrote $ROUTE_COUNT routes to $OUT"
+    on_failure: ignore
+
+  # ============================================================================
+  # TIER 2: AGENTIC NODE WITH ARTIFACT CONTRACT
+  # ============================================================================
+
+  - id: integrate
+    type: agentic
+    description: "Wire frontend pages to backend via TanStack Query hooks + API services"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/INTEGRATION_REPORT.md"
+    verification_pattern: "endpoints_wired:\\s*[0-9]+"
+    scope_guard:
+      allow: ["{FRONTEND_DIR}/src/**"]
+      deny: ["{BACKEND_DIR}/**"]
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_API.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_API_INTEGRATION.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_API_ROUTES.md"
+        - ".claude/{FRONTEND}/guides/api-integration.md"
+        - ".claude/{FRONTEND}/guides/data-fetching.md"
+        - ".claude/{FRONTEND}/guides/authentication.md"
+        - ".claude/{FRONTEND}/skills/api-integration/SKILL.md"
+    tool_profile:
+      allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Wire every frontend page to its backend API. Use EXACT paths from PROJECT_API_ROUTES.md.
+
+      REQUIREMENTS:
+      1. Use TanStack Query (useQuery for reads, useMutation for writes)
+      2. Every API call has loading + error + empty states
+      3. Axios instance with interceptors for auth tokens (httpOnly cookies)
+      4. Interceptor has `_isRetry` flag to prevent infinite refresh loops (RULE-I1)
+      5. Never `setTimeout(() => navigate(...))` after API response (RULE-I2)
+      6. API paths must match @Controller decorators exactly (RULE-I3)
+      7. CORS origin + Playwright baseURL + Vite port must be consistent (RULE-I4)
+      8. No `any` types in response DTOs
+      9. Error messages use server response, not hardcoded strings
+
+      FILE LAYOUT:
+      - {FRONTEND_DIR}/src/services/api/*.ts (axios instance + per-resource services)
+      - {FRONTEND_DIR}/src/hooks/api/use{Resource}.ts (TanStack Query hooks)
+      - Replace mock data in pages with real hook calls
+
+      COVERAGE TARGET: wire >= 50% of pages on first pass. Prioritize:
+        - All list pages (anything ending in List.tsx, ShowAll.tsx, or with a table)
+        - All dashboards (Home.tsx, Dashboard.tsx)
+        - All form pages (Apply.tsx, Create.tsx, Edit.tsx)
+        - Auth pages
+      Pages without an obvious matching hook: leave them untouched but log them
+      under "## Skipped (no matching hook)" in the report — those are signals
+      that the backend is missing an endpoint and will self-heal next generation.
+
+      REPORT FILE: .claude-project/status/{project}/INTEGRATION_REPORT.md
+      Required fields (regex-verifiable):
+        phase: integrate
+        endpoints_wired: <int>
+        services_created: <int>
+        hooks_created: <int>
+        pages_updated: <int>
+        pages_total: <int>
+        pages_with_hooks: <int>
+        coverage_pct: <int>
+        rule_i1_interceptor_retry_flag: (true|false)
+        rule_i3_route_matching: (true|false)
+
+      ## Skipped (no matching hook)
+        - <page-path>: <reason / which endpoint is missing>
+        - ...
+
+      === SECOND MANDATORY ARTIFACT: MISSING_ENDPOINTS.yaml ===
+
+      You MUST also write .claude-project/status/{project}/MISSING_ENDPOINTS.yaml
+      — a STRUCTURED, machine-readable list of the backend endpoints that would
+      have let you wire the skipped pages. The next generation's backend phase
+      reads this file and generates those controllers automatically (self-heal
+      across generations).
+
+      If every page was wired, write the file with an empty missing_endpoints list.
+
+      Schema (emit in this exact shape — keys are parsed by the orchestrator):
+
+      ```yaml
+      generated_at: <ISO timestamp>
+      gen: <integer, read from PIPELINE_STATUS.md `generation:` field; default 1>
+      total_pages: <int>
+      wired_pages: <int>
+      skipped_pages: <int>
+      missing_endpoints:
+        - resource: notices              # kebab-case, used as NestJS module name
+          module_name: notices           # matches {BACKEND_DIR}/src/modules/{module_name}
+          reason: <1-line why>
+          suggested_routes:
+            - method: GET
+              path: /notices
+              description: List notices for the current worker
+              scope: worker              # one of: public | worker | company | admin
+              response_shape: { items: NoticeDto[] }
+            - method: GET
+              path: /notices/:id
+              description: Notice detail
+              scope: worker
+              response_shape: NoticeDto
+            - method: POST
+              path: /admin/notices
+              description: Create notice (admin)
+              scope: admin
+              request_shape: CreateNoticeDto
+              response_shape: NoticeDto
+          consuming_pages:
+            - {FRONTEND_DIR}/src/pages/worker/Notices.tsx
+            - {FRONTEND_DIR}/src/pages/worker/NoticeDetail.tsx
+            - {FRONTEND_DIR}/src/pages/admin/Notices.tsx
+            - {FRONTEND_DIR}/src/pages/admin/NoticeCreate.tsx
+        - resource: faq
+          ...
+      ```
+
+      GROUP by `resource` — one entry per missing backend module, not one per page.
+      Infer the `resource` name from the unwired page filenames (Notices.tsx → notices).
+      Suggest routes conservatively: GET /resource, GET /resource/:id, POST /resource,
+      PATCH /resource/:id, DELETE /resource/:id (only the subset the page actually needs).
+
+  # ============================================================================
+  # TIER 3: POST-CHECKS (deterministic)
+  # ============================================================================
+
+  - id: verify-page-coverage
+    type: deterministic
+    description: "Enforce >= X% of data-pages use a TanStack Query hook (static pages exempt; progressive gen1 50%, gen2 70%, gen3+ 90%)"
+    command: |
+      #!/usr/bin/env bash
+      set -e
+      PAGES_DIR="{TARGET_DIR}/{FRONTEND_DIR}/src/pages"
+      [ -d "$PAGES_DIR" ] || { echo "FAIL: no pages dir at $PAGES_DIR"; exit 1; }
+
+      ALL_TMP=$(mktemp); WIRED_TMP=$(mktemp); ELIGIBLE_TMP=$(mktemp); UNWIRED_TMP=$(mktemp)
+      trap 'rm -f "$ALL_TMP" "$WIRED_TMP" "$ELIGIBLE_TMP" "$UNWIRED_TMP"' EXIT
+
+      find "$PAGES_DIR" -name '*.tsx' 2>/dev/null | sort > "$ALL_TMP"
+      TOTAL_ALL=$(wc -l < "$ALL_TMP" | tr -d ' ')
+      [ "$TOTAL_ALL" -gt 0 ] || { echo "FAIL: 0 pages found under $PAGES_DIR"; exit 1; }
+
+      # --- Exempt static pages from the denominator (filename-based only) ---
+      # These pages never need an API call by design. A content heuristic was
+      # tried earlier but over-exempted wired pages using non-obvious markup
+      # (dashboards with custom charts, detail pages with cards, etc.).
+      # Filename allow-list is conservative and reliable.
+      EXEMPT_NAMES='Landing|NotFound|Forbidden|Offline|Maintenance|Splash|More'
+
+      while IFS= read -r page; do
+        bn=$(basename "$page" .tsx)
+        if echo "$bn" | grep -qE "^(${EXEMPT_NAMES})$"; then
+          continue
+        fi
+        echo "$page" >> "$ELIGIBLE_TMP"
+      done < "$ALL_TMP"
+      ELIGIBLE=$(wc -l < "$ELIGIBLE_TMP" | tr -d ' ')
+
+      # "wired" = eligible page that imports from hooks/api/
+      grep -rlE "from ['\"](\\.\\./)+hooks/api" "$PAGES_DIR" --include='*.tsx' 2>/dev/null | sort > "$WIRED_TMP"
+      # Wired ∩ Eligible
+      WIRED=$(comm -12 "$ELIGIBLE_TMP" "$WIRED_TMP" | wc -l | tr -d ' ')
+
+      # Denominator: eligible pages only. If somehow 0 eligible, fall back to all.
+      DENOM=$ELIGIBLE
+      [ "$DENOM" -gt 0 ] || DENOM=$TOTAL_ALL
+      PCT=$(( WIRED * 100 / DENOM ))
+
+      # Progressive threshold based on generation
+      GEN=1
+      STATUS_FILE="{TARGET_DIR}/.claude-project/status/{project}/PIPELINE_STATUS.md"
+      if [ -f "$STATUS_FILE" ]; then
+        PARSED=$(grep -m1 '^generation:' "$STATUS_FILE" | sed 's/[^0-9]//g')
+        GEN=${PARSED:-1}
+      fi
+      if [ "$GEN" -ge 3 ]; then MIN=90
+      elif [ "$GEN" -eq 2 ]; then MIN=70
+      else MIN=50; fi
+
+      EXEMPTED=$(( TOTAL_ALL - ELIGIBLE ))
+      if [ "$PCT" -lt "$MIN" ]; then
+        echo "FAIL: $WIRED/$DENOM data-pages wired = ${PCT}% < ${MIN}% (gen $GEN; $EXEMPTED static/no-data pages exempted)"
+        echo "Unwired eligible pages (sample):"
+        comm -23 "$ELIGIBLE_TMP" "$WIRED_TMP" | head -10
+        exit 1
+      fi
+      echo "PASS: $WIRED/$DENOM data-pages wired (${PCT}% >= ${MIN}% gen $GEN; $EXEMPTED static/no-data pages exempted from $TOTAL_ALL total)"
+    on_failure: route_to_agent
+    route_to_agent_attempts: 2
+    fix_context: |
+      Many pages in {FRONTEND_DIR}/src/pages/**/*.tsx still use hardcoded mock data
+      instead of calling TanStack Query hooks from {FRONTEND_DIR}/src/hooks/api/.
+
+      For each unwired page (identified by the failure output above):
+      1. Identify the data it displays (read the page, find inline arrays/objects)
+      2. Find the matching hook in {FRONTEND_DIR}/src/hooks/api/use{Resource}.ts
+      3. Replace the inline data with: `const { data, isLoading, isError } = useFoo()`
+      4. Add loading + error + empty states (use existing hook patterns from already-wired pages as reference)
+      5. If no hook exists for the data, that's a backend gap — note it but skip the page
+
+      Prioritize: list pages (Applications, Workers, Companies, Notices), dashboards,
+      detail pages, then edit/create forms.
+
+      Do NOT delete pages or remove features. Do NOT add `any` types.
+      Re-run `cd frontend && npx tsc --noEmit` after each batch to catch regressions.
+
+      The orchestrator will re-run the coverage check after your fixes.
+
+  - id: verify-missing-endpoints-yaml
+    type: deterministic
+    description: "Verify integrate agent produced MISSING_ENDPOINTS.yaml (cross-gen signal for backend self-heal)"
+    command: |
+      #!/usr/bin/env bash
+      F="{TARGET_DIR}/.claude-project/status/{project}/MISSING_ENDPOINTS.yaml"
+      if [ ! -f "$F" ]; then
+        echo "FAIL: $F not written by integrate agent"
+        exit 1
+      fi
+      # Must have the top-level keys we expect
+      for key in generated_at missing_endpoints; do
+        grep -qE "^${key}:" "$F" || { echo "FAIL: missing key '${key}:' in $F"; exit 1; }
+      done
+      # If there are any entries, each must have resource + consuming_pages
+      if grep -q '^  - resource:' "$F"; then
+        RESOURCES=$(grep -c '^  - resource:' "$F")
+        PAGES=$(grep -c '^      - ' "$F" || echo 0)
+        echo "PASS: $RESOURCES missing-endpoint resources listed across $PAGES consuming pages"
+      else
+        echo "PASS: empty missing_endpoints list (all pages wired)"
+      fi
+    on_failure: route_to_agent
+    route_to_agent_attempts: 1
+    fix_context: |
+      The integrate agent did not produce the required MISSING_ENDPOINTS.yaml
+      alongside INTEGRATION_REPORT.md. This file is a structured, machine-readable
+      list of backend endpoints the consuming pages need. The next generation's
+      backend phase reads it to auto-generate missing modules (self-heal loop).
+
+      Write it now at: .claude-project/status/{project}/MISSING_ENDPOINTS.yaml
+
+      Source of truth: the INTEGRATION_REPORT.md "## Skipped (no matching hook)"
+      section. Convert each skipped page into an entry under missing_endpoints.
+
+      Schema is in integrate-2.yaml (the integrate node's prompt). Group by resource,
+      infer routes conservatively (GET list, GET :id, POST for admin, etc.), and
+      list every consuming page under consuming_pages.
+
+      If every page was successfully wired and no gaps exist, write an empty list:
+        missing_endpoints: []
+
+  - id: contract-validation
+    type: agentic
+    description: "Verify frontend form payloads match backend DTO contracts (RULE-I3)"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/CONTRACT_VALIDATION.md"
+    verification_pattern: "mismatches_found: [0-9]+"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_API.md"
+    tool_profile:
+      allow: [Read, Write, Grep, Glob, Bash]
+      deny: [WebSearch, WebFetch, Edit]
+    prompt: |
+      Validate that frontend form submissions match backend DTO contracts exactly.
+
+      STEPS:
+      1. Find all backend DTOs: `find {BACKEND_DIR}/src -name '*.dto.ts'`
+      2. For each DTO with form fields (Create*, Update*), extract:
+         - Field names, types, validation decorators (@IsArray, @IsIn, @IsString, etc.)
+         - Enum constraints (@IsIn values)
+      3. Find the corresponding frontend form component:
+         - Search for mutation hooks that POST/PATCH to the same endpoint
+         - Read the form state and the payload passed to mutateAsync()
+      4. Compare: does the frontend send the EXACT fields the backend expects?
+         - Field name mismatches (passengerCount vs passengers)
+         - Type mismatches (number vs array)
+         - Enum value mismatches (ROUNDTRIP vs round_trip)
+         - Missing required fields
+         - Extra fields the backend doesn't expect
+
+      REPORT FILE: .claude-project/status/{project}/CONTRACT_VALIDATION.md
+      Required format:
+        phase: integrate-contract-validation
+        dtos_checked: <N>
+        forms_checked: <N>
+        mismatches_found: <N>
+
+        ## Mismatches
+        | DTO | Field | Backend Expects | Frontend Sends | Severity |
+        |-----|-------|-----------------|----------------|----------|
+        ...
+
+        ## Matched Contracts
+        | DTO | Fields | Status |
+        |-----|--------|--------|
+        ...
+
+      If mismatches_found > 0, list each one with the exact file paths and line numbers.
+      This is a READ-ONLY audit — do NOT fix the code, only report mismatches.
+
+  - id: fix-contracts
+    type: deterministic
+    description: "Abort if contract mismatches found — route to agent to fix"
+    command: |
+      REPORT="{TARGET_DIR}/.claude-project/status/{project}/CONTRACT_VALIDATION.md"
+      [ -f "$REPORT" ] || { echo "FAIL: contract validation report missing"; exit 1; }
+      MISMATCHES=$(grep '^mismatches_found:' "$REPORT" | sed 's/[^0-9]//g')
+      [ "${MISMATCHES:-0}" -eq 0 ] && echo "PASS: 0 contract mismatches" && exit 0
+      echo "FAIL: $MISMATCHES contract mismatch(es) found"
+      grep -A50 '## Mismatches' "$REPORT" | head -30
+      exit 1
+    on_failure: route_to_agent
+    route_to_agent_attempts: 2
+    fix_context: |
+      Frontend form payloads don't match backend DTOs. Read the CONTRACT_VALIDATION.md
+      report at .claude-project/status/{project}/CONTRACT_VALIDATION.md to see the exact mismatches.
+      Fix the FRONTEND to match the backend DTO contracts. Do NOT change backend DTOs.
+      Common fixes:
+        - Rename form fields to match DTO field names
+        - Change data types (number → array of objects)
+        - Fix enum values (ROUNDTRIP → round_trip)
+        - Add missing required fields to the form
+
+  - id: typecheck
+    type: deterministic
+    description: "Verify frontend compiles after integration"
+    command: |
+      cd "{TARGET_DIR}/{FRONTEND_DIR}" && npx tsc --noEmit 2>&1
+    on_failure: abort
+
+  - id: evidence-check
+    type: deterministic
+    description: "Verify API hook/service files were created"
+    command: |
+      FE="{TARGET_DIR}/{FRONTEND_DIR}"
+      API=$(find "$FE/src" \( -path '*/api/*' -o -path '*/services/*' -o -path '*/hooks/*' \) \( -name '*.ts' -o -name '*.tsx' \) 2>/dev/null | wc -l | tr -d ' ')
+      [ "$API" -gt 0 ] || { echo "FAIL: no API hook/service files in {FRONTEND_DIR}"; exit 1; }
+      echo "PASS: $API API files"
+    on_failure: abort
+
+tool_profile:
+  allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+  deny: [WebSearch, WebFetch]

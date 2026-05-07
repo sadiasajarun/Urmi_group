@@ -1,0 +1,466 @@
+name: init-2
+description: |
+  Project scaffolding — create directory skeleton, scoped rule files, PIPELINE_STATUS.md.
+  v2 blueprint with strict artifact contract.
+version: 2
+manifest: init
+
+nodes:
+  # ============================================================================
+  # TIER 1: PRE-FLIGHT (deterministic)
+  # ============================================================================
+
+  - id: ensure-target-dir
+    type: deterministic
+    description: "Verify TARGET_DIR exists or create it"
+    command: |
+      mkdir -p "{TARGET_DIR}"
+      mkdir -p "{TARGET_DIR}/.claude-project/status/{project}"
+      echo "TARGET_DIR ready: {TARGET_DIR}"
+    on_failure: abort
+
+  - id: bootstrap-claude-submodule
+    type: deterministic
+    description: "Init git and bootstrap .claude as a submodule (mirrors v1 Step 1.2)"
+    command: |
+      cd "{TARGET_DIR}"
+      if [ ! -d .git ]; then
+        git init 2>&1
+        echo "git repo initialized"
+      else
+        echo "git repo already present"
+      fi
+
+      # Bootstrap .claude submodule only when TARGET_DIR has no .claude yet.
+      # When TARGET_DIR == sourceDir (no --path), .claude is already present
+      # (it's where this orchestrator lives), so this is a no-op for the add.
+      if [ ! -d .claude ]; then
+        echo "bootstrapping .claude submodule from potentialInc/claude-fullstack..."
+        git submodule add -b main https://github.com/potentialInc/claude-fullstack.git .claude 2>&1
+        git submodule update --init --recursive 2>&1
+        echo ".claude submodule bootstrapped"
+      else
+        echo ".claude already present — skip submodule add"
+      fi
+
+      # Always ensure nested stack submodules (nestjs, react, etc.) are initialized.
+      # Handles the case where someone cloned without --recursive, or submodule
+      # pointers were updated but not fetched.
+      if [ -f .claude/.gitmodules ]; then
+        cd .claude
+        git submodule update --init --recursive 2>&1
+        cd ..
+        echo "stack submodules initialized"
+      fi
+    on_failure: abort
+    abort_message: "Failed to bootstrap .claude submodule — required for stack-specific templates"
+
+  # ============================================================================
+  # TIER 2: AGENTIC NODE WITH ARTIFACT CONTRACT
+  # ============================================================================
+
+  - id: scaffold-project
+    type: agentic
+    description: "Create directory skeleton + scoped .claude-rules + PIPELINE_STATUS.md (v1 Step 1.3–1.5)"
+    condition: "! test -f {TARGET_DIR}/.claude-project/status/{project}/PIPELINE_STATUS.md"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/INIT_REPORT.md"
+    verification_pattern: "directories_created:\\s*[0-9]+"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/status/{project}/seed*.yaml"
+        - "{CLAUDE_DIR}/pipeline/phases/01-init.md"
+        - "{CLAUDE_DIR}/templates/PIPELINE_STATUS.template.md"
+        - "{CLAUDE_DIR}/templates/rules/common.claude-rules.template"
+    tool_profile:
+      allow: [Read, Write, Edit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Scaffold the project directory for {project} exactly as v1 Step 1.3–1.5 in {CLAUDE_DIR}/pipeline/phases/01-init.md.
+
+      TASKS:
+      1. Create standard directory skeleton:
+         - {TARGET_DIR}/{BACKEND_DIR}/
+         - {TARGET_DIR}/{FRONTEND_DIR}/
+         - {TARGET_DIR}/.claude-project/docs/
+         - {TARGET_DIR}/.claude-project/status/{project}/
+         - {TARGET_DIR}/.claude-project/user_stories/
+         - {TARGET_DIR}/.claude-project/design/
+         - {TARGET_DIR}/.claude-project/memory/
+
+      2. Generate scoped rule files from stack submodule templates (mirror v1 Step 1.3 exactly).
+         Each template is optional — if the file does not exist, skip that rule file.
+
+         Template paths and destinations:
+           Common:   {CLAUDE_DIR}/templates/rules/common.claude-rules.template
+                     → {TARGET_DIR}/.claude-rules
+           Backend:  {CLAUDE_DIR}/{BACKEND}/templates/backend.claude-rules.template
+                     → {TARGET_DIR}/{BACKEND_DIR}/.claude-rules
+           Frontend: {CLAUDE_DIR}/{FRONTEND}/templates/frontend.claude-rules.template
+                     → {TARGET_DIR}/{FRONTEND_DIR}/.claude-rules
+
+         Substitution values (replace all curly-brace placeholders found in templates):
+           PROJECT_NAME = {project}
+           BACKEND      = {BACKEND}
+           FRONTEND     = {FRONTEND}
+
+         Read v1 Step 1.3 in 01-init.md (provided in context) for the exact sed pattern.
+         Guard each template with `if [ -f "$TMPL" ]` — backend/frontend templates may not exist.
+
+      3. Create PIPELINE_STATUS.md from {CLAUDE_DIR}/templates/PIPELINE_STATUS.template.md
+         Substitute {PROJECT_NAME} → {project}
+         All phases = Pending, generation = 1
+
+      4. Create .gitignore covering node_modules/, .env, dist/, build/
+
+      REPORT FILE: .claude-project/status/{project}/INIT_REPORT.md
+      Required fields (regex-verifiable):
+        phase: init
+        directories_created: <int>
+        rule_files_created: <int>
+        pipeline_status_created: (true|false)
+        gitignore_created: (true|false)
+
+  - id: generate-claude-md
+    type: agentic
+    description: "Generate {TARGET_DIR}/CLAUDE.md from claude.template.md (mirrors v1 Step 1.6)"
+    condition: "! test -f {TARGET_DIR}/CLAUDE.md"
+    required_output_file: "{TARGET_DIR}/CLAUDE.md"
+    verification_pattern: "^#\\s"
+    context:
+      additional_read:
+        - "{CLAUDE_DIR}/templates/claude.template.md"
+        - "{CLAUDE_DIR}/pipeline/phases/01-init.md"
+        - "{TARGET_DIR}/.claude-project/status/{project}/seed*.yaml"
+        - "{TARGET_DIR}/.claude-project/status/{project}/PIPELINE_STATUS.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_KNOWLEDGE.md"
+        - "{TARGET_DIR}/.claude-project/design/DESIGN_SYSTEM.md"
+    tool_profile:
+      allow: [Read, Write, Edit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Generate {TARGET_DIR}/CLAUDE.md following v1 Step 1.6 in {CLAUDE_DIR}/pipeline/phases/01-init.md EXACTLY.
+
+      STEPS:
+      1. Read the template: {CLAUDE_DIR}/templates/claude.template.md
+
+      2. Replace every curly-brace placeholder in the template with real values.
+         Read v1 Step 1.6 in 01-init.md (provided in context) for the full list.
+
+         Known substitution values:
+           PROJECT_NAME        = {project}
+           PROJECT_TYPE        = Fullstack Web Application
+           PROJECT_DESCRIPTION = seed.goal or PROJECT_KNOWLEDGE overview, else "TODO"
+           KEY_DIFFERENTIATOR  = from seed/PRD, else "TODO"
+           PROJECT_DOMAIN      = from seed/PRD, else {project}.com
+           DATE                = today (YYYY-MM-DD)
+           BACKEND             = {BACKEND}
+           FRONTEND            = {FRONTEND}
+           ADMIN_DASHBOARD     = tech_stack.dashboards[0] from PIPELINE_STATUS.md, or "N/A"
+           DATABASE            = PostgreSQL
+           ORM                 = TypeORM (for nestjs backend) or Prisma (otherwise)
+           AUTH                = JWT httpOnly cookies
+           DEPLOYMENT          = Docker
+
+         Role placeholders (ROLE_1, ROLE_2, ADMIN_PERMISSIONS, ROLE_ENUM_VALUES, etc.):
+           Extract from seed ontology or PROJECT_KNOWLEDGE user types.
+           Use "TODO" for any role info not yet available.
+
+         Design placeholders (PRIMARY_COLOR_NAME, PRIMARY_COLOR_HEX):
+           Extract from DESIGN_SYSTEM.md if it exists, else use "Blue" / "#4A90D9".
+
+         FALLBACK RULE (exactly as v1 says): if seed/PRD is unavailable,
+         use "TODO" for description/role fields. Phase 2 regenerates CLAUDE.md
+         with full values after PRD conversion.
+
+      3. Write the substituted content to {TARGET_DIR}/CLAUDE.md
+
+      4. Self-verify: run `grep -cE '\{[A-Z_]+\}' {TARGET_DIR}/CLAUDE.md`
+         Expected: 0. If any unresolved placeholders remain, fix them before finishing.
+
+      The orchestrator verifies the file exists and starts with a Markdown heading.
+      Placeholder resolution is YOUR responsibility — do not finish with any remaining.
+
+  # ============================================================================
+  # TIER 2.5: TS PROJECT SCAFFOLD (deterministic)
+  # Guarantees backend/ and frontend/ have a valid TypeScript project so later
+  # phases (database typecheck, backend build, frontend build) can run.
+  # Idempotent: skips any file that already exists.
+  # ============================================================================
+
+  - id: scaffold-backend-ts
+    type: deterministic
+    description: "Write minimal backend package.json + tsconfig.json + npm install (idempotent)"
+    command: |
+      set -e
+      T="{TARGET_DIR}"
+      mkdir -p "$T/backend"
+      cd "$T/backend"
+
+      if [ ! -f package.json ]; then
+        cat > package.json <<'JSON'
+      {
+        "name": "backend",
+        "version": "0.1.0",
+        "private": true,
+        "scripts": {
+          "typecheck": "tsc --noEmit",
+          "build": "tsc"
+        },
+        "dependencies": {
+          "@nestjs/common": "^10.3.0",
+          "@nestjs/core": "^10.3.0",
+          "@nestjs/typeorm": "^10.0.2",
+          "class-transformer": "^0.5.1",
+          "class-validator": "^0.14.1",
+          "reflect-metadata": "^0.2.2",
+          "rxjs": "^7.8.1",
+          "typeorm": "^0.3.20"
+        },
+        "devDependencies": {
+          "@types/node": "^20.12.7",
+          "typescript": "^5.4.5"
+        }
+      }
+      JSON
+        echo "created backend/package.json"
+      else
+        echo "backend/package.json already exists — skip"
+      fi
+
+      if [ ! -f tsconfig.json ]; then
+        cat > tsconfig.json <<'JSON'
+      {
+        "compilerOptions": {
+          "module": "commonjs",
+          "target": "es2021",
+          "lib": ["es2021"],
+          "moduleResolution": "node",
+          "experimentalDecorators": true,
+          "emitDecoratorMetadata": true,
+          "strict": true,
+          "strictPropertyInitialization": false,
+          "esModuleInterop": true,
+          "skipLibCheck": true,
+          "forceConsistentCasingInFileNames": true,
+          "resolveJsonModule": true,
+          "noEmit": true,
+          "outDir": "./dist",
+          "baseUrl": "./"
+        },
+        "include": ["src/**/*.ts"],
+        "exclude": ["node_modules", "dist", "test"]
+      }
+      JSON
+        echo "created backend/tsconfig.json"
+      else
+        echo "backend/tsconfig.json already exists — skip"
+      fi
+
+      if [ ! -d node_modules ]; then
+        echo "installing backend deps..."
+        npm install --no-audit --no-fund --silent 2>&1 | tail -5
+      else
+        echo "backend/node_modules present — skip install"
+      fi
+    on_failure: abort
+    abort_message: "Failed to scaffold backend TypeScript project"
+
+  - id: scaffold-frontend-ts
+    type: deterministic
+    description: "Write minimal frontend package.json + tsconfig.json + npm install per frontend (idempotent, multi-frontend aware)"
+    command: |
+      set -e
+      T="{TARGET_DIR}"
+      STATUS="$T/.claude-project/status/{project}/PIPELINE_STATUS.md"
+
+      # --- Resolve frontend directories from PIPELINE_STATUS.md ---
+      # Parse structured frontends block: extract "dir: <value>" lines
+      # Uses awk to scope to the frontends: block and match only "dir:" (not "html_dir:")
+      FE_DIRS=""
+      if [ -f "$STATUS" ]; then
+        FE_DIRS=$(awk '/^  frontends:/{f=1;next} f&&/^  [a-z]/{f=0} f&&/^[[:space:]]*dir:/{sub(/.*dir:[[:space:]]*/,"");gsub(/[[:space:]]/,"");print}' "$STATUS" | tr '\n' ' ')
+      fi
+      # Fallback: if no dirs found, use "frontend"
+      if [ -z "$FE_DIRS" ]; then
+        FE_DIRS="frontend"
+      fi
+      echo "frontend dirs to scaffold: $FE_DIRS"
+
+      # --- Scaffold each frontend ---
+      for FE_DIR in $FE_DIRS; do
+        echo ""
+        echo "--- scaffolding $FE_DIR ---"
+        mkdir -p "$T/$FE_DIR"
+        cd "$T/$FE_DIR"
+
+        if [ ! -f package.json ]; then
+          cat > package.json <<JSON
+      {
+        "name": "$FE_DIR",
+        "version": "0.1.0",
+        "private": true,
+        "type": "module",
+        "scripts": {
+          "dev": "vite",
+          "build": "tsc --noEmit && vite build",
+          "typecheck": "tsc --noEmit"
+        },
+        "dependencies": {
+          "react": "^18.3.1",
+          "react-dom": "^18.3.1",
+          "react-router-dom": "^6.23.0",
+          "@tanstack/react-query": "^5.36.0",
+          "axios": "^1.7.0"
+        },
+        "devDependencies": {
+          "@types/node": "^20.12.7",
+          "@types/react": "^18.3.1",
+          "@types/react-dom": "^18.3.0",
+          "@vitejs/plugin-react": "^4.3.0",
+          "typescript": "^5.4.5",
+          "vite": "^5.2.0"
+        }
+      }
+      JSON
+          echo "created $FE_DIR/package.json"
+        else
+          echo "$FE_DIR/package.json already exists — skip"
+        fi
+
+        if [ ! -f tsconfig.json ]; then
+          cat > tsconfig.json <<'JSON'
+      {
+        "compilerOptions": {
+          "target": "ES2021",
+          "useDefineForClassFields": true,
+          "lib": ["ES2021", "DOM", "DOM.Iterable"],
+          "module": "ESNext",
+          "skipLibCheck": true,
+          "moduleResolution": "bundler",
+          "allowImportingTsExtensions": true,
+          "resolveJsonModule": true,
+          "isolatedModules": true,
+          "noEmit": true,
+          "jsx": "react-jsx",
+          "strict": true,
+          "forceConsistentCasingInFileNames": true,
+          "types": ["vite/client", "node"]
+        },
+        "include": ["src", "src/vite-env.d.ts"]
+      }
+      JSON
+          echo "created $FE_DIR/tsconfig.json"
+        else
+          echo "$FE_DIR/tsconfig.json already exists — skip"
+        fi
+
+        mkdir -p src
+        if [ ! -f src/vite-env.d.ts ]; then
+          cat > src/vite-env.d.ts <<'DTS'
+      /// <reference types="vite/client" />
+      DTS
+          echo "created $FE_DIR/src/vite-env.d.ts"
+        fi
+
+        if [ ! -d node_modules ]; then
+          echo "installing $FE_DIR deps..."
+          npm install --no-audit --no-fund --silent 2>&1 | tail -5
+        else
+          echo "$FE_DIR/node_modules present — skip install"
+        fi
+      done
+
+      echo ""
+      echo "frontend scaffold complete: $FE_DIRS"
+    on_failure: abort
+    abort_message: "Failed to scaffold frontend TypeScript project(s)"
+
+  # ============================================================================
+  # TIER 3: EVIDENCE CHECK (deterministic)
+  # ============================================================================
+
+  - id: evidence-check
+    type: deterministic
+    description: "Verify scaffold + .claude submodule + CLAUDE.md + all frontends (mirrors v1 init quality gate)"
+    command: |
+      T="{TARGET_DIR}"
+      STATUS="$T/.claude-project/status/{project}/PIPELINE_STATUS.md"
+      FAIL=0
+
+      # Backend skeleton
+      [ -d "$T/backend" ] || { echo "FAIL: backend/ missing"; FAIL=1; }
+      [ -f "$T/backend/package.json" ] || { echo "FAIL: backend/package.json missing"; FAIL=1; }
+      [ -f "$T/backend/tsconfig.json" ] || { echo "FAIL: backend/tsconfig.json missing"; FAIL=1; }
+
+      # Frontend skeleton — multi-frontend aware (same parsing as scaffold-frontend-ts)
+      FE_DIRS=""
+      if [ -f "$STATUS" ]; then
+        FE_DIRS=$(awk '/^  frontends:/{f=1;next} f&&/^  [a-z]/{f=0} f&&/^[[:space:]]*dir:/{sub(/.*dir:[[:space:]]*/,"");gsub(/[[:space:]]/,"");print}' "$STATUS" | tr '\n' ' ')
+      fi
+      if [ -z "$FE_DIRS" ]; then
+        FE_DIRS="frontend"
+      fi
+      for FE_DIR in $FE_DIRS; do
+        [ -d "$T/$FE_DIR" ] || { echo "FAIL: $FE_DIR/ missing"; FAIL=1; }
+        [ -f "$T/$FE_DIR/package.json" ] || { echo "FAIL: $FE_DIR/package.json missing"; FAIL=1; }
+        [ -f "$T/$FE_DIR/tsconfig.json" ] || { echo "FAIL: $FE_DIR/tsconfig.json missing"; FAIL=1; }
+      done
+
+      # Project structure
+      [ -d "$T/.claude-project/docs" ] || { echo "FAIL: .claude-project/docs missing"; FAIL=1; }
+      [ -f "$STATUS" ] || { echo "FAIL: PIPELINE_STATUS.md missing"; FAIL=1; }
+
+      # .claude submodule (v1 Step 1.2 — must exist after bootstrap)
+      [ -d "$T/.claude" ] || { echo "FAIL: .claude/ missing (submodule not bootstrapped)"; FAIL=1; }
+
+      # Stack submodules — verify claude-nestjs and claude-react are initialized
+      # Read tech_stack from PIPELINE_STATUS.md to know which submodules to check
+      BACKEND_STACK="nestjs"
+      FRONTEND_STACK="react"
+      if [ -f "$STATUS" ]; then
+        B=$(grep -m1 'backend:' "$STATUS" | sed 's/.*backend:[[:space:]]*//' | tr -d '[:space:]')
+        [ -n "$B" ] && BACKEND_STACK="$B"
+      fi
+      if [ -d "$T/.claude/$BACKEND_STACK" ]; then
+        # Check submodule has content (not just an empty dir from uninitialized submodule)
+        if [ -z "$(ls -A "$T/.claude/$BACKEND_STACK" 2>/dev/null)" ]; then
+          echo "FAIL: .claude/$BACKEND_STACK/ exists but is empty (submodule not initialized)"
+          FAIL=1
+        fi
+      else
+        echo "FAIL: .claude/$BACKEND_STACK/ missing (stack submodule not found)"
+        FAIL=1
+      fi
+      if [ -d "$T/.claude/$FRONTEND_STACK" ]; then
+        if [ -z "$(ls -A "$T/.claude/$FRONTEND_STACK" 2>/dev/null)" ]; then
+          echo "FAIL: .claude/$FRONTEND_STACK/ exists but is empty (submodule not initialized)"
+          FAIL=1
+        fi
+      else
+        echo "FAIL: .claude/$FRONTEND_STACK/ missing (stack submodule not found)"
+        FAIL=1
+      fi
+
+      # Common rule file (v1 Step 1.3 — common template always present in claude-fullstack)
+      [ -f "$T/.claude-rules" ] || { echo "FAIL: .claude-rules missing at project root"; FAIL=1; }
+
+      # CLAUDE.md (v1 Step 1.6 — mandatory, no unresolved placeholders)
+      if [ ! -f "$T/CLAUDE.md" ]; then
+        echo "FAIL: CLAUDE.md missing at project root"
+        FAIL=1
+      else
+        UNRESOLVED=$(grep -cE '\{[A-Z_]+\}' "$T/CLAUDE.md" || true)
+        if [ "$UNRESOLVED" -gt 0 ]; then
+          echo "FAIL: CLAUDE.md has $UNRESOLVED unresolved {PLACEHOLDER} tokens"
+          grep -oE '\{[A-Z_]+\}' "$T/CLAUDE.md" | sort -u | head -20
+          FAIL=1
+        fi
+      fi
+
+      [ "$FAIL" -eq 1 ] && exit 1
+      echo "PASS: scaffold verified (backend + frontends: $FE_DIRS + .claude + CLAUDE.md)"
+    on_failure: abort
+
+tool_profile:
+  allow: [Read, Write, Edit, Bash, Grep, Glob]
+  deny: [WebSearch, WebFetch]

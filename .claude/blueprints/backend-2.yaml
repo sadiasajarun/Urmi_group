@@ -1,0 +1,302 @@
+name: backend-2
+description: |
+  Backend phase — TDD cycle (RED → GREEN → REFACTOR → REVIEW) + gates.
+  v2 blueprint with strict artifact contracts on every agentic sub-node.
+version: 2
+manifest: backend
+
+nodes:
+  # ============================================================================
+  # TIER 1: PRE-FLIGHT (deterministic)
+  # ============================================================================
+
+  - id: pre-check
+    type: deterministic
+    description: "Verify database entities exist"
+    command: |
+      ENTITY_COUNT=$(find {TARGET_DIR}/{BACKEND_DIR}/src -name '*.entity.ts' 2>/dev/null | wc -l | tr -d ' ')
+      [ "$ENTITY_COUNT" -gt 0 ] || { echo "FAIL: No entity files — run database phase first"; exit 1; }
+      echo "Found $ENTITY_COUNT entities"
+    on_failure: abort
+    abort_message: "Phase 4 (database) must complete first"
+
+  - id: api-doc-check
+    type: deterministic
+    description: "Verify PROJECT_API.md exists (source of truth for TDD)"
+    command: |
+      [ -f "{TARGET_DIR}/.claude-project/docs/PROJECT_API.md" ] || exit 1
+      echo "PROJECT_API.md found"
+    on_failure: abort
+    abort_message: "PROJECT_API.md missing — run prd phase first"
+
+  # ============================================================================
+  # PHASE 5a — RED: generate failing tests
+  # ============================================================================
+
+  - id: generate-tests
+    type: agentic
+    description: "RED — write e2e tests from PROJECT_API.md (tests MUST fail)"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/BACKEND_TESTS_GENERATED.md"
+    verification_pattern: "tests_generated:\\s*[0-9]+"
+    scope_guard:
+      allow: ["{BACKEND_DIR}/test/**"]
+      deny:
+        - "{BACKEND_DIR}/src/modules/**/*.controller.ts"
+        - "{BACKEND_DIR}/src/modules/**/*.service.ts"
+        - "{BACKEND_DIR}/src/modules/**/*.dto.ts"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_API.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_DATABASE.md"
+        - "{TARGET_DIR}/.claude-project/status/{project}/MISSING_ENDPOINTS.yaml"
+        - ".claude/{BACKEND}/guides/testing-guide.md"
+        - ".claude/{BACKEND}/guides/workflow-generate-e2e-tests.md"
+    tool_profile:
+      allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      You are in the RED phase of TDD. Write failing e2e tests for EVERY endpoint in PROJECT_API.md.
+
+      OUTPUT:
+      1. {BACKEND_DIR}/test/**/*.e2e-spec.ts — one spec file per controller/resource
+      2. .claude-project/status/{project}/BACKEND_TESTS_GENERATED.md — report with fields:
+           phase: backend-red
+           tests_generated: <int>
+           endpoints_covered: <int>
+           test_files: [list]
+
+      EACH TEST MUST:
+      - Assert status code from PROJECT_API.md
+      - Assert response shape (at least top-level keys)
+      - Cover auth requirement (public / user / admin)
+      - Include boundary cases: invalid body, missing auth, wrong role
+
+      CROSS-GENERATION SELF-HEAL:
+      If .claude-project/status/{project}/MISSING_ENDPOINTS.yaml exists AND
+      its missing_endpoints list is non-empty, ALSO generate tests for those
+      resources — the previous generation's integrate phase identified them
+      as needed by the frontend but missing from the backend API surface.
+      For each entry: use the suggested_routes as the endpoint spec and
+      produce one e2e-spec.ts per resource. Treat those as first-class
+      endpoints on equal footing with PROJECT_API.md.
+
+      DO NOT:
+      - Create or modify controllers, services, or DTOs
+      - Write tests that trivially pass without implementation
+
+  - id: verify-red
+    type: deterministic
+    description: "Confirm test files exist (RED state)"
+    command: |
+      cd {TARGET_DIR}/{BACKEND_DIR}
+      TEST_COUNT=$(find test -name '*.e2e-spec.ts' -o -name '*.spec.ts' 2>/dev/null | wc -l | tr -d ' ')
+      [ "$TEST_COUNT" -gt 0 ] || { echo "FAIL: no test files generated"; exit 1; }
+      echo "RED confirmed — $TEST_COUNT test files"
+    on_failure: abort
+
+  # ============================================================================
+  # PHASE 5b — GREEN: implement to pass tests
+  # ============================================================================
+
+  - id: implement
+    type: agentic
+    description: "GREEN — implement minimum API code to make tests pass"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/BACKEND_IMPLEMENTATION_REPORT.md"
+    verification_pattern: "controllers_created:\\s*[0-9]+"
+    scope_guard:
+      allow: ["{BACKEND_DIR}/src/**"]
+      deny: ["{BACKEND_DIR}/test/**"]
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_API.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_DATABASE.md"
+        - "{TARGET_DIR}/.claude-project/status/{project}/MISSING_ENDPOINTS.yaml"
+        - ".claude/{BACKEND}/guides/best-practices.md"
+        - ".claude/{BACKEND}/guides/routing-and-controllers.md"
+        - ".claude/{BACKEND}/guides/services-and-repositories.md"
+        - ".claude/{BACKEND}/guides/validation-patterns.md"
+    tool_profile:
+      allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      GREEN phase of TDD. Implement EVERY endpoint in PROJECT_API.md following {BACKEND} best practices.
+
+      GOAL: make all tests in {BACKEND_DIR}/test/ pass.
+
+      REQUIRED DELIVERABLES:
+      1. For each resource: controller.ts, service.ts, dto files, module.ts
+      2. Swagger decorators on every controller method
+      3. class-validator decorators on every DTO field
+      4. JWT auth guards applied where PROJECT_API.md says Protected
+      5. Return snake_case → camelCase mapping for Prisma/TypeORM results (not raw entities)
+
+      CROSS-GENERATION SELF-HEAL:
+      If .claude-project/status/{project}/MISSING_ENDPOINTS.yaml exists AND
+      its missing_endpoints list is non-empty, IMPLEMENT those resources too.
+      They were flagged by a prior generation's integrate phase: frontend pages
+      consume them but the backend didn't have matching controllers. Treat
+      each entry as part of the API surface:
+        - Create {BACKEND_DIR}/src/modules/<module_name>/ with controller + service + dto
+        - Use the suggested_routes as the endpoint spec (method, path, scope, shapes)
+        - Apply auth guards per scope (public=no guard, worker/company/admin=JwtAuthGuard + role)
+        - If tests/e2e exist for these resources (RED phase generated them from
+          the same MISSING_ENDPOINTS.yaml), make those tests pass too
+      Record the extra endpoints in the report under endpoints_implemented.
+
+      REPORT FILE: .claude-project/status/{project}/BACKEND_IMPLEMENTATION_REPORT.md
+      Required fields (regex-verifiable):
+        phase: backend-green
+        controllers_created: <int>
+        services_created: <int>
+        dto_files_created: <int>
+        endpoints_implemented: <int>
+        tests_passing: <int>/<int>
+        self_healed_resources: <int>   # count of MISSING_ENDPOINTS.yaml entries implemented (0 if file absent)
+
+      DO NOT modify files in {BACKEND_DIR}/test/.
+
+  - id: lint-fix
+    type: deterministic
+    description: "Auto-fix ESLint issues"
+    command: "cd {TARGET_DIR}/{BACKEND_DIR} && npx eslint src/ --fix 2>&1 || true"
+    on_failure: ignore
+
+  - id: typecheck
+    type: deterministic
+    description: "Verify backend compiles"
+    command: |
+      cd {TARGET_DIR}/{BACKEND_DIR} && \
+      (npx tsc --project tsconfig.app.json --noEmit 2>&1 || npx tsc --noEmit 2>&1)
+    on_failure: abort
+    abort_message: "Backend TypeScript does not compile — GREEN phase produced broken code"
+
+  - id: verify-green
+    type: deterministic
+    description: "Run tests to confirm GREEN state"
+    command: |
+      cd {TARGET_DIR}/{BACKEND_DIR}
+      if [ -f tsconfig.spec.json ]; then
+        npx tsc --project tsconfig.spec.json --noEmit 2>&1 || { echo "FAIL: test files do not compile"; exit 1; }
+      fi
+      npx jest --passWithNoTests 2>&1
+    on_failure: abort
+    abort_message: "Tests still failing after GREEN implementation"
+
+  # ============================================================================
+  # PHASE 5c — REFACTOR
+  # ============================================================================
+
+  - id: refactor
+    type: agentic
+    description: "REFACTOR — improve code quality while keeping tests green"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/BACKEND_REFACTOR_REPORT.md"
+    verification_pattern: "refactor_status:\\s*(complete|skipped)"
+    scope_guard:
+      allow: ["{BACKEND_DIR}/src/**"]
+      deny: ["{BACKEND_DIR}/test/**"]
+    context:
+      additional_read:
+        - ".claude/{BACKEND}/guides/best-practices.md"
+    tool_profile:
+      allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      REFACTOR phase. Review {BACKEND_DIR}/src/ for:
+      - Code duplication (extract to shared utilities)
+      - Missing Swagger decorators (@ApiTags, @ApiOperation, @ApiResponse)
+      - Missing class-validator decorators on DTOs
+      - Inconsistent naming vs {BACKEND} conventions
+      - Proper use of HTTP status codes
+
+      Improve clarity without changing behavior. Tests MUST still pass.
+      Do NOT modify {BACKEND_DIR}/test/.
+
+      REPORT FILE: .claude-project/status/{project}/BACKEND_REFACTOR_REPORT.md
+      Required fields:
+        phase: backend-refactor
+        refactor_status: (complete|skipped)
+        changes_made: <int>
+        files_touched: [list]
+        tests_still_passing: (true|false)
+
+  # ============================================================================
+  # REVIEW — spec compliance
+  # ============================================================================
+
+  - id: review
+    type: agentic
+    description: "REVIEW — verify implementation matches PROJECT_API.md"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/BACKEND_REVIEW_REPORT.md"
+    verification_pattern: "spec_compliance:\\s*[0-9.]+"
+    scope_guard:
+      allow: ["{BACKEND_DIR}/src/**"]
+      deny: ["{BACKEND_DIR}/test/**"]
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_API.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_DATABASE.md"
+    tool_profile:
+      allow: [Read, Write, Edit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Review the backend implementation against PROJECT_API.md.
+
+      CHECK:
+      1. Every PRD endpoint has a controller route
+      2. Request/response DTOs match documented shapes
+      3. HTTP status codes correct (201 create, 204 delete, etc.)
+      4. Auth guards applied as documented
+      5. Error responses handled (400 / 401 / 403 / 404)
+      6. No over-engineering — features not in spec should be removed
+
+      REPORT FILE: .claude-project/status/{project}/BACKEND_REVIEW_REPORT.md
+      Required fields:
+        phase: backend-review
+        spec_compliance: <float 0.0-1.0>
+        missing_endpoints: [list]
+        extra_endpoints: [list]
+        dto_mismatches: [list]
+        issues_fixed: <int>
+        status: (PASS|NEEDS_WORK)
+
+      If spec_compliance < 0.9, fix the critical issues before writing the report.
+
+  # ============================================================================
+  # TIER 3: EVIDENCE CHECK (deterministic)
+  # ============================================================================
+
+  - id: seed-script-check
+    type: deterministic
+    description: "Verify seed script exists and is registered in package.json (RULE-B3)"
+    command: |
+      SEED="{TARGET_DIR}/{BACKEND_DIR}/src/database/seed.ts"
+      [ -f "$SEED" ] || { echo "FAIL: seed script missing at $SEED"; exit 1; }
+      grep -q '"seed"' "{TARGET_DIR}/{BACKEND_DIR}/package.json" || { echo "FAIL: seed script not registered in package.json"; exit 1; }
+      echo "PASS: seed script exists and registered"
+    on_failure: route_to_agent
+    route_to_agent_attempts: 2
+    fix_context: |
+      RULE-B3 requires a seed script at {BACKEND_DIR}/src/database/seed.ts.
+      It must read fixture users from .claude-project/user_stories/_fixtures.yaml.
+      It must be registered in package.json scripts as "seed".
+      See .claude/rules/phases/backend.rules.md for full requirements.
+
+  - id: evidence-check
+    type: deterministic
+    description: "Verify backend phase produced controllers, services, and tests"
+    command: |
+      CTRL=$(find {TARGET_DIR}/{BACKEND_DIR}/src -name '*.controller.ts' 2>/dev/null | wc -l | tr -d ' ')
+      SVC=$(find {TARGET_DIR}/{BACKEND_DIR}/src -name '*.service.ts' 2>/dev/null | wc -l | tr -d ' ')
+      TEST=$(find {TARGET_DIR}/{BACKEND_DIR}/test -name '*.e2e-spec.ts' -o -name '*.spec.ts' 2>/dev/null | wc -l | tr -d ' ')
+      FAIL=0
+      [ "$CTRL" -eq 0 ] && echo "FAIL: no controllers" && FAIL=1
+      [ "$SVC" -eq 0 ] && echo "FAIL: no services" && FAIL=1
+      [ "$TEST" -eq 0 ] && echo "FAIL: no tests" && FAIL=1
+      [ "$FAIL" -eq 1 ] && exit 1
+      echo "PASS: $CTRL controllers, $SVC services, $TEST tests"
+    on_failure: abort
+    abort_message: "Backend phase must produce controllers, services, and tests"
+
+tool_profile:
+  allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+  deny: [WebSearch, WebFetch]

@@ -1,0 +1,25 @@
+phase: P2-prd
+project: urmi
+status: pass
+score: 0.90
+prd_canonical: .claude-project/docs/PRD.md
+prd_archive: .claude-project/prd/URMI_PRD.md
+prd_history: .claude-project/prd/history/PRD_v1.md
+prd_version: 1
+prd_hash: 85a98756f102a5135ec2f5173e24eb92d761ff14ba0d7f5897251fbae0e4f250
+checks:
+  prd_canonical_exists: pass
+  prd_archive_exists: pass
+  sections_complete: pass    # Title, Terminology, Project Information, System Modules, 3rd Party APIs, Page Architecture, Tech Stack all present
+  no_ambiguity: pass         # Open items quarantined to "Additional Questions" section
+  seed_aligned: pass         # PRD covers every acceptance criterion in seed-2026-05-07.yaml
+  version_snapshot: pass
+generated_at: 2026-05-07
+generated_by: /fullstack-pm urmi --phase P2-prd
+notes: |
+  PRD generated retrospectively after the homepage build. Adapted the dev
+  generate-prd template for a marketing site (omitted Admin Dashboard /
+  user-management modules). The "Feature Change Log" section documents every
+  delta between the original knowledge base and the as-built v2 implementation.
+  Six required and six recommended clarifications are listed in the
+  "Additional Questions" section as blockers / soft-blockers.

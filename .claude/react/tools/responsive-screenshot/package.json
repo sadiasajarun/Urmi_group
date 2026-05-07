@@ -1,0 +1,16 @@
+{
+  "name": "responsive-screenshot",
+  "version": "1.0.0",
+  "description": "Config-driven Playwright screenshot capture for responsive design QA",
+  "main": "capture.js",
+  "scripts": {
+    "capture": "node capture.js",
+    "capture:mobile": "node capture.js --viewport mobile",
+    "capture:tablet": "node capture.js --viewport tablet",
+    "capture:admin": "node capture.js --context admin",
+    "capture:user": "node capture.js --context user"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}

@@ -1,0 +1,245 @@
+name: design-2
+description: |
+  Design phase — Domain research + 3 variations + client confirmation PAUSE + full HTML.
+  v2 blueprint with strict artifact contracts.
+  The client confirmation step aborts the orchestrator until DESIGN_STATUS.md has approved:true.
+  Re-run with --resume after the user picks a variation.
+version: 2
+manifest: design
+
+nodes:
+  # ============================================================================
+  # TIER 1: PRE-FLIGHT (deterministic)
+  # ============================================================================
+
+  - id: require-prd
+    type: deterministic
+    description: "Verify PRD docs exist"
+    command: |
+      [ -f "{TARGET_DIR}/.claude-project/docs/PROJECT_KNOWLEDGE.md" ] || { echo "FAIL: PROJECT_KNOWLEDGE.md missing"; exit 1; }
+      echo "PRD docs verified"
+    on_failure: abort
+    abort_message: "Phase 2 (prd) must complete first"
+
+  # ============================================================================
+  # TIER 2A: AGENTIC — domain research
+  # ============================================================================
+
+  - id: domain-research
+    type: agentic
+    description: "Phase 2.5 — extract industry/competitors/design references"
+    required_output_file: "{TARGET_DIR}/.claude-project/design/DOMAIN_RESEARCH.md"
+    verification_pattern: "^(#\\s+Domain|##\\s+Industry|industry:)"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_KNOWLEDGE.md"
+        - "{TARGET_DIR}/.claude-project/context/PRD_chunk_*.md"
+        - ".claude/skills/design/prd-to-design-guide/SKILL.md"
+    tool_profile:
+      allow: [Read, Write, Edit, Bash, Grep, Glob, WebSearch, WebFetch]
+      deny: []
+    prompt: |
+      Run Phase 2.5 only — Domain & Reference Research.
+
+      TASKS:
+      1. Extract industry/domain from PROJECT_KNOWLEDGE.md and PRD chunks
+      2. Identify 3-5 competitors and their UI patterns (WebSearch + WebFetch)
+      3. Derive standard sections/elements per page type (Landing, Dashboard, Detail)
+      4. Deep-dive the PRD-specified references
+
+      OUTPUT: .claude-project/design/DOMAIN_RESEARCH.md
+      Required sections:
+        # Domain Research
+        ## Industry
+        ## Competitors
+        ## Reference UI Patterns
+        ## Page-type Conventions (Landing / Dashboard / Detail)
+
+      DO NOT generate Design Guide or DESIGN_SYSTEM yet — that's the next step.
+
+  # ============================================================================
+  # TIER 2B: AGENTIC — 3 variations (3a+3b+3c)
+  # ============================================================================
+
+  - id: design-variations
+    type: agentic
+    description: "3a+3b+3c — Design Guide + 3 DESIGN_SYSTEM variants + 9 preview HTML"
+    required_output_file: "{TARGET_DIR}/.claude-project/design/VARIATIONS_INDEX.md"
+    verification_pattern: "variations_generated:\\s*3"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/design/DOMAIN_RESEARCH.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_KNOWLEDGE.md"
+        - ".claude/skills/design/prd-to-design-guide/SKILL.md"
+    tool_profile:
+      allow: [Read, Write, Edit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Run Phase 3 Steps 3a + 3b + 3c.
+
+      READ FIRST: DOMAIN_RESEARCH.md (previous step)
+
+      STEP 3a: Generate Design Guide + 3 DESIGN_SYSTEM variants (A, B, C)
+      STEP 3b: Generate representative page prompts (3 pages × 3 styles)
+      STEP 3c: Generate 9 preview HTML files (A/B/C × landing/dashboard/detail)
+
+      CRITICAL VARIATION RULES:
+      - The 3 variants MUST have **different background color themes** (e.g., dark / cream / white)
+      - Do NOT copy PRD color tokens identically across variants
+      - Interpret PRD primary color differently per variant (gradient glow vs pastel+accent vs sparse accent)
+      - Assign a different reference company per variant (Linear / Notion / Apple / …)
+      - ≥5 of 7 items in the PHASE 3.5 differentiation checklist MUST differ
+
+      OUTPUTS:
+      - .claude-project/design/DESIGN_SYSTEM_A.md, _B.md, _C.md
+      - .claude-project/design/variations/{A|B|C}-0{1|2|3}-{page}.html (9 files)
+      - .claude-project/design/variations/showcase-ALL.html
+      - .claude-project/design/VARIATIONS_INDEX.md with fields:
+          phase: design-variations
+          variations_generated: 3
+          html_files: <int>
+          archetypes: [archetype_A, archetype_B, archetype_C]
+          differentiation_score: <int>/7
+
+      MANDATORY STRUCTURAL MARKERS (grep-verified by validator):
+      - Every `{A|B|C}-0{1|2|3}-{page}.html` file MUST include either:
+          a) `class="phone-frame"` wrapper (375px mobile frame), OR
+          b) `max-width: 1440px` inline style OR `max-w-[1440px]` Tailwind class on its root wrapper
+        This enforces a consistent viewport frame for side-by-side comparison.
+      - Every `{A|B|C}-0{1|2|3}-{page}.html` file MUST include an in-page variation nav
+        with `class="var-nav-bar"` — a small fixed nav letting the reviewer jump between
+        A/B/C of the same page. Example:
+          <nav class="var-nav-bar fixed top-4 right-4 flex gap-2 bg-black/80 px-3 py-2 rounded text-xs">
+            <a href="A-01-landing.html">A</a><a href="B-01-landing.html">B</a><a href="C-01-landing.html">C</a>
+          </nav>
+      - `showcase-ALL.html` must exist and embed/link all 9 variants.
+
+      Files missing these markers FAIL the phase regardless of visual quality.
+
+      DO NOT proceed to 3d/3e. Stop after 9 HTML files.
+
+  # ============================================================================
+  # TIER 2C: PAUSE — client confirmation (deterministic, ABORTs until approved)
+  # ============================================================================
+
+  - id: validate-variations-output
+    type: deterministic
+    description: "Validate variation HTML meets MANDATORY structural requirements"
+    command: |
+      DIR="{TARGET_DIR}/.claude-project/design/variations"
+      ERRORS=0
+      for f in "$DIR"/*-0[1-3]-*.html; do
+        [ -f "$f" ] || continue
+        grep -qE 'phone-frame|max-width[^a-zA-Z]*1440|max-w-\[1440px\]' "$f" 2>/dev/null || { echo "FAIL: $f missing device frame"; ERRORS=$((ERRORS+1)); }
+      done
+      [ -f "$DIR/showcase-ALL.html" ] || { echo "FAIL: showcase-ALL.html missing"; ERRORS=$((ERRORS+1)); }
+      for f in "$DIR"/[A-Z]-0*.html; do
+        [ -f "$f" ] || continue
+        grep -q 'var-nav-bar' "$f" 2>/dev/null || { echo "FAIL: $f missing in-page variation nav"; ERRORS=$((ERRORS+1)); }
+      done
+      [ $ERRORS -gt 0 ] && { echo "DESIGN_VALIDATION_FAILED: $ERRORS errors"; exit 1; }
+      echo "DESIGN_VALIDATION_PASSED"
+    on_failure: abort
+
+  - id: require-variation-selection
+    type: deterministic
+    description: "PAUSE — ABORT until DESIGN_STATUS.md contains approved:true"
+    command: |
+      STATUS_FILE=""
+      for c in \
+        "{TARGET_DIR}/.claude-project/status/DESIGN_STATUS.md" \
+        "{TARGET_DIR}/.claude-project/DESIGN_STATUS.md" \
+        "{TARGET_DIR}/.claude-project/design/DESIGN_STATUS.md"; do
+        [ -f "$c" ] && STATUS_FILE="$c" && break
+      done
+      if [ -z "$STATUS_FILE" ]; then
+        echo "PAUSE: DESIGN_STATUS.md not found"
+        echo "→ Show the 3 variations to the user, record their selection in DESIGN_STATUS.md:"
+        echo "   selected_variation: A"
+        echo "   approved: true"
+        echo "→ Then re-run: node .claude/scripts/fullstack-2/orchestrator.js {project} --phase design --resume"
+        exit 1
+      fi
+      grep -q 'approved: true' "$STATUS_FILE" 2>/dev/null || {
+        VARIATION=$(grep 'selected_variation:' "$STATUS_FILE" 2>/dev/null | sed 's/.*: *//')
+        echo "PAUSE: approved:true missing. selected_variation=${VARIATION:-'(unset)'}"
+        exit 1
+      }
+      VARIATION=$(grep 'selected_variation:' "$STATUS_FILE" | sed 's/.*: *//' | tr -d ' "')
+      echo "Client approved: variation $VARIATION"
+    on_failure: abort
+    abort_message: |
+      ⏸ DESIGN REVIEW REQUIRED
+
+      The 3 variations (A/B/C) are ready in .claude-project/design/variations/.
+      Show them to the user, record their selection in DESIGN_STATUS.md:
+        selected_variation: <A|B|C>
+        approved: true
+
+      Then re-run with --resume to continue into full HTML generation.
+
+  # ============================================================================
+  # TIER 2D: AGENTIC — 3e + 3f + 3g full HTML + QA + upload
+  # ============================================================================
+
+  - id: design-full-generation
+    type: agentic
+    description: "3e+3f+3g — Full HTML for all PRD pages + QA + upload + phase_complete marker"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/DESIGN_FULL_GENERATION_REPORT.md"
+    verification_pattern: "phase_complete:\\s*true"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/design/DOMAIN_RESEARCH.md"
+        - "{TARGET_DIR}/.claude-project/design/VARIATIONS_INDEX.md"
+        - ".claude/skills/design/generate-html/SKILL.md"
+    tool_profile:
+      allow: [Read, Write, Edit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Run Phase 3 Steps 3e → 3f → 3g.
+
+      The confirmed variation is in DESIGN_STATUS.md (approved:true).
+      Read DESIGN_STATUS.md → get selected_variation → load DESIGN_SYSTEM_{variation}.md.
+
+      3e: Full HTML generation for ALL PRD pages using the confirmed variation's DESIGN_SYSTEM
+      3f: Design QA — generate DESIGN_SYSTEM_{variation}.md (final consolidated)
+      3g: Upload / finalize all HTML files
+
+      OUTPUTS:
+      - .claude-project/design/html/*.html (full set, NOT just 3 samples)
+      - .claude-project/design/DESIGN_SYSTEM_{variation}.md (final)
+
+      Append `phase_complete: true` to DESIGN_STATUS.md.
+
+      REPORT FILE: .claude-project/status/{project}/DESIGN_FULL_GENERATION_REPORT.md
+      Required fields (regex-verifiable):
+        phase: design-full
+        selected_variation: <A|B|C>
+        html_files_generated: <int>
+        design_system_finalized: (true|false)
+        phase_complete: true
+
+  # ============================================================================
+  # TIER 3: EVIDENCE CHECK (deterministic)
+  # ============================================================================
+
+  - id: evidence-check
+    type: deterministic
+    description: "Verify full HTML set + phase_complete marker"
+    command: |
+      HTML=$(find {TARGET_DIR}/.claude-project/design/html -name '*.html' 2>/dev/null | wc -l | tr -d ' ')
+      [ "$HTML" -gt 0 ] || { echo "FAIL: no full HTML files in design/html/"; exit 1; }
+      STATUS_FILE=""
+      for c in \
+        "{TARGET_DIR}/.claude-project/status/DESIGN_STATUS.md" \
+        "{TARGET_DIR}/.claude-project/DESIGN_STATUS.md" \
+        "{TARGET_DIR}/.claude-project/design/DESIGN_STATUS.md"; do
+        [ -f "$c" ] && STATUS_FILE="$c" && break
+      done
+      grep -q 'phase_complete: true' "$STATUS_FILE" || { echo "FAIL: phase_complete:true missing from DESIGN_STATUS.md"; exit 1; }
+      echo "PASS: $HTML full HTML files + phase_complete=true"
+    on_failure: abort
+
+tool_profile:
+  allow: [Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion]
+  deny: [WebSearch, WebFetch]

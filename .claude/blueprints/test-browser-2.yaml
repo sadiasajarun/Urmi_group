@@ -1,0 +1,327 @@
+name: test-browser-2
+description: |
+  Browser-based QA driven entirely by user story YAML files.
+
+  Each story in .claude-project/user_stories/*.yaml is executed against the
+  running app via playwright-cli, dispatched through the playwright-qa-agent
+  subagent (one agent per story, parallel sessions). Results — PASS / FAIL /
+  CRASH with screenshot evidence — feed a single bug-fix pass that closes
+  every failure before the gate runs.
+
+  No curl smoke tests, no static greppers, no Playwright spec-file generation.
+  If it can't be observed in a real browser, it isn't a test.
+version: 2
+manifest: test-browser
+
+nodes:
+  # ============================================================================
+  # PRE-FLIGHT (deterministic)
+  # ============================================================================
+
+  - id: user-stories-check
+    type: deterministic
+    description: "Block phase if user-story YAMLs are missing"
+    command: |
+      STORIES_DIR=""
+      for candidate in \
+        "{TARGET_DIR}/.claude-project/user_stories" \
+        "{TARGET_DIR}/user_stories"; do
+        [ -d "$candidate" ] && STORIES_DIR="$candidate" && break
+      done
+      if [ -z "$STORIES_DIR" ]; then
+        echo "FAIL: no user_stories directory"
+        exit 1
+      fi
+      STORY_COUNT=$(find "$STORIES_DIR" -maxdepth 1 -name '*.yaml' \
+        ! -name '_fixtures.yaml' ! -name '_index.yaml' 2>/dev/null | wc -l | tr -d ' ')
+      if [ "$STORY_COUNT" -eq 0 ]; then
+        echo "FAIL: user_stories/ has no story YAMLs"
+        exit 1
+      fi
+      echo "stories=$STORY_COUNT in $STORIES_DIR"
+    on_failure: abort
+    abort_message: "user-stories phase must produce story YAMLs first"
+
+  - id: ensure-servers
+    type: deterministic
+    description: "Backend + frontend must be reachable before we drive a browser"
+    command: |
+      BACKEND_URL="http://localhost:{BACKEND_PORT}/api"
+      FRONTEND_URL="http://localhost:{FRONTEND_PORT}"
+      BCODE=$(curl -s -o /dev/null -w "%{http_code}" "$BACKEND_URL" || echo 000)
+      FCODE=$(curl -s -o /dev/null -w "%{http_code}" "$FRONTEND_URL" || echo 000)
+      if [ "$BCODE" = "000" ] || [ "$FCODE" = "000" ]; then
+        echo "FAIL: backend=$BCODE frontend=$FCODE"
+        exit 1
+      fi
+      echo "backend=$BCODE frontend=$FCODE"
+    on_failure: abort
+    abort_message: "Start backend on :{BACKEND_PORT} and frontend on :{FRONTEND_PORT} before running test-browser"
+
+  - id: ensure-playwright-cli
+    type: deterministic
+    description: "playwright-cli must be on PATH for the QA agents"
+    command: |
+      if ! command -v playwright-cli >/dev/null 2>&1; then
+        echo "FAIL: playwright-cli not installed"
+        echo "Install with: brew install playwright-cli (or see agents/playwright-qa-agent.md)"
+        exit 1
+      fi
+      playwright-cli --help 2>&1 | head -1
+    on_failure: abort
+    abort_message: "playwright-cli is required to drive browser sessions"
+
+  # ============================================================================
+  # STORY EXECUTION (agentic — dispatches playwright-qa-agent per story)
+  # ============================================================================
+
+  - id: story-runner
+    type: agentic
+    description: "Run every user story in a real browser via playwright-qa-agent"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/user_stories/_index.yaml"
+        - "{TARGET_DIR}/.claude-project/user_stories/_fixtures.yaml"
+    prompt: |
+      You are the story-runner. Your job is to execute EVERY user story
+      YAML against the running app and record a single consolidated report.
+
+      === INPUT ===
+      - Stories directory: {TARGET_DIR}/.claude-project/user_stories/
+      - Skip files: _fixtures.yaml, _index.yaml
+      - Each story file contains: id, role, feature, acceptance_criteria[],
+        boundary_cases[], error_scenarios[], and (optionally) fixture_refs[].
+      - Servers: backend http://localhost:{BACKEND_PORT}, frontend http://localhost:{FRONTEND_PORT}
+      - Fixture users (credentials) live in _fixtures.yaml under users:
+
+      === EXECUTION ===
+
+      STEP 1 — discover stories
+        Use Glob on '{TARGET_DIR}/.claude-project/user_stories/*.yaml'.
+        Exclude _fixtures.yaml and _index.yaml.
+
+      STEP 2 — build RUN_DIR
+        RUN_DIR='{TARGET_DIR}/.claude-project/status/{project}/story-runs/<ISO timestamp>'
+        mkdir -p "$RUN_DIR"
+        Use one timestamp for the whole run so screenshots group correctly.
+
+      STEP 3 — dispatch QA agents in parallel
+        For each story, spawn one playwright-qa-agent via the Task tool.
+        Issue them in the SAME message (parallel tool calls) — max 4 at a time.
+        If there are more than 4 stories, batch: dispatch 4, wait for all,
+        dispatch the next 4, etc.
+
+        Prompt for each Task call — include ALL of the following:
+          - story_name: <story.feature>
+          - story_url: http://localhost:{FRONTEND_PORT}/ (or role-appropriate landing page)
+          - workflow: a numbered list built from the story YAML:
+              1. For each acceptance_criterion.description → one workflow step
+                 ("Verify <description>" or "Execute <description>")
+              2. For each boundary_case → one step
+                 ("Attempt <case> and verify rejection/expected status")
+              3. For each error_scenario → one step
+          - RUN_DIR: <RUN_DIR>/<story-kebab>
+          - FRONTEND_URL: http://localhost:{FRONTEND_PORT}
+          - viewport: 'desktop' unless the story mentions mobile/tablet
+
+        Use subagent_type='playwright-qa-agent' for every dispatch.
+        Do NOT invent workflow steps beyond what the YAML lists.
+        Do NOT hardcode credentials — instruct the agent to read
+          _fixtures.yaml via Read and use the fixture matching story.role.
+
+      STEP 4 — collect results
+        Each agent returns a block like:
+          STATUS: PASS|FAIL|CRASH
+          STORY: ...
+          | Step | Action | Result | Screenshot |
+          FAILURE_DETAILS: ...
+          SUGGESTED_STORIES: ...
+
+        Parse each. Classify:
+          - overall_status: PASS / FAIL / CRASH (from the STATUS line)
+          - failure: first failing step + FAILURE_DETAILS text
+          - priority:
+              CRASH                              → P0
+              FAIL on acceptance_criterion       → P1
+              FAIL on boundary_case or error_scenario → P2
+          - screenshot_dir: RUN_DIR/<story-kebab>
+
+      STEP 5 — write the report
+
+      REPORT FILE: {TARGET_DIR}/.claude-project/status/{project}/STORY_QA_REPORT.md
+
+      Required format (the `stories_total/stories_passed/stories_failed/stories_crashed`
+      and `run_dir` lines are machine-parsed — keep them exact):
+      ```
+      # Story QA Report
+
+      timestamp: <ISO>
+      run_dir: <RUN_DIR>
+
+      stories_total: <N>
+      stories_passed: <N>
+      stories_failed: <N>
+      stories_crashed: <N>
+      stories_skipped: <N>
+      pass_rate: <0.00-1.00>
+
+      bugs_p0: <N>   # CRASH count
+      bugs_p1: <N>   # acceptance_criterion failures
+      bugs_p2: <N>   # boundary/error failures
+
+      ## Per-Story Results
+
+      | story | role | status | priority | first_failure | screenshots |
+      |-------|------|--------|----------|---------------|-------------|
+      | auth | all | PASS | - | - | story-runs/.../auth/ |
+      | payment-refund | admin | FAIL | P1 | AC-3 refund button missing | story-runs/.../payment-refund/ |
+      ...
+
+      ## Failures (one entry per non-PASS story)
+
+      ### <story> — <priority>
+      - failure: <step/AC id + details>
+      - screenshots: <path>
+      - suggested_stories: <list or "none">
+      ...
+
+      story_runner_complete: true
+      ```
+
+      === RULES ===
+      - Do NOT write Playwright .spec.ts files. The QA agents drive playwright-cli directly.
+      - Do NOT skip stories. Empty results = FAIL, not SKIP.
+      - If an agent crashes its session repeatedly, record priority=P0 and move on.
+      - Budget: 45 minutes wall-clock. Batch parallelism of 4 keeps total runtime low.
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/STORY_QA_REPORT.md"
+    verification_pattern: "story_runner_complete: true"
+    tool_profile:
+      allow: [Task, Read, Write, Glob, Grep, Bash]
+      deny: [WebSearch, WebFetch, Edit]
+
+  # ============================================================================
+  # BUG-FIX PASS (agentic — fixes EVERY failing story before gate runs)
+  # ============================================================================
+
+  - id: bug-fix-pass
+    type: agentic
+    description: "Fix every P0/P1/P2 surfaced by story-runner, re-run the story to prove it"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/status/{project}/STORY_QA_REPORT.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_API.md"
+        - "{TARGET_DIR}/.claude-project/user_stories/_fixtures.yaml"
+    prompt: |
+      You fix the bugs found by the story-runner, then re-run the affected
+      stories to prove the fixes work. There is no per-run fix cap — every
+      P0 and P1 must be fixed or explicitly documented as blocked with a
+      code-level reason, before this node exits.
+
+      === STEP 1 — triage ===
+      Read STORY_QA_REPORT.md. For every row where status != PASS:
+        - Note priority (P0 / P1 / P2)
+        - Note first_failure (step or acceptance_criterion id)
+        - Open the relevant screenshot(s) in RUN_DIR/<story-kebab>/ if needed to
+          disambiguate ("button missing" vs "button wired but throws").
+
+      Order: P0 first, then P1, then P2. Within a priority, fix whatever
+      touches the fewest files first (cheap wins unblock other stories).
+
+      === STEP 2 — fix ===
+      For each bug:
+        a) Read the relevant source file(s).
+        b) Make the minimal fix. Never add features; never delete tests;
+           never add .skip(); never weaken assertions.
+        c) Run tsc:
+             cd backend  && npx tsc --noEmit 2>&1 | tail -20
+             cd frontend && npx tsc --noEmit 2>&1 | tail -20
+           If tsc regresses, fix before moving on.
+
+      === STEP 3 — re-verify via playwright-qa-agent ===
+      For each fixed bug, re-dispatch the story that was failing via the
+      Task tool (subagent_type='playwright-qa-agent'). Pass the SAME workflow
+      the story-runner used, plus this context line:
+        "Re-run after fix attempt. Story should now PASS."
+
+      Capture the new STATUS from the agent's report. If still FAIL, try ONE
+      more fix attempt. If it still fails after two tries, record as "stuck"
+      and move on — don't burn the budget on a single story.
+
+      === STEP 4 — write report ===
+      REPORT FILE: {TARGET_DIR}/.claude-project/status/{project}/BUG_FIX_REPORT.md
+
+      Required format:
+      ```
+      # Bug Fix Report
+
+      timestamp: <ISO>
+      bugs_found: <N>
+      bugs_fixed: <N>
+      bugs_stuck: <N>
+      bugs_remaining_p0: <N>   # MUST be 0 for the gate to pass
+      bugs_remaining_p1: <N>   # MUST be 0 for the gate to pass
+      bugs_remaining_p2: <N>
+
+      ## Fixes Applied
+
+      | priority | story | file(s) | fix | re-run status |
+      |----------|-------|---------|-----|----------------|
+      | P0 | payment-refund | {FRONTEND_DIR}/src/pages/admin/Refund.tsx | wire refund button to useMutation | PASS |
+
+      ## Stuck (retries exhausted — code-level blocker)
+
+      | priority | story | blocker |
+      |----------|-------|---------|
+      | P1 | company-dashboard | depends on seed data not present |
+
+      fix_pass_complete: true
+      ```
+
+      === RULES ===
+      - tsc --noEmit must return 0 for both backend and frontend before you
+        write fix_pass_complete: true.
+      - You may modify code under {BACKEND_DIR}/src/ and {FRONTEND_DIR}/src/.
+      - You may NOT modify .claude/, .claude-project/user_stories/ (except to
+        log suggested_stories as follow-ups — NOT during this pass), or test infra.
+      - Budget: 60 minutes. If you're not done, STOP and write the report
+        with bugs_remaining_* reflecting reality. Do not lie.
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/BUG_FIX_REPORT.md"
+    verification_pattern: "fix_pass_complete: true"
+    tool_profile:
+      allow: [Task, Read, Write, Edit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+
+  # ============================================================================
+  # EVIDENCE VERIFICATION (deterministic)
+  # ============================================================================
+
+  - id: evidence-check
+    type: deterministic
+    description: "Verify story + bug-fix reports exist with real numbers"
+    command: |
+      STATUS_DIR="{TARGET_DIR}/.claude-project/status/{project}"
+      STORY_REPORT="$STATUS_DIR/STORY_QA_REPORT.md"
+      BUG_REPORT="$STATUS_DIR/BUG_FIX_REPORT.md"
+      MISSING=0
+      for f in "$STORY_REPORT" "$BUG_REPORT"; do
+        if [ ! -f "$f" ]; then
+          echo "MISSING: $f"
+          MISSING=$((MISSING+1))
+        elif grep -q '<ISO>\|YYYY-MM-DD\|{PROJECT_NAME}\|<N>' "$f"; then
+          echo "TEMPLATE_PLACEHOLDER: $f"
+          MISSING=$((MISSING+1))
+        fi
+      done
+      if [ $MISSING -gt 0 ]; then
+        echo "FAIL: $MISSING report(s) missing or templated"
+        exit 1
+      fi
+      TOTAL=$(grep -m1 '^stories_total:' "$STORY_REPORT" | sed 's/[^0-9]//g')
+      TOTAL=${TOTAL:-0}
+      if [ "$TOTAL" -eq 0 ]; then
+        echo "FAIL: STORY_QA_REPORT.md says stories_total=0"
+        exit 1
+      fi
+      echo "PASS: stories_total=$TOTAL, both reports present"
+    on_failure: abort
+    abort_message: "story-runner or bug-fix-pass did not produce real evidence"

@@ -1,0 +1,202 @@
+@import 'tailwindcss';
+
+/* ========================================================================
+   Brand tokens — Urmi Group v2 (blue-primary, sage for sustainability)
+   ======================================================================== */
+@theme {
+  /* Primary — sampled from the logo */
+  --color-urmi-blue: #1e5c9f;
+  --color-urmi-blue-deep: #143f73;
+  --color-wave-blue: #7bb6e8;
+  --color-wave-blue-soft: #cfe4f5;
+
+  /* Secondary — sustainability */
+  --color-sage: #5b8c7e;
+  --color-sage-deep: #3f6a5e;
+  --color-sage-soft: #d6e4df;
+
+  /* Neutrals */
+  --color-mist: #f4f7fb;
+  --color-cloud: #e6ecf2;
+  --color-slate-text: #4a5568;
+  --color-ink: #0f1e33;
+
+  /* Single warm accent */
+  --color-amber-accent: #c8956d;
+
+  /* Typography */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-bengali: 'Hind Siliguri', sans-serif;
+
+  /* Easing */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ========================================================================
+   Global resets and defaults
+   ======================================================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-mist);
+  color: var(--color-slate-text);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--color-ink);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+.font-sans {
+  font-family: var(--font-sans);
+}
+.font-bengali {
+  font-family: var(--font-bengali);
+}
+
+/* Hide scrollbar nicely */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-cloud);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-wave-blue);
+}
+
+/* ========================================================================
+   Grain overlay (3% noise) — port from Aura HTML
+   ======================================================================== */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ========================================================================
+   Wave clip-path (Section 3 — Pillars top edge)
+   ======================================================================== */
+.wave-clip-top {
+  clip-path: path(
+    'M 0,24 Q 50,0 100,24 T 200,24 T 300,24 T 400,24 L 400,1000 L 0,1000 Z'
+  );
+}
+.wave-clip-top-alt {
+  clip-path: path(
+    'M 0,24 Q 50,48 100,24 T 200,24 T 300,24 T 400,24 L 400,1000 L 0,1000 Z'
+  );
+}
+
+/* ========================================================================
+   Keyframes
+   ======================================================================== */
+@keyframes pulse-line {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  50.1% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+.animate-pulse-line {
+  animation: pulse-line 3s var(--ease-out-soft) infinite;
+}
+
+@keyframes scroll-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: scroll-marquee 40s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes wave-rise {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+.animate-ripple {
+  animation: ripple 2.4s var(--ease-out-soft) infinite;
+}
+
+@keyframes cloth-wave {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-8px) scaleY(1.02);
+  }
+}
+
+/* ========================================================================
+   Reduced motion
+   ======================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

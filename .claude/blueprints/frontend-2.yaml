@@ -1,0 +1,375 @@
+name: frontend-2
+description: |
+  Convert HTML designs to React components.
+  v2 blueprint with strict artifact contracts on every agentic node.
+version: 2
+manifest: frontend
+
+nodes:
+  # ============================================================================
+  # TIER 1: PRE-FLIGHT (deterministic)
+  # ============================================================================
+
+  - id: design-approval-check
+    type: deterministic
+    description: "Block frontend if design not approved + fully complete"
+    command: |
+      STATUS_FILE=""
+      for c in \
+        "{TARGET_DIR}/.claude-project/status/DESIGN_STATUS.md" \
+        "{TARGET_DIR}/.claude-project/DESIGN_STATUS.md" \
+        "{TARGET_DIR}/.claude-project/design/DESIGN_STATUS.md"; do
+        [ -f "$c" ] && STATUS_FILE="$c" && break
+      done
+      [ -n "$STATUS_FILE" ] || { echo "FAIL: DESIGN_STATUS.md missing"; exit 1; }
+      grep -q 'approved: true' "$STATUS_FILE" || { echo "FAIL: design not approved"; exit 1; }
+      grep -q 'phase_complete: true' "$STATUS_FILE" || { echo "FAIL: design phase_complete missing"; exit 1; }
+      VARIATION=$(grep 'selected_variation:' "$STATUS_FILE" | sed 's/.*: *//' | tr -d ' "')
+      echo "Design approved: variation ${VARIATION}"
+    on_failure: abort
+    abort_message: "Phase 3 (design) must be approved AND phase_complete before frontend"
+
+  - id: html-inventory
+    type: deterministic
+    description: "List HTML prototypes to convert"
+    command: |
+      HTML_DIR=""
+      for d in .claude-project/generated-screens .claude-project/design/html design/html; do
+        if [ -d "{TARGET_DIR}/$d" ] && [ "$(find "{TARGET_DIR}/$d" -name '*.html' 2>/dev/null | wc -l)" -gt 0 ]; then
+          HTML_DIR="{TARGET_DIR}/$d"
+          break
+        fi
+      done
+      [ -n "$HTML_DIR" ] || { echo "FAIL: no HTML prototypes"; exit 1; }
+      COUNT=$(find "$HTML_DIR" -name '*.html' | wc -l | tr -d ' ')
+      echo "HTML_DIR=$HTML_DIR"
+      echo "HTML_COUNT=$COUNT"
+    on_failure: abort
+
+  - id: extract-prd-roles
+    type: deterministic
+    description: "Extract PRD role/layout references into PROJECT_PRD_ROLES.md"
+    command: |
+      PRD="{TARGET_DIR}/.claude-project/docs/PROJECT_KNOWLEDGE.md"
+      OUT="{TARGET_DIR}/.claude-project/docs/PROJECT_PRD_ROLES.md"
+      [ -f "$PRD" ] || { echo "PROJECT_KNOWLEDGE.md missing — skipping"; exit 0; }
+      mkdir -p "$(dirname "$OUT")"
+      {
+        echo "# PRD Role & Layout Requirements (Auto-generated)"
+        echo ""
+        echo "## User Roles"
+        grep -iE 'admin|user|client|manager|super.admin|owner|viewer|editor|moderator|staff|role' "$PRD" | \
+          grep -iv 'database\|column\|entity\|migration\|typeorm\|prisma' | head -30
+        echo ""
+        echo "## Layout Requirements"
+        grep -iE 'layout|sidebar|navbar|header|footer|navigation' "$PRD" | head -20
+        echo ""
+        echo "## Route Guards"
+        grep -iE 'guard|protect|auth.*route|role.*based|access.*control|permission' "$PRD" | head -20
+      } > "$OUT"
+      echo "Extracted to $OUT"
+    on_failure: ignore
+
+  # ============================================================================
+  # TIER 2: AGENTIC NODES WITH ARTIFACT CONTRACTS
+  # ============================================================================
+
+  - id: convert
+    type: agentic
+    description: "HTML-to-React conversion — every HTML page must get a matching TSX"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/FRONTEND_CONVERSION_REPORT.md"
+    verification_pattern: "pages_converted:\\s*[0-9]+"
+    scope_guard:
+      allow: ["{FRONTEND_DIR}/src/**"]
+      deny: ["{BACKEND_DIR}/**", ".claude-project/design/**"]
+
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_KNOWLEDGE.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_PRD_ROLES.md"
+        - "{TARGET_DIR}/.claude-project/generated-screens/*.html"
+        - "{TARGET_DIR}/.claude-project/design/html/*.html"
+        - ".claude/{FRONTEND}/guides/best-practices.md"
+        - ".claude/{FRONTEND}/guides/component-patterns.md"
+        - ".claude/{FRONTEND}/guides/routing-guide.md"
+        - ".claude/{FRONTEND}/guides/styling-guide.md"
+        - ".claude/{FRONTEND}/skills/converters/html-to-react-converter.md"
+    tool_profile:
+      allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Convert every HTML prototype to a React component. HTML is the SOURCE OF TRUTH (RULE-F7).
+
+      CRITICAL (RULE-F8 — pixel perfect):
+      - Extract EXACT CSS values from HTML <style> blocks
+      - padding: 40px 36px → px-[36px] py-[40px] (NOT p-8)
+      - border-radius: 24px → rounded-[24px] (NOT rounded-2xl)
+      - font-size: 28px → text-[28px] (NOT text-3xl)
+      - Preserve box-shadow, backdrop-filter, etc.
+
+      PROCESS PER HTML FILE:
+      1. Read the HTML file fully
+      2. Extract CSS values from <style>
+      3. Create matching React component in {FRONTEND_DIR}/src/pages/
+      4. Extract shared nav/header/footer into a Layout component
+
+      ROLE HANDLING: read PROJECT_PRD_ROLES.md — every declared role needs its own Layout variant + route guard.
+
+      ==================================================================
+      MANDATORY GATE REQUIREMENTS (all grep-verified — phase FAILS if any miss)
+      ==================================================================
+
+      1) NO DEAD BUTTONS (gate: no-dead-buttons)
+         Every `<button>` element MUST have one of:
+           - `onClick={...}` handler, OR
+           - `type="submit"` (inside a form), OR
+           - `disabled` attribute, OR
+           - `aria-*` attribute with semantic purpose
+         Do NOT emit `<button>Save</button>` with no handler. If the action
+         isn't wired yet, give it `onClick={() => { /* TODO */ }}` — never
+         bare buttons. A regex check runs over every .tsx file.
+
+      2) PRD NFR COMPLIANCE — i18n REQUIRED (gate: prd-nfr-compliance)
+         PROJECT_KNOWLEDGE.md mentions i18n/한국어/다국어. You MUST produce
+         ALL FOUR signals for the gate to pass — any missing = FAIL:
+           (a) Install `react-i18next` + `i18next` in {FRONTEND_DIR}/package.json
+           (b) Create `{FRONTEND_DIR}/src/i18n/index.ts` that calls
+               `i18next.use(initReactI18next).init({...})`
+               and is imported from `main.tsx`
+           (c) Create `{FRONTEND_DIR}/public/locales/en/common.json` AND
+               `{FRONTEND_DIR}/public/locales/ko/common.json` (≥2 locale files required)
+           (d) At least 5 page components must call `useTranslation()` and
+               use `t('key')` for display strings (not hardcoded text)
+         Also: add a simple language toggle UI (EN/KO buttons) in the
+         shared header/layout.
+
+      3) LOGO/BRAND → HOME LINK (gate: logo-home-link)
+         In EVERY `*Layout*.tsx` file, the brand/logo element MUST be wrapped
+         in a React Router `<Link to="/">` (or `<a href="/">`), and the inner
+         text/markup must contain the word "brand", "logo", "name", "Brand",
+         "Logo", or "Name" so the grep detects it. Example:
+             <Link to="/" className="flex items-center gap-2">
+               <img src={logo} alt="Brand logo" className="h-8" />
+               <span className="font-bold">BrandName</span>
+             </Link>
+         One matching `<Link>`/`<a>` wrapper per Layout file. No exceptions.
+
+      4) ROLE-BASED UI GUARDS (gate: role-based-ui)
+         PROJECT_KNOWLEDGE.md / PROJECT_PRD_ROLES.md defines multiple roles
+         (admin, manager, user, etc.). EVERY .tsx file under
+         `{FRONTEND_DIR}/src/pages/` that is role-restricted MUST reference at
+         least one of these identifiers so the gate grep passes:
+             role, isOwner, isAdmin, isPlatformAdmin, canManage,
+             permission, ProtectedRoute, RequireRole, useRole, usePermission
+         Recommended pattern:
+           - Create `{FRONTEND_DIR}/src/components/ProtectedRoute.tsx` that reads
+             the current user's role from the auth store and renders
+             children or redirects to /login.
+           - Wrap role-scoped routes in App.tsx:
+               <Route element={<ProtectedRoute requiredRole="admin" />}>
+                 <Route path="/admin/*" element={<AdminLayout/>}>...</Route>
+               </Route>
+           - Inside role-scoped page components, call `useRole()` or
+             `usePermission()` for fine-grained gating.
+         At least 1 page file must contain one of those identifiers, but
+         ideally every role-scoped page does.
+
+      5) 404 CATCH-ALL (gate: 404-catch-all)
+         App.tsx (or the router config) MUST contain a `path="*"` route
+         rendering a 404/NotFound page. Example:
+             <Route path="*" element={<NotFoundPage />} />
+
+      6) TS STRICT MODE (gate: ts-strict-mode)
+         {FRONTEND_DIR}/tsconfig.json MUST contain `"strict": true`. Do not
+         disable it to silence errors.
+      ==================================================================
+
+      REPORT FILE: .claude-project/status/{project}/FRONTEND_CONVERSION_REPORT.md
+      Required fields (regex-verifiable):
+        phase: frontend-convert
+        html_source_files: <int>
+        pages_converted: <int>
+        shared_components: [list]
+        layouts_created: <int>
+        route_guards: [list]
+        fidelity_estimate: <float 0.0-1.0>
+        i18n_configured: true
+        dead_buttons_fixed: <int>
+        logo_links_added: <int>
+        protected_routes_added: <int>
+
+  - id: design-fidelity-check
+    type: agentic
+    description: "Execute design-qa-html skill: per-screen fidelity scoring (gen 1 target: 85%, ratchets each generation)"
+    on_failure: ignore
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/FRONTEND_FIDELITY_REPORT.md"
+    # Verification accepts >= 0.70 — the SCORE itself is enforced by frontend-gate
+    # which uses progressive thresholds (gen 1: 0.70, gen 2: 0.85, gen 3+: 0.95).
+    # This prevents a single phase blowout when 59 auto-converted pages can't
+    # hit 95% in one pass within reasonable budget.
+    verification_pattern: "avg_fidelity:\\s*0\\.[7-9]\\d*|avg_fidelity:\\s*1\\.0+"
+    scope_guard:
+      allow: ["{FRONTEND_DIR}/src/**"]
+      deny: ["{BACKEND_DIR}/**"]
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/design/DESIGN_SYSTEM.md"
+        - "{TARGET_DIR}/.claude-project/generated-screens/*.html"
+        - "{TARGET_DIR}/.claude-project/design/html/*.html"
+        - ".claude/{FRONTEND}/skills/qa/design-qa-html.md"
+    tool_profile:
+      allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Execute the design-qa-html skill (.claude/{FRONTEND}/skills/qa/design-qa-html.md)
+      end-to-end. Follow ALL 7 phases of the skill — do not shortcut.
+
+      ## Required workflow (from the skill)
+
+      Phase 1 — Project Selection
+        - Discover frontend dir ({FRONTEND_DIR}/) and load
+          .claude-project/status/{project}/SCREEN_IMPLEMENTATION_STATUS.md
+          (if absent, derive screen list from HTML inventory).
+
+      Phase 2 — Screen Selection
+        - Run on ALL screens (full project QA). Do not sample.
+
+      Phase 3 — HTML Prototype Analysis
+        For each HTML file under .claude-project/generated-screens/ or
+        .claude-project/design/html/:
+          - Read the file fully
+          - Extract & categorize Tailwind classes into 6 buckets:
+            Layout / Spacing / Typography / Colors / Visual Effects / Components
+          - Build the class inventory table
+
+      Phase 4 — Implementation Review
+        For each matching React file under {FRONTEND_DIR}/src/pages/:
+          - Read the file
+          - Extract & categorize classes using the SAME 6 buckets
+
+      Phase 5 — Fidelity Score Calculation (MANDATORY weights)
+        Category Score = (matching_classes / total_html_classes_in_category) * 100
+        Apply weights:
+          Layout         25%
+          Spacing        20%
+          Typography     20%
+          Colors         15%
+          Visual Effects 10%
+          Components     10%
+        Overall = sum(score * weight)
+
+      Phase 6 — Fix Generation + Repair Loop (BUDGET-BOUNDED)
+        - Identify the LOWEST-SCORING 5 pages (by overall fidelity).
+        - For each of those 5 pages only:
+            * Generate Critical+High priority fixes (skip Medium/Low)
+            * APPLY the fixes via Edit/MultiEdit on {FRONTEND_DIR}/src/pages/**
+            * Re-measure that page
+        - Limit: 1 fix iteration per page (NOT 3). Future generations will iterate further.
+        - All other pages: report scores in the table, no edits.
+        - RULE-F8 still applies: use [Xpx] arbitrary values when HTML uses
+          non-standard pixel values.
+
+      Phase 7 — Report Generation
+        Write .claude-project/status/{project}/FRONTEND_FIDELITY_REPORT.md
+        with these EXACT fields (regex-verified):
+
+          phase: frontend-fidelity
+          pages_checked: <int>
+          avg_fidelity: <float, must be >= 0.95>
+          category_scores:
+            layout: <float>
+            spacing: <float>
+            typography: <float>
+            colors: <float>
+            effects: <float>
+            components: <float>
+          pages_below_95: [list of page names still under 0.95 after 3 iters]
+          pages_fixed: <int>
+          fix_iterations: <int total fixes applied across all pages>
+
+        Also include a per-screen table and the project-wide rating
+        distribution (Pixel Perfect / Minor Issues / Needs Work / Major
+        Revision) as shown in the skill.
+
+      ## Hard requirements
+      - avg_fidelity MUST reach >= 0.95. The orchestrator's
+        verification_pattern only matches 0.95+; anything lower fails the node.
+      - Do NOT inflate scores. Use the formula in Phase 5 strictly.
+      - Do NOT touch {BACKEND_DIR}/** or design files — only {FRONTEND_DIR}/src/**.
+
+  # ============================================================================
+  # TIER 3: POST-CHECKS (deterministic)
+  # ============================================================================
+
+  - id: fidelity-gate
+    type: deterministic
+    description: "Enforce avg_fidelity threshold (progressive: gen 1 >= 0.70, gen 2 >= 0.85, gen 3+ >= 0.95)"
+    command: |
+      REPORT="{TARGET_DIR}/.claude-project/status/{project}/FRONTEND_FIDELITY_REPORT.md"
+      STATUS_FILE="{TARGET_DIR}/.claude-project/status/{project}/PIPELINE_STATUS.md"
+      if [ ! -f "$REPORT" ]; then
+        echo "WARN: FRONTEND_FIDELITY_REPORT.md missing — skipping fidelity gate (design-fidelity-check may have failed)"
+        exit 0
+      fi
+      SCORE=$(grep -E '^avg_fidelity:' "$REPORT" | head -1 | sed -E 's/.*: *([0-9.]+).*/\1/')
+      [ -n "$SCORE" ] || { echo "WARN: avg_fidelity field not found in report — skip"; exit 0; }
+      GEN=1
+      if [ -f "$STATUS_FILE" ]; then
+        PARSED=$(grep -m1 '^generation:' "$STATUS_FILE" | sed 's/[^0-9]//g')
+        GEN=${PARSED:-1}
+      fi
+      if [ "$GEN" -ge 3 ]; then THRESHOLD=0.95
+      elif [ "$GEN" -eq 2 ]; then THRESHOLD=0.85
+      else THRESHOLD=0.70
+      fi
+      awk -v s="$SCORE" -v t="$THRESHOLD" 'BEGIN { exit (s+0 >= t+0 ? 0 : 1) }' || {
+        echo "FAIL: avg_fidelity=$SCORE < $THRESHOLD (gen $GEN)"; exit 1;
+      }
+      echo "PASS: avg_fidelity=$SCORE >= $THRESHOLD (gen $GEN)"
+    on_failure: abort
+    abort_message: "Frontend fidelity below progressive threshold — see FRONTEND_FIDELITY_REPORT.md"
+
+  - id: lint-fix
+    type: deterministic
+    description: "Auto-fix ESLint issues"
+    command: |
+      cd "{TARGET_DIR}/{FRONTEND_DIR}" && npx eslint src/ --fix 2>&1 || true
+    on_failure: ignore
+
+  - id: typecheck
+    type: deterministic
+    description: "Verify frontend TypeScript compiles"
+    command: |
+      cd "{TARGET_DIR}/{FRONTEND_DIR}" && npx tsc --noEmit 2>&1
+    on_failure: abort
+    abort_message: "Frontend TypeScript does not compile"
+
+  - id: build
+    type: deterministic
+    description: "Verify production build succeeds"
+    command: |
+      cd "{TARGET_DIR}/{FRONTEND_DIR}" && npm run build 2>&1
+    on_failure: abort
+    abort_message: "Frontend production build failed"
+
+  - id: evidence-check
+    type: deterministic
+    description: "Verify page components + HTML coverage >= 80%"
+    command: |
+      FE="{TARGET_DIR}/{FRONTEND_DIR}"
+      PAGES=$(find "$FE/src" -name '*.tsx' \( -path '*/pages/*' -o -path '*/views/*' \) 2>/dev/null | wc -l | tr -d ' ')
+      [ "$PAGES" -gt 0 ] || { echo "FAIL: no page TSX files in {FRONTEND_DIR}"; exit 1; }
+      HTML=$(find {TARGET_DIR}/.claude-project/generated-screens {TARGET_DIR}/.claude-project/design/html -name '*.html' 2>/dev/null | wc -l | tr -d ' ')
+      if [ "$HTML" -gt 0 ]; then
+        THRESHOLD=$((HTML * 80 / 100))
+        [ "$THRESHOLD" -lt 1 ] && THRESHOLD=1
+        [ "$PAGES" -lt "$THRESHOLD" ] && { echo "FAIL: $PAGES pages < $THRESHOLD (80% of $HTML HTML)"; exit 1; }
+        echo "PASS: $PAGES pages cover $HTML HTML (>= 80%)"
+      else
+        echo "PASS: $PAGES pages (no HTML to compare)"
+      fi
+    on_failure: abort
+
+tool_profile:
+  allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+  deny: [WebSearch]

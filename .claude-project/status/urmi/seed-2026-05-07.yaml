@@ -1,0 +1,141 @@
+seed_id: urmi-2026-05-07
+project: urmi
+created_at: 2026-05-07
+created_via: pm-pipeline (P1-spec, lite)
+source_documents:
+  - C:/Users/Sajarun Sadia/Downloads/urmi-redesign-knowledge-base.md
+  - C:/Users/Sajarun Sadia/.claude/plans/we-will-create-a-mossy-reef.md
+ambiguity_score: 0.15
+
+goal: >
+  Build a marketing homepage for Urmi Group (Bangladesh's first Full-Green RMG manufacturer)
+  that distinctly represents Urmi's brand identity, communicates four decades of sustainable
+  craft, and serves as a B2B portfolio entry point for global apparel buyers and partners.
+
+constraints:
+  technical:
+    - Stack: Vite + React 19 + TypeScript (strict) + Tailwind CSS v4 (CSS-first @theme tokens)
+    - Single-page scroll architecture; navbar anchors to in-page sections
+    - Animation: Framer Motion (count-up, reveals, scroll-linked); no Lottie, no auto-cycling carousels
+    - Maps: Google Maps JS API via @vis.gl/react-google-maps with styled SVG fallback when key absent
+    - No console.log / no `any` types in production code
+    - Hand-drawn inline SVG icons only — no Lucide / Heroicons
+    - WCAG AA contrast minimum, prefers-reduced-motion respected
+    - Lighthouse target: ≥ 90 Performance, 100 Accessibility (mobile profile)
+  brand:
+    - Primary color: brand blue (sampled from logo) #1E5C9F + light wave accent #7BB6E8
+    - Secondary color (sustainability sections only): sage green #5B8C7E
+    - Background: cool off-white mist #F4F7FB (NOT warm cottons or beiges)
+    - Single warm accent: amber #C8956D for stat underlines / hover lines
+    - Typography: Playfair Display (serif), Inter (sans), Hind Siliguri (Bengali wordmark)
+    - No exclamation marks, no "elevate / harness / leverage / synergy" / no glassmorphism
+  business:
+    - B2B portfolio site (no e-commerce, no prices, no Add-to-Cart)
+    - Must communicate sustainability as the operating system, not a section
+    - Wave metaphor (ঊর্মি = wave) is brand-defining but the heavy river framing is dialed back per v2 user feedback
+
+acceptance_criteria:
+  build:
+    - "Production build succeeds: `npm run build` exits 0 with no TypeScript errors"
+    - "Dev server starts cleanly: `npm run dev` reaches Vite ready state"
+    - "All static assets serve 200 OK from public/img/ paths"
+  homepage_sections:
+    - "Hero (Section 1): full viewport, video slot + dark blue gradient fallback, Bengali wordmark + H1 + 2 CTAs + scroll cue"
+    - "Pillars (Section 2 — '#about'): 4 wave-edge cards with rise-in animation when scrolled into view, headline 'Four pillars. One promise.'"
+    - "By the Numbers (Section 3): 4 stats render REAL values on first paint (44+, 2,50,000+, 4,000+ m³, 2030); count-up is enhancement only"
+    - "Crafts (Section 4 — '#craft'): exactly 6 crafts (Garments, Textile, Printing, Shipping, Embroidery, Washing) in alternating-row magazine layout, headline 'Six crafts. One conscience.'"
+    - "Sustainability (Section 5 — '#sustainability'): non-scroll radial diagram with sage core + 5 surrounding commitment cards, headline 'Five commitments behind every responsible thread.'"
+    - "Products (Section 6 — '#portfolio'): 6-tile asymmetric grid (2 hero + 4 medium), headline 'Garments worn from the gym to the gala — and to bed.'"
+    - "Impact (Section 7): manual carousel with 6 IMPACT values (I, M, P, A, C, T), keyboard arrow nav, no auto-cycle"
+    - "Factories (Section 8): Google Map with HQ logo marker + 3 factory pins (FTML, UGL, UHM); SVG fallback when API key absent"
+    - "Clients (Section 9 — '#clients'): grid of 12 client cards with logo (or text monogram fallback) + name pairs"
+    - "Awards (Section 10): 4-column grid of 8 award visuals + titles + years"
+    - "CallToAction (Section 11 — '#connect'): full-bleed deep-blue CTA with 3 buttons (Become a Buyer, Join the Team, Visit a Factory)"
+    - "Footer: 3-column with Bengali wordmark + address + sitemap + newsletter form + social icons"
+  brand_audit:
+    - "Primary surfaces are blue-driven (#1E5C9F / #143F73 / #7BB6E8 / #F4F7FB)"
+    - "Sustainability section uses sage #5B8C7E without saturated lime/mint"
+    - "Logo image renders in navbar; Bengali wordmark appears in hero + footer"
+    - "No Lucide/Heroicons, no glassmorphism, no auto-cycling carousels"
+    - "All copy avoids exclamation marks and the banned vocabulary"
+  asset_handoff:
+    - "ASSETS.md exists at project root listing every placeholder and what real asset replaces it"
+    - "User-supplied images from Desktop folders (Four waves, six crafts, Impact) are copied into public/img/{waves,crafts,impact}/ and rendered by their respective sections"
+    - ".env.example documents VITE_GOOGLE_MAPS_API_KEY"
+  navigation:
+    - "Navbar contains exactly: Home · About · Craft · Portfolio · Sustainability · Clients · Connect"
+    - "Logo image (left) replaces the wordmark in the navbar"
+    - "Each navbar link scrolls smoothly to its corresponding section ID"
+
+ontology:
+  - term: "Urmi (ঊর্মি)"
+    definition: "Bengali word meaning 'wave'. Brand-anchoring metaphor connecting Urmi's river heritage, continuous improvement, and sustainable craft."
+  - term: "Full-Green RMG"
+    definition: "A garments manufacturer whose facilities are certified green from input to output. Urmi is Bangladesh's first such group."
+  - term: "RMG"
+    definition: "Readymade Garments — Bangladesh's largest export industry, in which Urmi operates."
+  - term: "ETP"
+    definition: "Effluent Treatment Plant — Urmi runs an anaerobic biological ETP processing 4,000 m³/day with zero discharge."
+  - term: "LEED"
+    definition: "Leadership in Energy and Environmental Design certification. Urmi's UHM facility is LEED-certified."
+  - term: "UHM"
+    definition: "UHM Limited — Urmi's flagship green factory, joint venture with Toray Japan, target of Decarbonization 2030."
+  - term: "FTML"
+    definition: "Fakhruddin Textile Mills Limited — Urmi's vertically integrated knitting/dyeing/finishing/stitching site (6,218 colleagues)."
+  - term: "UGL"
+    definition: "Urmi Garments Limited — original 1984 garments unit, now a 1,710-colleague specialty wash facility."
+  - term: "Decarbonization 2030"
+    definition: "Urmi's published commitment to halve emissions by 2030. Already past the halfway mark."
+  - term: "IMPACT"
+    definition: "Acronym for Urmi's 6 corporate values: Integrity, Mutual Trust, Passion for Excellence, Agility, Customer Focus, Teamwork."
+  - term: "Pillars"
+    definition: "The 4-card opening section summarizing Urmi at a glance (renamed from 'Four waves' to 'Four pillars' per v2 user feedback)."
+  - term: "Crafts"
+    definition: "Six manufacturing capabilities highlighted on the homepage (down from seven; Seamless was moved off-homepage per v2 feedback)."
+
+evaluation_principles:
+  - name: brand_fidelity
+    weight: 0.30
+    description: "Does the visual language unambiguously read as Urmi (blue-driven, sustainable, restrained)?"
+  - name: feature_completeness
+    weight: 0.25
+    description: "Are all 12 homepage sections rendered with the v2-revised copy and layout?"
+  - name: code_quality
+    weight: 0.20
+    description: "TypeScript strict, no console.log, no any, hand-drawn SVG icons, asset registry up to date."
+  - name: performance
+    weight: 0.15
+    description: "Lighthouse mobile Performance ≥ 90, Accessibility = 100, no layout shift."
+  - name: handoff_readiness
+    weight: 0.10
+    description: "ASSETS.md, .env.example, and PRD all describe placeholders, missing assets, and follow-up actions."
+
+exit_conditions:
+  - "PRD.md exists at .claude-project/docs/PRD.md and is hashed into prd/history/"
+  - "All 12 homepage sections are demonstrable on `npm run dev`"
+  - "Production build is green"
+  - "ASSETS.md catalogs every TODO-replace slot"
+
+deferred_to_dev_track:
+  - "About / Sustainability / Portfolio / Career / Connect dedicated pages (homepage covers anchor sections only)"
+  - "Real photography commissioning + hero video production"
+  - "Google Maps JS API key provisioning"
+  - "CMS strategy for sustainability reports + news / blog"
+  - "i18n / Bengali language toggle (currently English-only with Bengali wordmark only)"
+
+risks:
+  - id: R1
+    risk: "Real client/award/photo assets arrive different aspect ratios, breaking grids"
+    mitigation: "Tile components use object-cover + aspect-ratio CSS; ASSETS.md flags this"
+  - id: R2
+    risk: "Hero video is large (KB §14 says ≤ 4 MB); can degrade mobile Lighthouse score"
+    mitigation: "<video poster=> + reduced-motion fallback already wired; video file is optional"
+  - id: R3
+    risk: "GMaps API key cost overruns if site goes viral"
+    mitigation: "Consider Map ID restrictions + HTTP referrer locking; SVG fallback still works"
+
+status:
+  spec_phase: complete
+  next_phase: P2-prd
+  approved_by: development-pipeline@riseuplabs.com
+  approved_at: 2026-05-07

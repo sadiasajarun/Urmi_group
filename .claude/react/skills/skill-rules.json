@@ -1,0 +1,315 @@
+{
+  "version": "2.0",
+  "description": "React skill triggers - aligned with claude-workflow base architecture",
+  "stack": "react",
+  "skills": {
+    "frontend-dev-guidelines": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "frontend:",
+      "category": "frontend",
+      "description": "React component patterns — React Router 7 framework mode, declarative routing, inline RBAC, data fetching",
+      "file": "../agents/frontend-developer.md",
+      "promptTriggers": {
+        "keywords": ["frontend", "react", "component", "page", "api integration", "playwright", "e2e test", "typescript", "tailwind", "redux", "router", "react-router", "route config", "protected route", "RBAC", "auth guard", "guest guard", "role guard", "protected layout", "route access", "declarative routing", "framework mode"],
+        "intentPatterns": [
+          "(create|implement|build|add|update|fix).*?(component|page|route|feature)",
+          "(integrate|connect|fetch).*?(api|backend|endpoint)",
+          "(test|testing).*?(e2e|playwright|integration)",
+          "(create|add|define|configure).*?(route|routing|protected.*route)",
+          "(auth|guard|RBAC|role).*?(route|layout|protection)",
+          "react.*router.*7"
+        ]
+      }
+    },
+    "design-qa-figma": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "qa:",
+      "category": "frontend",
+      "description": "Compare Figma designs vs implementation",
+      "file": "qa/design-qa-figma.md",
+      "promptTriggers": {
+        "keywords": ["design qa", "design-qa", "pixel-perfect", "qa report", "visual comparison", "design verification", "figma qa"],
+        "intentPatterns": [
+          "(qa|verify|check|compare).*?(design|figma|screen|implementation)",
+          "(design|figma).*?(qa|review|audit|check)",
+          "pixel.?perfect",
+          "figma.*?(qa|verify|check)"
+        ]
+      }
+    },
+    "design-qa-html": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "qa-html:",
+      "category": "frontend",
+      "description": "QA HTML prototypes vs implementation",
+      "file": "qa/design-qa-html.md",
+      "promptTriggers": {
+        "keywords": ["design qa", "design-qa", "html qa", "html prototype", "prototype qa", "visual comparison"],
+        "intentPatterns": [
+          "(qa|verify|check|compare).*?(html|prototype|implementation)",
+          "html.*?(qa|review|audit|check)",
+          "prototype.*?(qa|verify|compare)"
+        ]
+      }
+    },
+    "frontend-e2e-testing": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "e2e-fe:",
+      "category": "testing",
+      "description": "Generate frontend e2e tests with Playwright",
+      "file": "e2e-testing/SKILL.md",
+      "promptTriggers": {
+        "keywords": [
+          "e2e test",
+          "frontend e2e",
+          "playwright",
+          "playwright test",
+          "browser test",
+          "ui test",
+          "end-to-end",
+          "generate test",
+          "create test",
+          "write test",
+          "integration test",
+          "playwright fixtures",
+          "test fixtures",
+          "page objects",
+          "page object pattern",
+          "POM"
+        ],
+        "intentPatterns": [
+          "(create|generate|write|add).*?(e2e|playwright|test)",
+          "(test|testing).*?(page|flow|user)",
+          "(create|add|write).*?(playwright|test).*?fixture",
+          "fixture.*?(pattern|setup)",
+          "(create|add|write).*?page.*object",
+          "page.*object.*?(pattern|setup)"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": [
+          "**/test/**/*.spec.ts",
+          "**/e2e/**/*.ts",
+          "**/playwright/**/*.ts"
+        ]
+      }
+    },
+    "figma-to-react-converter": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "figma:",
+      "category": "frontend",
+      "description": "Convert Figma designs to React (dedicated fullstack phase, auto-skips if no FIGMA_URL)",
+      "file": "converters/figma-to-react-converter.md",
+      "agentFile": "../../base/agents/orchestration/figma-to-react.md",
+      "promptTriggers": {
+        "keywords": ["figma", "convert figma", "figma to react", "implement design", "build from figma", "figma fullstack", "figma project", "figma screens"],
+        "intentPatterns": [
+          "(convert|implement|build).*?figma",
+          "figma.*?(react|component|implementation|project|fullstack|screens)",
+          "pixel.?perfect.*?figma"
+        ]
+      }
+    },
+    "html-to-react-converter": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "magicKeyword": "html2react:",
+      "category": "frontend",
+      "description": "Convert HTML prototypes to React components",
+      "file": "converters/html-to-react-converter.md",
+      "promptTriggers": {
+        "keywords": ["convert html", "html to react", "migrate html", "static html"],
+        "intentPatterns": [
+          "(convert|migrate|transform).*?html",
+          "html.*?(react|component)"
+        ]
+      }
+    },
+    "dashboard-builder": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "magicKeyword": "dash:",
+      "category": "frontend",
+      "description": "Build admin dashboard pages with CRUD",
+      "file": "builders/dashboard-builder.md",
+      "promptTriggers": {
+        "keywords": ["dashboard", "admin dashboard", "admin panel", "crud operations", "admin ui"],
+        "intentPatterns": [
+          "(build|create|generate).*?(dashboard|admin)",
+          "(crud|admin).*?(panel|dashboard)",
+          "analytics.*?dashboard"
+        ]
+      }
+    },
+    "code-quality": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "category": "frontend",
+      "description": "Organize frontend types and barrel exports",
+      "file": "code-quality/organize-types.md",
+      "promptTriggers": {
+        "keywords": ["organize frontend types", "component types", "react types", "refactor frontend types", "centralize types", ".d.ts", "barrel exports frontend", "redux types"],
+        "intentPatterns": [
+          "(organize|clean|refactor|centralize).*?(frontend|react|component|redux).*?types",
+          "(component|react|frontend|redux).*?type.*?(organization|structure|cleanup)",
+          "(create|add).*?\\.d\\.ts"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": [
+          "**/types/**/*.ts",
+          "**/types/**/*.d.ts"
+        ]
+      }
+    },
+    "frontend-debugging": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "magicKeyword": "debug-fe:",
+      "category": "frontend",
+      "description": "Debug React and frontend errors",
+      "file": "debugging/fix-bug.md",
+      "promptTriggers": {
+        "keywords": ["frontend bug", "frontend debug", "react error", "component error", "typescript error", "runtime error", "redux error", "ui bug", "react debug"],
+        "intentPatterns": [
+          "(fix|debug|solve|resolve).*?(frontend|react|component|ui).*?bug",
+          "(react|frontend|redux|component).*?error",
+          "troubleshoot.*?(frontend|react|ui)"
+        ]
+      }
+    },
+    "enum-sync": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "magicKeyword": "sync-enums:",
+      "category": "frontend",
+      "description": "Bidirectional enum sync across all stacks (backend ↔ frontend)",
+      "file": "../../base/commands/dev/sync-enums.md",
+      "promptTriggers": {
+        "keywords": ["sync enums", "enum sync", "backend enums", "frontend enums", "shared enums", "hardcoded strings", "enum values", "sync frontend to backend", "enum pipeline", "bidirectional enum"],
+        "intentPatterns": [
+          "(sync|copy|mirror|share).*?enum",
+          "enum.*?(sync|copy|mirror|frontend|backend)",
+          "(replace|convert|update).*?string.*?enum",
+          "(add|create|update).*?enum.*?(frontend|backend|shared)",
+          "enum.*?value.*?(change|update|modify)",
+          "enum.*?pipeline"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": ["**/enums/**/*.enum.ts", "**/shared/enums/**/*.ts", "**/enums/**/*.py", "**/enums/__init__.py"]
+      }
+    },
+    "api-integration": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "integrate:",
+      "category": "frontend",
+      "description": "Connect frontend services to backend API",
+      "file": "api-integration/SKILL.md",
+      "promptTriggers": {
+        "keywords": [
+          "api integration",
+          "integrate api",
+          "connect backend",
+          "implement service",
+          "api service",
+          "frontend api",
+          "backend integration",
+          "create service",
+          "httpService"
+        ],
+        "intentPatterns": [
+          "(integrate|connect|implement).*?(api|backend|endpoint|service)",
+          "(create|add|build).*?(service|api.*?integration)",
+          "api.*?(integration|connect|implement)",
+          "(create|implement).*?httpService"
+        ]
+      }
+    },
+    "responsive-design": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "file": "responsive-design/SKILL.md",
+      "promptTriggers": {
+        "keywords": ["responsive", "mobile responsive", "tablet responsive", "breakpoint", "mobile design", "tablet design", "iPad responsive", "반응형"],
+        "intentPatterns": [
+          "(make|implement|add|fix|run).*?(responsive|mobile|tablet)",
+          "(mobile|tablet|iPad).*?(design|layout|responsive)",
+          "responsive.*?(check|audit|fix|implement|design)"
+        ]
+      },
+      "fileTriggers": {
+        "pathPatterns": [
+          "**/*.tsx",
+          "**/*.jsx",
+          "**/*.vue"
+        ]
+      }
+    },
+    "e2e-test-generator": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "medium",
+      "category": "testing",
+      "description": "Generate Playwright E2E tests iteratively (Ralph workflow)",
+      "file": "e2e-test-generator.md",
+      "promptTriggers": {
+        "keywords": ["ralph e2e", "generate e2e test", "create e2e test", "e2e generator", "ralph test"],
+        "intentPatterns": [
+          "ralph.*e2e",
+          "(generate|create).*e2e.*test"
+        ]
+      }
+    },
+    "project-qa": {
+      "type": "domain",
+      "enforcement": "suggest",
+      "priority": "high",
+      "magicKeyword": "qa-project:",
+      "category": "qa",
+      "description": "Full QA audit for React+API projects (9 categories, health score, fixing plan)",
+      "file": "qa/project-qa/SKILL.md",
+      "promptTriggers": {
+        "keywords": [
+          "project qa",
+          "full qa",
+          "qa audit",
+          "project audit",
+          "health check",
+          "project health",
+          "api qa",
+          "integration qa",
+          "validate project",
+          "qa testing",
+          "qa report",
+          "code audit"
+        ],
+        "intentPatterns": [
+          "(run|perform|execute).*?(qa|audit|health.*?check)",
+          "(qa|audit|validate).*?(project|frontend|api|integration)",
+          "(check|verify|scan).*?(project|health|quality)",
+          "health.*?score",
+          "project.*?(quality|health|status)"
+        ]
+      }
+    }
+  }
+}

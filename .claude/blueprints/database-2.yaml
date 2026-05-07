@@ -1,0 +1,121 @@
+name: database-2
+description: |
+  Database schema generation — v2 blueprint with strict artifact contracts.
+  Agentic node produces entity files; a mandatory schema report summarizes the outcome.
+version: 2
+manifest: database
+
+nodes:
+  # ============================================================================
+  # TIER 1: PRE-FLIGHT (deterministic)
+  # ============================================================================
+
+  - id: pre-check
+    type: deterministic
+    description: "Verify PRD docs exist before designing schema"
+    command: |
+      DOCS="{TARGET_DIR}/.claude-project/docs"
+      [ -f "$DOCS/PROJECT_KNOWLEDGE.md" ] || { echo "FAIL: PROJECT_KNOWLEDGE.md missing"; exit 1; }
+      [ -f "$DOCS/PROJECT_DATABASE.md" ] || { echo "FAIL: PROJECT_DATABASE.md missing"; exit 1; }
+      echo "PRD docs found"
+    on_failure: abort
+    abort_message: "Phase 2 (prd) must complete first — PROJECT_KNOWLEDGE.md and PROJECT_DATABASE.md required"
+
+  # ============================================================================
+  # TIER 2: AGENTIC NODE WITH ARTIFACT CONTRACT
+  # ============================================================================
+
+  - id: design-schema
+    type: agentic
+    description: "Implement TypeORM entities + migrations from PROJECT_DATABASE.md"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/DATABASE_SCHEMA_REPORT.md"
+    verification_pattern: "entities_created:\\s*[0-9]+"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_KNOWLEDGE.md"
+        - "{TARGET_DIR}/.claude-project/docs/PROJECT_DATABASE.md"
+        - ".claude/{BACKEND}/guides/database-patterns.md"
+        - ".claude/{BACKEND}/guides/workflow-design-database.md"
+    tool_profile:
+      allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+    prompt: |
+      Implement the database schema for project {project} following PROJECT_DATABASE.md exactly.
+
+      STACK: {BACKEND} + TypeORM + PostgreSQL
+
+      TASKS:
+      1. For every entity in PROJECT_DATABASE.md, create:
+         - {BACKEND_DIR}/src/modules/{entity}/entities/{entity}.entity.ts
+         - Fields match the spec exactly (names, types, nullable, unique)
+         - UUID primary key via @PrimaryGeneratedColumn('uuid')
+         - Soft delete via @DeleteDateColumn() on deleted_at
+         - Extends BaseEntity if that pattern exists in the repo
+      2. Create/update {BACKEND_DIR}/src/database/migrations/*.ts so tsc compiles cleanly
+      3. No orphan entities — every entity must participate in at least one relation if the spec requires it
+      4. Use TypeScript enums (not string literals) for enum columns
+
+      REQUIRED REPORT FILE:
+        Path: .claude-project/status/{project}/DATABASE_SCHEMA_REPORT.md
+        Must contain (regex-verifiable):
+          phase: database
+          entities_created: <int>
+          migrations_created: <int>
+          relations_declared: <int>
+          enums_defined: <int>
+          typecheck_status: (PASS|FAIL)
+          entity_files: [list of paths]
+
+      SCOPE GUARD:
+      - ONLY create files under backend/src/modules/*/entities/ and {BACKEND_DIR}/src/database/migrations/
+      - Do NOT create controllers, services, or DTOs (Phase 5)
+      - Do NOT modify frontend files
+
+  # ============================================================================
+  # TIER 3: POST-CHECKS (deterministic)
+  # ============================================================================
+
+  - id: typecheck
+    type: deterministic
+    description: "Verify entity + shared files compile (scoped — backend phase regenerates services/main later)"
+    command: |
+      cd {TARGET_DIR}/{BACKEND_DIR}
+      # Write a scoped tsconfig that includes only schema-layer files. Other files
+      # (main.ts, app.module.ts, services, controllers, seed.ts) are generated in
+      # later phases and may not exist yet at the database-phase boundary.
+      cat > tsconfig.entities.json <<'JSON'
+      {
+        "extends": "./tsconfig.json",
+        "compilerOptions": { "noEmit": true },
+        "include": [
+          "src/modules/**/entities/**/*.ts",
+          "src/shared/**/*.ts",
+          "src/core/**/*.ts",
+          "src/database/migrations/**/*.ts"
+        ],
+        "exclude": ["node_modules", "dist", "test"]
+      }
+      JSON
+      npx tsc --project tsconfig.entities.json 2>&1
+      EXIT=$?
+      rm -f tsconfig.entities.json
+      exit $EXIT
+    on_failure: abort
+    abort_message: "Entity/shared TypeScript does not compile after schema generation"
+
+  - id: evidence-check
+    type: deterministic
+    description: "Verify entity + migration files were actually created"
+    command: |
+      ENTITY_COUNT=$(find {TARGET_DIR}/{BACKEND_DIR}/src -name '*.entity.ts' 2>/dev/null | wc -l | tr -d ' ')
+      if [ "$ENTITY_COUNT" -eq 0 ]; then
+        echo "FAIL: No *.entity.ts files found"
+        exit 1
+      fi
+      echo "PASS: $ENTITY_COUNT entity files found"
+    on_failure: abort
+    abort_message: "Database phase must produce at least 1 entity file"
+
+tool_profile:
+  allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+  deny: [WebSearch, WebFetch]

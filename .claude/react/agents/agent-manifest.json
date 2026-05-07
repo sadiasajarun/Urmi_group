@@ -1,0 +1,85 @@
+{
+  "version": "2.0",
+  "stack": "react",
+  "agents": {
+    "frontend-developer": {
+      "file": "frontend-developer.md",
+      "model": "opus",
+      "tier": "high",
+      "domain": "frontend",
+      "roles": ["implementer", "architect"],
+      "team": "team-frontend",
+      "role": "leader",
+      "reports-to": "project-coordinator",
+      "manages": ["mobile-developer", "api-integration-agent"],
+      "cross-team-contacts": ["backend-developer", "quality-lead", "documentation-architect"],
+      "description": "React frontend developer — React Router 7 framework mode, declarative routing, inline RBAC, component patterns, data fetching, form handling"
+    },
+    "design-qa-agent": {
+      "file": "design-qa-agent.md",
+      "model": "sonnet",
+      "tier": "medium",
+      "domain": "frontend",
+      "roles": ["tester", "verifier"],
+      "team": "team-quality",
+      "role": "member",
+      "reports-to": "quality-lead",
+      "description": "Compare UI implementation with Figma designs"
+    },
+    "frontend-error-fixer": {
+      "file": "frontend-error-fixer.md",
+      "model": "sonnet",
+      "tier": "medium",
+      "domain": "frontend",
+      "roles": ["debugger"],
+      "team": "team-quality",
+      "role": "member",
+      "reports-to": "quality-lead",
+      "description": "Debug and fix React/frontend errors"
+    },
+    "crud-operations": {
+      "file": "crud-operations.md",
+      "model": "sonnet",
+      "tier": "medium",
+      "domain": "frontend",
+      "roles": ["implementer"],
+      "team": "team-frontend",
+      "role": "member",
+      "reports-to": "frontend-developer",
+      "description": "CRUD operations pattern guide (service/slice/mutation patterns)"
+    },
+    "gap-finder": {
+      "file": "gap-finder.md",
+      "model": "sonnet",
+      "tier": "medium",
+      "domain": "frontend",
+      "roles": ["tester", "verifier"],
+      "team": "team-quality",
+      "role": "member",
+      "reports-to": "quality-lead",
+      "description": "React-specific gap analysis and implementation auditor"
+    },
+    "compliance-checker": {
+      "file": "compliance-checker.md",
+      "model": "sonnet",
+      "tier": "medium",
+      "domain": "qa",
+      "roles": ["auditor", "tester"],
+      "team": "team-quality",
+      "role": "member",
+      "reports-to": "quality-lead",
+      "description": "Audits React frontend for mandatory rule violations (forms, UI primitives, component org, typed props, enums, imports, types, RR7 routing patterns, RBAC)"
+    },
+    "responsive-design-agent": {
+      "file": "responsive-design-agent.md",
+      "model": "sonnet",
+      "tier": "medium",
+      "domain": "frontend",
+      "roles": ["implementer", "tester"],
+      "team": "team-frontend",
+      "role": "member",
+      "reports-to": "frontend-developer",
+      "description": "Mobile + tablet responsive design with 19 critical rules and 2-tier learning system"
+    }
+  }
+}

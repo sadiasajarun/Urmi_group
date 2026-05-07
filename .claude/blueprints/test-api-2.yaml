@@ -1,0 +1,173 @@
+name: test-api-2
+description: |
+  Smoke test all routes + execute backend API tests with stability verification.
+  v2 blueprint with strict artifact contract on the smoke-test agentic node.
+version: 2
+manifest: test-api
+
+nodes:
+  # ============================================================================
+  # TIER 1: PRE-FLIGHT (deterministic)
+  # ============================================================================
+
+  - id: pre-check
+    type: deterministic
+    description: "Verify backend compiles"
+    command: "cd {TARGET_DIR}/backend && (npx tsc --project tsconfig.app.json --noEmit 2>&1 || npx tsc --noEmit 2>&1)"
+    on_failure: abort
+    abort_message: "Backend must compile before test-api"
+
+  - id: pm2-restart
+    type: deterministic
+    description: "Restart pm2 servers so they pick up freshly-generated backend/frontend code"
+    command: |
+      if command -v pm2 >/dev/null 2>&1 && pm2 list 2>/dev/null | grep -qE '\bbackend\b|\bfrontend\b'; then
+        pm2 restart backend frontend --update-env 2>&1 | tail -5 || true
+        # Wait for backend (NestJS bootstrap) — frontend is Vite, near-instant
+        for i in 1 2 3 4 5 6 7 8 9 10; do
+          sleep 1
+          curl -sf -o /dev/null http://localhost:{BACKEND_PORT}/api/health && { echo "backend ready after ${i}s"; exit 0; }
+        done
+        echo "WARN: backend health check did not return 200 within 10s; ensure-servers will catch any actual outage"
+      else
+        echo "pm2 not available or backend/frontend processes not registered — skip restart"
+      fi
+    on_failure: ignore
+
+  - id: ensure-servers
+    type: deterministic
+    description: "Verify backend + frontend servers are reachable"
+    command: |
+      BACKEND_URL="http://localhost:{BACKEND_PORT}/api"
+      FRONTEND_URL="http://localhost:{FRONTEND_PORT}"
+      BC=$(curl -s -o /dev/null -w "%{http_code}" "$BACKEND_URL" || echo 000)
+      FC=$(curl -s -o /dev/null -w "%{http_code}" "$FRONTEND_URL" || echo 000)
+      [ "$BC" = "000" ] && { echo "FAIL: Backend down at $BACKEND_URL"; exit 1; }
+      [ "$FC" = "000" ] && { echo "FAIL: Frontend down at $FRONTEND_URL"; exit 1; }
+      echo "Backend=$BC Frontend=$FC — servers healthy"
+    on_failure: abort
+    abort_message: "Servers must be running (backend:{BACKEND_PORT}, frontend:{FRONTEND_PORT})"
+
+  # ============================================================================
+  # TIER 2: AGENTIC NODE WITH ARTIFACT CONTRACT
+  # ============================================================================
+
+  - id: smoke-test
+    type: agentic
+    description: "Visit every route via playwright-cli, capture console errors"
+    required_output_file: "{TARGET_DIR}/.claude-project/status/{project}/SMOKE_TEST_STATUS.md"
+    verification_pattern: "routes_probed:\\s*[0-9]+"
+    context:
+      additional_read:
+        - "{TARGET_DIR}/.claude-project/routes.yaml"
+        - ".claude/skills/qa/test-smoke/SKILL.md"
+    tool_profile:
+      allow: [Read, Write, Edit, Bash, Grep, Glob]
+      deny: [WebSearch, WebFetch]
+      mcp: [playwright]
+    prompt: |
+      Smoke test every route listed in .claude-project/routes.yaml via playwright-cli.
+
+      FOR EACH ROUTE:
+      1. Navigate to the route
+      2. Take a snapshot
+      3. Check console for TypeError, ReferenceError, uncaught exceptions
+      4. Verify root element has visible children (not a blank page)
+      5. Check for unexpected network errors (401 on public, 500 anywhere)
+
+      This smoke test is BLOCKING — all routes must pass before backend tests run.
+
+      REPORT FILE: .claude-project/status/{project}/SMOKE_TEST_STATUS.md
+      Required fields (regex-verifiable):
+        phase: test-api-smoke
+        routes_probed: <int>
+        routes_passed: <int>
+        console_errors: <int>
+        network_errors: <int>
+        crashes: <int>
+        failed_routes: [list]
+
+      If any route crashes, mark it in failed_routes. Fix before running backend tests.
+
+  # ============================================================================
+  # TIER 3: RUN BACKEND TESTS (deterministic)
+  # ============================================================================
+
+  - id: run-backend-tests
+    type: deterministic
+    description: "Execute backend API test suite"
+    command: |
+      cd {TARGET_DIR}/{BACKEND_DIR}
+      if grep -q '"test:e2e"' package.json 2>/dev/null; then
+        npm run test:e2e -- --forceExit 2>&1
+      else
+        npm test -- --forceExit 2>&1
+      fi
+    on_failure: route_to_agent
+    route_to_agent_attempts: 3
+    max_retries: 1
+    fix_read_files:
+      - "{TARGET_DIR}/.claude-project/docs/PROJECT_API.md"
+      - "{TARGET_DIR}/.claude-project/docs/PROJECT_DATABASE.md"
+    fix_context: |
+      This is a NestJS backend with TypeORM. Tests use Jest + Supertest.
+      Test files: {BACKEND_DIR}/test/e2e/*.e2e-spec.ts
+      Test helper: {BACKEND_DIR}/test/helpers/app.ts
+      Source modules: {BACKEND_DIR}/src/modules/*/
+
+      DIAGNOSIS STEPS:
+      1. Read the test failure output above carefully
+      2. Read PROJECT_API.md and PROJECT_DATABASE.md above for expected behavior
+      3. Read the failing test file AND the controller/service it tests
+      4. Determine: wrong test expectation or wrong source code?
+
+      Common patterns:
+        - 404 instead of 401 → route may not exist or missing auth guard
+        - 404 instead of 403 → route exists but guard returns wrong error
+        - 500 → service/controller bug
+        - Test expects wrong status code → check PROJECT_API.md for correct behavior
+
+  - id: evidence-check
+    type: deterministic
+    description: "Verify smoke coverage >= 50% of routes + backend test files exist"
+    command: |
+      SMOKE="{TARGET_DIR}/.claude-project/status/{project}/SMOKE_TEST_STATUS.md"
+      ROUTES_FILE="{TARGET_DIR}/.claude-project/routes.yaml"
+
+      # Check smoke report exists
+      [ -f "$SMOKE" ] || { echo "FAIL: smoke report missing"; exit 1; }
+      PROBED=$(grep '^routes_probed:' "$SMOKE" | head -1 | sed 's/.*:\s*//' | tr -d ' ')
+      [ -z "$PROBED" ] || [ "$PROBED" = "0" ] && { echo "FAIL: routes_probed=0"; exit 1; }
+
+      # Count total routes from routes.yaml
+      TOTAL_ROUTES=0
+      if [ -f "$ROUTES_FILE" ]; then
+        TOTAL_ROUTES=$(grep -c '^\s*- path:' "$ROUTES_FILE" 2>/dev/null || echo 0)
+      fi
+
+      # Enforce: probed >= 50% of known routes (smoke doesn't need to hit every route,
+      # but must be more than a token effort)
+      if [ "$TOTAL_ROUTES" -gt 0 ]; then
+        THRESHOLD=$(( (TOTAL_ROUTES * 50 + 99) / 100 ))
+        if [ "$PROBED" -lt "$THRESHOLD" ]; then
+          echo "FAIL: smoke probed $PROBED routes but $TOTAL_ROUTES exist (need >= $THRESHOLD = 50%)"
+          exit 1
+        fi
+        echo "PASS: smoke probed $PROBED/$TOTAL_ROUTES routes (>= 50%)"
+      else
+        echo "PASS: smoke probed $PROBED routes (no routes.yaml to compare)"
+      fi
+
+      # Check backend test files exist
+      TEST_COUNT=$(find "{TARGET_DIR}/backend" -name '*.e2e-spec.ts' -o -name '*.spec.ts' 2>/dev/null | grep -v node_modules | wc -l | tr -d ' ')
+      if [ "$TEST_COUNT" -eq 0 ]; then
+        echo "FAIL: no backend test files found"
+        exit 1
+      fi
+      echo "PASS: $TEST_COUNT backend test files found"
+    on_failure: abort
+
+tool_profile:
+  allow: [Read, Write, Edit, MultiEdit, Bash, Grep, Glob]
+  deny: [WebSearch, WebFetch]
+  mcp: [playwright]

@@ -1,0 +1,12 @@
+[submodule "nestjs"]
+	path = nestjs
+	url = https://github.com/potentialInc/claude-nestjs.git
+	branch = dev
+[submodule "react"]
+	path = react
+	url = https://github.com/potentialInc/claude-react.git
+	branch = dev
+[submodule "operations"]
+	path = operations
+	url = https://github.com/potentialInc/claude-operations.git
+	branch = dev

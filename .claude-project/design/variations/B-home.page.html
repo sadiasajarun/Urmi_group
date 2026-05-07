@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urmi Group — Variation B · Atelier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urmi-blue': '#2167B6',
+              'urmi-blue-deep': '#163E78',
+              'wave-blue': '#6FA9D9',
+              'wave-blue-soft': '#E2EEF8',
+              'sage': '#6E9B8E',
+              'sage-deep': '#557969',
+              'mist': '#F8FAFC',
+              'cloud': '#ECEFF3',
+              'slate-text': '#586474',
+              'ink': '#0E1A2D',
+              'paper': '#FBFCFD',
+            },
+            fontFamily: {
+              serif: ["'Playfair Display'", 'Georgia', 'serif'],
+              sans: ["'Inter'", 'system-ui', 'sans-serif'],
+              bengali: ["'Hind Siliguri'", 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body { background: #FBFCFD; color: #586474; font-family: 'Inter', sans-serif; font-weight: 300; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; color: #0E1A2D; font-weight: 600; }
+      .hairline { height: 1px; background: #1E2A3F; opacity: 0.7; }
+    </style>
+  </head>
+  <body class="antialiased overflow-x-hidden">
+    <div class="fixed top-4 right-4 z-[60] bg-ink text-paper px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] font-medium shadow-lg">
+      Variation B · Atelier
+    </div>
+
+    <!-- NAVBAR — minimal, no underline animation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-paper/90 backdrop-blur-sm">
+      <div class="mx-auto max-w-[80rem] px-6 md:px-12 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="bg-urmi-blue rounded-full w-11 h-11 flex items-center justify-center font-serif text-lg text-paper">U</div>
+        </div>
+        <div class="hidden lg:flex items-center gap-8 text-[11px] uppercase tracking-[0.18em] font-medium text-ink">
+          <a href="#" class="hover:text-urmi-blue transition-colors py-2">Home</a>
+          <a href="#about" class="hover:text-urmi-blue transition-colors py-2">About</a>
+          <a href="#craft" class="hover:text-urmi-blue transition-colors py-2">Craft</a>
+          <a href="#" class="hover:text-urmi-blue transition-colors py-2">Portfolio</a>
+          <a href="#sustainability" class="hover:text-urmi-blue transition-colors py-2">Sustainability</a>
+          <a href="#" class="hover:text-urmi-blue transition-colors py-2">Clients</a>
+          <a href="#" class="hover:text-urmi-blue transition-colors py-2">Connect</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO — type-driven, no video, no full-bleed photo -->
+    <section class="relative h-screen min-h-[720px] w-full bg-paper flex flex-col justify-center items-center text-center px-6">
+      <div class="max-w-[55rem] mx-auto">
+        <span class="font-bengali text-[5.5rem] leading-none text-urmi-blue-deep mb-4 block font-medium">ঊর্মি</span>
+        <span class="inline-block italic font-serif text-sm text-slate-text border border-ink/30 px-4 py-1.5 mb-12">(Urmi — the wave.)</span>
+        <h1 class="text-[clamp(3rem,9vw,7.5rem)] leading-[1.0] tracking-tight mb-10" style="font-weight: 600;">The wave that clothes the world.</h1>
+        <p class="text-base md:text-lg text-slate-text font-light max-w-[28rem] mx-auto leading-[1.7] mb-14">Forty years on the river. Sixteen thousand hands. The wave never stops.</p>
+        <div class="flex items-center justify-center gap-6 text-[12px] uppercase tracking-[0.2em] font-medium text-urmi-blue">
+          <a href="#about" class="relative group py-2"><span>Discover Our Story</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+          <span class="hairline w-[1px] h-5"></span>
+          <a href="#" class="relative group py-2"><span>Partner With Us</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+        </div>
+      </div>
+      <!-- single decorative wave line -->
+      <svg class="absolute bottom-12 left-0 right-0 w-full opacity-30 pointer-events-none" viewBox="0 0 1440 80" preserveAspectRatio="none" style="height: 60px;">
+        <path d="M0,40 C240,90 480,0 720,40 C960,80 1200,30 1440,50" fill="none" stroke="#6FA9D9" stroke-width="1"/>
+      </svg>
+      <span class="absolute bottom-6 left-6 md:left-12 text-[10px] uppercase tracking-[0.22em] text-slate-text">Bangladesh's first Full-Green RMG group</span>
+    </section>
+
+    <!-- PILLARS — type+stat blocks only, NO IMAGES -->
+    <section id="about" class="bg-paper py-[clamp(7rem,14vw,12rem)] px-6 md:px-12">
+      <div class="mx-auto max-w-[80rem]">
+        <div class="mb-24">
+          <span class="text-[11px] tracking-[0.22em] uppercase text-slate-text/70 mb-4 block font-bengali">COMPANY AT A GLANCE — ০১</span>
+          <h2 class="text-[clamp(1.875rem,4vw,3.25rem)] leading-[1.2] tracking-tight max-w-3xl">Four pillars. One promise.</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
+          <div class="flex flex-col">
+            <span class="font-bengali text-[5rem] leading-none text-urmi-blue-deep mb-4 font-medium">৪০+</span>
+            <div class="hairline w-12 mb-4"></div>
+            <span class="text-[11px] uppercase tracking-[0.18em] text-slate-text">Years of craft</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-serif text-[5rem] leading-none text-urmi-blue-deep mb-4">16,800</span>
+            <div class="hairline w-12 mb-4"></div>
+            <span class="text-[11px] uppercase tracking-[0.18em] text-slate-text">Hands shaping every thread</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-serif text-[3.5rem] leading-none text-urmi-blue-deep mb-4">Full Green</span>
+            <div class="hairline w-12 mb-4"></div>
+            <span class="text-[11px] uppercase tracking-[0.18em] text-slate-text">Bangladesh's first green factory group</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-serif text-[5rem] leading-none text-urmi-blue-deep mb-4">30+</span>
+            <div class="hairline w-12 mb-4"></div>
+            <span class="text-[11px] uppercase tracking-[0.18em] text-slate-text">Global brands trust us daily</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- "FACES OF THE WORK" — Variation B's added section, photographs live here -->
+    <section class="bg-mist py-[clamp(7rem,14vw,12rem)] px-6 md:px-12">
+      <div class="mx-auto max-w-[80rem]">
+        <div class="mb-20 max-w-3xl">
+          <span class="text-[11px] tracking-[0.22em] uppercase text-slate-text/70 mb-4 block font-bengali">FACES OF THE WORK — ০২</span>
+          <h2 class="text-[clamp(1.875rem,4vw,3.25rem)] leading-[1.2] tracking-tight">The hands behind the cloth.</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
+          <figure class="border border-ink/40">
+            <div class="aspect-[4/5] bg-cloud" style="background: linear-gradient(180deg, #6FA9D9 0%, #163E78 100%);"></div>
+            <figcaption class="p-6 text-xs uppercase tracking-[0.18em] text-slate-text">River at golden hour — where the wave begins</figcaption>
+          </figure>
+          <figure class="border border-ink/40 md:translate-y-16">
+            <div class="aspect-[4/5] bg-cloud" style="background: linear-gradient(180deg, #6E9B8E 0%, #2167B6 100%);"></div>
+            <figcaption class="p-6 text-xs uppercase tracking-[0.18em] text-slate-text">Sixteen thousand hands</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- BY THE NUMBERS — static, hairline above + below -->
+    <section class="bg-paper py-24 px-6 md:px-12">
+      <div class="mx-auto max-w-[80rem]">
+        <div class="hairline mb-20"></div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 text-center lg:text-left">
+          <div>
+            <div class="font-serif text-[clamp(3rem,5vw,5rem)] leading-none text-ink">44+</div>
+            <span class="text-[11px] uppercase tracking-[0.2em] text-slate-text mt-3 block">Tons fabric daily</span>
+          </div>
+          <div>
+            <div class="font-serif text-[clamp(3rem,5vw,5rem)] leading-none text-ink">2,50,000+</div>
+            <span class="text-[11px] uppercase tracking-[0.2em] text-slate-text mt-3 block">Garments daily</span>
+          </div>
+          <div>
+            <div class="font-serif text-[clamp(3rem,5vw,5rem)] leading-none text-ink">4,000+ m³</div>
+            <span class="text-[11px] uppercase tracking-[0.2em] text-slate-text mt-3 block">Wastewater daily</span>
+          </div>
+          <div>
+            <div class="font-serif text-[clamp(3rem,5vw,5rem)] leading-none text-ink">2030</div>
+            <span class="text-[11px] uppercase tracking-[0.2em] text-slate-text mt-3 block">Decarbonization goal</span>
+          </div>
+        </div>
+        <div class="hairline mt-20"></div>
+      </div>
+    </section>
+
+    <!-- CRAFTS — sample row, lighter, smaller image, more whitespace -->
+    <section id="craft" class="bg-paper py-[clamp(7rem,14vw,12rem)] px-6 md:px-12">
+      <div class="mx-auto max-w-[80rem]">
+        <div class="mb-24 max-w-3xl">
+          <span class="text-[11px] tracking-[0.22em] uppercase text-slate-text/70 mb-4 block font-bengali">CAPABILITY — ০৩</span>
+          <h2 class="text-[clamp(1.875rem,4vw,3.25rem)] leading-[1.2] tracking-tight">Six crafts. One conscience.</h2>
+        </div>
+        <article class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-center">
+          <div class="lg:col-span-5">
+            <div class="border border-ink/40 aspect-[4/5] max-w-[480px]" style="background: linear-gradient(180deg, #2167B6 0%, #163E78 100%);"></div>
+          </div>
+          <div class="lg:col-span-7">
+            <span class="text-[11px] uppercase tracking-[0.22em] text-slate-text mb-4 block">No. 01 · Garments</span>
+            <h3 class="text-3xl md:text-4xl lg:text-5xl mb-6 leading-[1.2]">Garments</h3>
+            <p class="text-base md:text-lg text-slate-text font-light leading-[1.7] mb-8 max-w-md">Ninety lines, eight thousand hands, precision cut and sewn for the world's most exacting brands.</p>
+            <div class="hairline w-12 mb-4"></div>
+            <span class="text-xs uppercase tracking-[0.18em] text-urmi-blue-deep">150,000 pieces / day</span>
+            <div class="mt-10">
+              <a href="#" class="text-urmi-blue uppercase tracking-[0.18em] text-xs font-medium relative group inline-block py-2"><span>See the process</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SUSTAINABILITY — radial with paper core, sage hairline border -->
+    <section id="sustainability" class="bg-mist py-[clamp(7rem,14vw,12rem)] px-6 md:px-12">
+      <div class="mx-auto max-w-[80rem]">
+        <div class="text-center mb-20 max-w-3xl mx-auto">
+          <span class="text-[11px] tracking-[0.22em] uppercase text-sage-deep mb-4 block font-bengali">SUSTAINABILITY — ০৪</span>
+          <h2 class="text-[clamp(1.875rem,4vw,3.25rem)] leading-[1.2] tracking-tight">Five commitments behind every responsible thread.</h2>
+        </div>
+        <div class="flex justify-center">
+          <div class="relative w-72 h-72 lg:w-80 lg:h-80 flex items-center justify-center">
+            <div class="absolute w-full h-full rounded-full border border-sage/40"></div>
+            <div class="absolute w-3/4 h-3/4 rounded-full border border-sage/30"></div>
+            <div class="relative bg-paper rounded-full w-72 h-72 flex flex-col items-center justify-center text-center p-10 border-2 border-sage">
+              <span class="text-[10px] uppercase tracking-[0.22em] text-sage-deep mb-3">Pillar No. 01</span>
+              <h3 class="text-xl text-ink leading-tight mb-4">Zero-Discharge ETP</h3>
+              <p class="text-sm text-slate-text font-light leading-relaxed">Anaerobic biological treatment. 4,000 m³/day, zero discharge.</p>
+              <span class="mt-5 text-xs uppercase tracking-[0.2em] text-sage-deep border-t border-sage/40 pt-3">4,000 m³ / day</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — only dark moment in the page -->
+    <section class="bg-urmi-blue-deep text-paper py-[clamp(8rem,16vw,14rem)] px-6 md:px-12 text-center">
+      <span class="text-[11px] tracking-[0.22em] uppercase text-paper/60 mb-8 block font-bengali">CARRY THE WAVE — ০৯</span>
+      <h2 class="text-paper text-[clamp(2.5rem,7vw,5.75rem)] leading-[1.1] tracking-tight max-w-4xl mx-auto mb-10" style="font-weight: 500;">The next wave is waiting.</h2>
+      <p class="text-base md:text-lg text-paper/85 max-w-md mx-auto mb-16 font-light leading-[1.7]">Whether you're a global buyer, a young designer, or a future colleague — there's a place for you here.</p>
+      <div class="flex items-center justify-center gap-6 text-[12px] uppercase tracking-[0.22em] font-medium text-paper">
+        <a href="#" class="bg-paper text-urmi-blue-deep px-10 py-5 hover:bg-wave-blue hover:text-paper transition-colors">Become a Buyer</a>
+        <a href="#" class="relative group py-2"><span>Join the Team</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+        <span class="hairline w-[1px] h-5 bg-paper/30"></span>
+        <a href="#" class="relative group py-2"><span>Visit a Factory</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-urmi-blue-deep text-paper py-12 border-t border-paper/10">
+      <div class="mx-auto max-w-[80rem] px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-paper/60">
+        <p>© 2026 Urmi Group. All rights reserved.</p>
+        <p class="italic">Crafted on the Padma.</p>
+      </div>
+    </footer>
+  </body>
+</html>

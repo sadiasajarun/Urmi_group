@@ -1,0 +1,9 @@
+settings.json
+settings.local.json
+feature-manifest.json
+.env
+node_modules/
+.DS_Store
+package-lock.json
+status/
+.claude-project

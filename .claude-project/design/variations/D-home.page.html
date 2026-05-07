@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urmi Group — Variation D · Cinematic Tide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urmi-blue':       '#1E5C9F',
+              'urmi-blue-deep':  '#143F73',
+              'wave-blue':       '#5BA0DE',
+              'wave-blue-soft':  '#C5DCEF',
+              'tide':            '#7FAA9C',
+              'tide-deep':       '#4A7864',
+              'tide-soft':       '#DCE9E3',
+              'tide-mist':       '#F0F5F2',
+              'mist':            '#F4F7FB',
+              'seafoam':         '#E8F0EC',
+              'paper':           '#FCFDFC',
+              'cloud':           '#E0E8E5',
+              'ink':             '#0F1E33',
+              'slate-text':      '#3F5468',
+              'cream':           '#F5EFE3',
+              'cream-text':      '#2A1F12',
+            },
+            fontFamily: {
+              serif: ["'Playfair Display'", 'Georgia', 'serif'],
+              sans: ["'Inter'", 'system-ui', 'sans-serif'],
+              mono: ["'IBM Plex Mono'", 'ui-monospace', 'monospace'],
+              bengali: ["'Hind Siliguri'", 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body { background: #F0F5F2; color: #3F5468; font-family: 'Inter', sans-serif; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: #0F1E33; }
+      .grain::after {
+        content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+        background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        opacity: 0.04;
+      }
+      .wave-frame::before {
+        content: ''; position: absolute; inset: 32px; border: 1px solid #5BA0DE;
+        pointer-events: none; z-index: 5;
+      }
+      @keyframes ripple {
+        0%   { transform: scale(0.95); opacity: 0.55; }
+        100% { transform: scale(1.4);  opacity: 0; }
+      }
+      .animate-ripple { animation: ripple 2.6s cubic-bezier(0.22,1,0.36,1) infinite; }
+    </style>
+  </head>
+  <body class="antialiased overflow-x-hidden">
+    <div class="fixed top-4 right-4 z-[60] bg-tide-deep text-paper px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] font-mono shadow-lg">
+      Variation D · Cinematic Tide
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-transparent">
+      <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-5 flex items-center justify-between">
+        <div class="bg-paper rounded-full w-12 h-12 flex items-center justify-center font-serif text-lg text-urmi-blue shadow-md">U</div>
+        <div class="hidden lg:flex items-center gap-7 text-[11px] uppercase tracking-[0.18em] font-mono text-paper drop-shadow">
+          <a href="#" class="relative group py-2"><span>Home</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+          <a href="#about" class="relative group py-2"><span>About</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+          <a href="#craft" class="relative group py-2"><span>Craft</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+          <a href="#" class="relative group py-2"><span>Portfolio</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+          <a href="#sustainability" class="relative group py-2"><span>Sustainability</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+          <a href="#" class="relative group py-2"><span>Clients</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+          <a href="#" class="relative group py-2"><span>Connect</span><span class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-wave-blue group-hover:w-full transition-all"></span></a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO — cinematic photographic but LIGHT (warm sunlit), with wave-blue frame -->
+    <section class="relative h-screen min-h-[720px] w-full overflow-hidden grain wave-frame">
+      <!-- Photographic base — warm golden-hour gradient, NOT dark navy -->
+      <div class="absolute inset-0 z-0" style="background:
+        radial-gradient(ellipse at 70% 30%, #F5EFE3 0%, transparent 45%),
+        radial-gradient(ellipse at 25% 75%, #C5DCEF 0%, transparent 50%),
+        linear-gradient(180deg, #DCE9E3 0%, #C5DCEF 35%, #7FAA9C 75%, #4A7864 100%);"></div>
+      <!-- Soft light gradient overlay (NOT dark) -->
+      <div class="absolute inset-0 z-10 bg-gradient-to-b from-paper/40 via-transparent to-tide-soft/30 pointer-events-none"></div>
+
+      <div class="relative z-20 h-full flex flex-col justify-center items-center text-center px-6 md:px-12">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-urmi-blue-deep mb-8">ঊর্মি · URMI · EST. 1955</span>
+        <span class="font-bengali text-5xl md:text-6xl text-urmi-blue-deep tracking-[0.15em] mb-4 leading-none font-medium">ঊর্মি</span>
+        <span class="italic font-serif text-sm md:text-base text-slate-text mb-10 block">(Urmi — the wave.)</span>
+        <h1 class="text-ink text-[clamp(3rem,7.5vw,6rem)] leading-[1.05] tracking-tight max-w-[60rem] mb-8">The wave that clothes the world.</h1>
+        <p class="italic font-serif text-slate-text text-lg md:text-xl max-w-md mb-12">Forty years on the river. Sixteen thousand hands.</p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#about" class="bg-urmi-blue text-paper uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-tide-deep transition-colors">Discover Our Story</a>
+          <a href="#" class="border border-tide-deep text-tide-deep uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-tide-deep hover:text-paper transition-colors">Partner With Us</a>
+        </div>
+      </div>
+
+      <!-- Frame counter bottom-right -->
+      <div class="absolute bottom-12 right-16 z-20 hidden md:block">
+        <span class="font-mono text-[11px] tracking-[0.22em] text-urmi-blue-deep">01 / 12 · ZONES OF CRAFT</span>
+      </div>
+    </section>
+
+    <!-- PILLARS — photographic frames with seafoam callout band -->
+    <section id="about" class="bg-tide-mist py-[clamp(5rem,10vw,9rem)] px-6 md:px-12">
+      <div class="mx-auto max-w-[90rem]">
+        <div class="text-center mb-16 md:mb-20">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// COMPANY AT A GLANCE — ০১</span>
+          <h2 class="text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.15] tracking-tight">Four pillars. One promise.</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <!-- Card 1 -->
+          <div class="relative overflow-hidden bg-cloud aspect-[4/5] flex flex-col justify-end grain group">
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, #C5DCEF 0%, #1E5C9F 100%);"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/35 via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full bg-seafoam border-t-2 border-tide p-5">
+              <span class="font-bengali text-3xl text-urmi-blue-deep mb-1 leading-none block font-medium">৪০+</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">Years of craft</span>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="relative overflow-hidden bg-cloud aspect-[4/5] flex flex-col justify-end grain group">
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, #DCE9E3 0%, #4A7864 100%);"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/35 via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full bg-seafoam border-t-2 border-tide p-5">
+              <span class="font-serif text-3xl text-urmi-blue-deep mb-1 leading-none block">16,800</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">Hands shaping every thread</span>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="relative overflow-hidden bg-cloud aspect-[4/5] flex flex-col justify-end grain group">
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, #F5EFE3 0%, #7FAA9C 100%);"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full bg-seafoam border-t-2 border-tide p-5">
+              <span class="font-serif text-2xl text-urmi-blue-deep mb-1 leading-none block">Full Green</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">First green factory group</span>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="relative overflow-hidden bg-cloud aspect-[4/5] flex flex-col justify-end grain group">
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, #5BA0DE 0%, #143F73 100%);"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/35 via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full bg-seafoam border-t-2 border-tide p-5">
+              <span class="font-serif text-3xl text-urmi-blue-deep mb-1 leading-none block">30+</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">Global brands</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BY THE NUMBERS — LIGHT bg, mono captions, wave-blue underlines -->
+    <section class="bg-mist py-24 md:py-32 px-6 md:px-12 relative">
+      <div class="mx-auto max-w-[90rem] grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 text-center lg:text-left">
+        <div class="flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep">// PRODUCTION</span>
+          <div class="font-serif text-[clamp(3.5rem,5.5vw,5.5rem)] leading-none text-urmi-blue-deep">44+</div>
+          <div class="h-[2px] w-16 bg-wave-blue mx-auto lg:mx-0"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text">Tons fabric daily</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep">// SHIPMENT</span>
+          <div class="font-serif text-[clamp(3.5rem,5.5vw,5.5rem)] leading-none text-urmi-blue-deep">2,50,000+</div>
+          <div class="h-[2px] w-16 bg-wave-blue mx-auto lg:mx-0"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text">Garments daily</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep">// WATER</span>
+          <div class="font-serif text-[clamp(3.5rem,5.5vw,5.5rem)] leading-none text-urmi-blue-deep">4,000+ m³</div>
+          <div class="h-[2px] w-16 bg-wave-blue mx-auto lg:mx-0"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text">Wastewater purified</span>
+        </div>
+        <div class="flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep">// HORIZON</span>
+          <div class="font-serif text-[clamp(3.5rem,5.5vw,5.5rem)] leading-none text-urmi-blue-deep">2030</div>
+          <div class="h-[2px] w-16 bg-wave-blue mx-auto lg:mx-0"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text">Decarbonization goal</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRAFTS — photographic + cream callout (cream is the only warm note) -->
+    <section id="craft" class="relative">
+      <div class="bg-tide-mist px-6 md:px-12 py-16">
+        <div class="mx-auto max-w-[90rem] max-w-3xl">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// CAPABILITY — ০২</span>
+          <h2 class="text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.1] tracking-tight">Six crafts. One conscience.</h2>
+        </div>
+      </div>
+      <div class="relative h-[640px] grain">
+        <div class="absolute inset-0 z-0" style="background:
+          radial-gradient(ellipse at 30% 30%, #F5EFE3 0%, transparent 40%),
+          radial-gradient(ellipse at 70% 70%, #5BA0DE 0%, transparent 50%),
+          linear-gradient(135deg, #DCE9E3 0%, #7FAA9C 60%, #4A7864 100%);"></div>
+        <div class="absolute inset-0 bg-tide-mist/15"></div>
+        <!-- Cream callout overlaid bottom-left -->
+        <div class="absolute bottom-12 left-12 md:left-20 max-w-[480px] bg-cream text-cream-text p-10 border border-tide-deep/30 shadow-2xl">
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep mb-3 block">// No. 01 · Garments</span>
+          <h3 class="font-serif text-3xl md:text-4xl text-urmi-blue-deep mb-4 leading-[1.2]">Garments</h3>
+          <p class="text-base text-cream-text/85 font-light leading-relaxed mb-6">Ninety lines. Eight thousand hands. Precision cut and sewn for the world's most exacting brands.</p>
+          <div class="border-l-2 border-tide-deep pl-3 mb-6">
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-tide-deep">150,000 pieces / day</span>
+          </div>
+          <a href="#" class="font-mono text-[11px] uppercase tracking-[0.22em] text-urmi-blue-deep hover:text-tide-deep transition-colors">→ See the process</a>
+        </div>
+        <!-- Frame counter -->
+        <div class="absolute top-12 right-12 z-10">
+          <span class="font-mono text-[11px] tracking-[0.22em] text-urmi-blue-deep">02 / 12</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUSTAINABILITY — radial diagram, light bg, tide-deep core (NOT navy) -->
+    <section id="sustainability" class="relative py-[clamp(5rem,10vw,9rem)] px-6 md:px-12 overflow-hidden" style="background: linear-gradient(180deg, #DCE9E3 0%, #F0F5F2 100%);">
+      <div class="mx-auto max-w-[90rem]">
+        <div class="text-center mb-20 max-w-3xl mx-auto">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// SUSTAINABILITY — ০৩</span>
+          <h2 class="text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.1] tracking-tight">Five commitments behind every responsible thread.</h2>
+        </div>
+        <div class="flex justify-center">
+          <div class="relative w-80 h-80 lg:w-96 lg:h-96 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full border border-tide/40 animate-ripple"></div>
+            <div class="absolute w-3/4 h-3/4 rounded-full border border-tide/50 animate-ripple" style="animation-delay: 1s;"></div>
+            <div class="relative bg-tide-deep text-paper rounded-full w-72 h-72 lg:w-80 lg:h-80 flex flex-col items-center justify-center text-center p-10 shadow-2xl">
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/70 mb-3">// Pillar 01</span>
+              <h3 class="text-xl lg:text-2xl text-paper leading-tight mb-4">Zero-Discharge ETP</h3>
+              <p class="text-sm text-paper/90 font-light leading-relaxed">Anaerobic biological treatment. 4,000 m³/day, zero discharge.</p>
+              <span class="mt-5 font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue-soft border-t border-paper/30 pt-3">4,000 m³ / day</span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-12 flex flex-wrap gap-4 justify-center">
+          <span class="bg-paper border border-tide/40 px-5 py-3 text-sm text-tide-deep font-mono uppercase tracking-[0.15em] text-xs">Full Green Factory</span>
+          <span class="bg-paper border border-tide/40 px-5 py-3 text-sm text-tide-deep font-mono uppercase tracking-[0.15em] text-xs">Decarbonization 2030</span>
+          <span class="bg-paper border border-tide/40 px-5 py-3 text-sm text-tide-deep font-mono uppercase tracking-[0.15em] text-xs">Circular Water</span>
+          <span class="bg-paper border border-tide/40 px-5 py-3 text-sm text-tide-deep font-mono uppercase tracking-[0.15em] text-xs">Certified, Audited, Accountable</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — only DARK moment in the entire page -->
+    <section class="relative bg-urmi-blue-deep text-paper py-[clamp(6rem,12vw,10rem)] px-6 md:px-12 text-center wave-frame">
+      <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue mb-8 block">// CARRY THE WAVE — ০৯</span>
+      <h2 class="text-cream text-[clamp(2.5rem,7vw,5.75rem)] leading-[1.05] tracking-tight max-w-4xl mx-auto mb-10 font-serif">The next wave is waiting.</h2>
+      <p class="italic font-serif text-paper/85 text-lg max-w-md mx-auto mb-14">Whether you're a global buyer, a young designer, or a future colleague — there's a place for you here.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="#" class="bg-cream text-urmi-blue-deep uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-wave-blue hover:text-paper transition-colors">→ Become a Buyer</a>
+        <a href="#" class="border border-wave-blue text-wave-blue uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-wave-blue hover:text-urmi-blue-deep transition-colors">→ Join the Team</a>
+        <a href="#" class="border border-wave-blue text-wave-blue uppercase tracking-[0.18em] text-xs font-mono font-medium px-9 py-5 hover:bg-wave-blue hover:text-urmi-blue-deep transition-colors">→ Visit a Factory</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-urmi-blue-deep text-paper py-12 border-t border-paper/10">
+      <div class="mx-auto max-w-[90rem] px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-paper/60 font-mono uppercase tracking-[0.18em]">
+        <p>© 2026 Urmi Group. All rights reserved.</p>
+        <p class="italic font-serif normal-case tracking-normal">Crafted on the Padma.</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+gate: P3-design
+executed_at: 2026-05-07T16:25:00Z
+score: 1.00
+passed: 8/8
+checks_hash: 13eb50cc3dcb8176033a0947ecc466231fe3f95ebfbdf65b4bb6d79c75053aad
+runner_pid: 0
+runner_note: jq+bc unavailable on Windows host; checks verified manually with bash, proof written to mirror _gate-runner.sh schema

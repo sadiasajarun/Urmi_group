@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urmi Group — Variation Showcase (A / B / C)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body { font-family: 'Inter', sans-serif; background: #0F1E33; color: #E6ECF2; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
+      .frame {
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #4A5568;
+      }
+      .frame iframe {
+        width: 1280px;
+        height: 800px;
+        border: 0;
+        transform: scale(0.42);
+        transform-origin: top left;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .frame-wrap {
+        aspect-ratio: 1280 / 800;
+        width: 100%;
+      }
+      .frame-wrap .frame {
+        width: 100%;
+        height: 100%;
+      }
+      .label-badge {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.6875rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <header class="px-6 md:px-12 py-12 max-w-[90rem] mx-auto">
+      <span class="label-badge text-amber-400 mb-4 block">URMI GROUP · DESIGN VARIATION SHOWCASE</span>
+      <h1 class="text-white text-[clamp(2.25rem,4.5vw,3.5rem)] leading-tight mb-4">Three takes on the homepage.</h1>
+      <p class="text-white/70 text-lg max-w-3xl">
+        Three distinct visual directions for the Urmi Group homepage. All three honor the locked
+        brand decisions (blue primary, Bengali wordmark, six crafts, sustainability as operating
+        system). They differ in <em>how</em> — palette balance, type pairing, density, and motion
+        language. Pick one — or call out a "Mix" — and we'll lock the choice in
+        <code class="bg-white/10 px-2 py-0.5 rounded">DESIGN_STATUS.md</code>.
+      </p>
+      <p class="text-white/50 text-sm mt-4">
+        Each preview below is the live HTML scaled down. Open the standalone files for a full-size view:
+        <a class="text-amber-300 underline hover:text-amber-200" href="A-home.page.html" target="_blank">A-home.page.html</a> ·
+        <a class="text-amber-300 underline hover:text-amber-200" href="B-home.page.html" target="_blank">B-home.page.html</a> ·
+        <a class="text-amber-300 underline hover:text-amber-200" href="C-home.page.html" target="_blank">C-home.page.html</a> ·
+        <a class="text-amber-300 underline hover:text-amber-200" href="D-home.page.html" target="_blank">D-home.page.html</a>
+      </p>
+      <p class="text-emerald-300/80 text-sm mt-3 italic">
+        Variation D added 2026-05-07 in response to: "high cinematic but not dark navy blue dominant; soothing shade of green along with blue which represents sustainability and wave."
+      </p>
+    </header>
+
+    <main class="px-6 md:px-12 max-w-[90rem] mx-auto pb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8">
+        <!-- VARIATION A -->
+        <article class="flex flex-col">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <span class="bg-[#1E5C9F] text-white w-9 h-9 rounded-full flex items-center justify-center font-serif text-lg">A</span>
+              <h2 class="text-white text-xl">Editorial Wave</h2>
+            </div>
+            <a href="A-home.page.html" target="_blank" class="label-badge text-white/60 hover:text-white">Open ↗</a>
+          </div>
+          <div class="frame-wrap mb-4">
+            <div class="frame">
+              <iframe src="A-home.page.html" loading="lazy" title="Variation A · Editorial Wave"></iframe>
+            </div>
+          </div>
+          <p class="text-white/80 text-sm leading-relaxed mb-3">
+            <em>Polished magazine cover of a sustainable industrial group.</em> Closest to the as-built
+            React homepage. Mid-density layouts, Playfair Display + Inter, blue palette with sage
+            sustainability accents, wave-clip section dividers.
+          </p>
+          <ul class="text-white/60 text-xs space-y-1.5 leading-relaxed">
+            <li>· Hero: full-bleed video / blue gradient + soft overlays</li>
+            <li>· Pillars: 4 wave-clip-top cards with rise-in animation</li>
+            <li>· Best for: clients who want polish, not reinvention</li>
+            <li>· Implementation cost: low (matches current src/)</li>
+          </ul>
+        </article>
+
+        <!-- VARIATION B -->
+        <article class="flex flex-col">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <span class="bg-[#FBFCFD] text-[#163E78] border border-[#163E78] w-9 h-9 rounded-full flex items-center justify-center font-serif text-lg">B</span>
+              <h2 class="text-white text-xl">Atelier</h2>
+            </div>
+            <a href="B-home.page.html" target="_blank" class="label-badge text-white/60 hover:text-white">Open ↗</a>
+          </div>
+          <div class="frame-wrap mb-4">
+            <div class="frame">
+              <iframe src="B-home.page.html" loading="lazy" title="Variation B · Atelier"></iframe>
+            </div>
+          </div>
+          <p class="text-white/80 text-sm leading-relaxed mb-3">
+            <em>Loro Piana with a Bengali soul.</em> Sparse. Whitespace as luxury. Type-driven hero
+            (no video). Bengali wordmark promoted to first-class display element. Sage and amber
+            de-emphasized; ink hairlines replace ornament.
+          </p>
+          <ul class="text-white/60 text-xs space-y-1.5 leading-relaxed">
+            <li>· Hero: type-driven, no video, no full-bleed photo</li>
+            <li>· Pillars: borderless type+stat blocks (no images)</li>
+            <li>· Best for: clients chasing quiet-luxury aesthetic</li>
+            <li>· Implementation cost: medium (3 wks of frontend rework)</li>
+          </ul>
+        </article>
+
+        <!-- VARIATION C -->
+        <article class="flex flex-col">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <span class="bg-[#0E2748] text-[#F5EFE3] border border-[#B8924E] w-9 h-9 rounded-full flex items-center justify-center font-serif text-lg">C</span>
+              <h2 class="text-white text-xl">Cinematic Mill</h2>
+            </div>
+            <a href="C-home.page.html" target="_blank" class="label-badge text-white/60 hover:text-white">Open ↗</a>
+          </div>
+          <div class="frame-wrap mb-4">
+            <div class="frame">
+              <iframe src="C-home.page.html" loading="lazy" title="Variation C · Cinematic Mill"></iframe>
+            </div>
+          </div>
+          <p class="text-white/80 text-sm leading-relaxed mb-3">
+            <em>A film about a factory.</em> Dark navy dominates. Heavy editorial photography across every
+            section. Tiempos + IBM Plex Mono pairing. Brass accent replaces amber. Section transitions
+            cross-fade like film cuts.
+          </p>
+          <ul class="text-white/60 text-xs space-y-1.5 leading-relaxed">
+            <li>· Hero: cinematic photograph + brass frame</li>
+            <li>· Pillars: cream callouts on full-bleed photo strip</li>
+            <li>· Best for: clients who said "Brandix" and meant it</li>
+            <li>· Implementation cost: high (6–8 wks; needs photo budget)</li>
+          </ul>
+        </article>
+
+        <!-- VARIATION D -->
+        <article class="flex flex-col ring-2 ring-emerald-400/40 ring-offset-4 ring-offset-[#0F1E33] rounded-sm pb-2">
+          <div class="flex items-center justify-between mb-4 px-2 pt-2">
+            <div class="flex items-center gap-3">
+              <span class="bg-[#7FAA9C] text-white border border-[#4A7864] w-9 h-9 rounded-full flex items-center justify-center font-serif text-lg">D</span>
+              <h2 class="text-white text-xl">Cinematic Tide</h2>
+              <span class="text-[10px] uppercase tracking-[0.2em] text-emerald-300 font-mono">your synthesis</span>
+            </div>
+            <a href="D-home.page.html" target="_blank" class="label-badge text-white/60 hover:text-white">Open ↗</a>
+          </div>
+          <div class="px-2"><div class="frame-wrap mb-4">
+            <div class="frame">
+              <iframe src="D-home.page.html" loading="lazy" title="Variation D · Cinematic Tide"></iframe>
+            </div>
+          </div></div>
+          <div class="px-2">
+            <p class="text-white/80 text-sm leading-relaxed mb-3">
+              <em>Brandix-tier cinematic vocabulary on a soft, sun-lit palette.</em> Light backgrounds dominate;
+              brand blue and lagoon green flow as twin currents (river + sustainability). Tiempos + Plex Mono
+              type pairing kept from C, but warm wave-blue accent replaces brass.
+            </p>
+            <ul class="text-white/60 text-xs space-y-1.5 leading-relaxed">
+              <li>· Hero: cinematic photo on warm gradient (no navy)</li>
+              <li>· Palette: blue + tide-green twin protagonists</li>
+              <li>· Best for: cinematic ambition without dark-mode heaviness</li>
+              <li>· Implementation cost: ~5–7 wks; survives placeholder photo better than C</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+
+      <!-- COMPARISON TABLE -->
+      <section class="mt-20 bg-white/5 border border-white/10 p-8 md:p-12">
+        <h2 class="text-white text-2xl mb-8">Side-by-side at a glance</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-white/10 text-white/50 label-badge">
+                <th class="py-3 pr-6 font-normal">Lever</th>
+                <th class="py-3 pr-6 font-normal">A · Editorial Wave</th>
+                <th class="py-3 pr-6 font-normal">B · Atelier</th>
+                <th class="py-3 pr-6 font-normal">C · Cinematic Mill</th>
+                <th class="py-3 pr-6 font-normal text-emerald-300">D · Cinematic Tide</th>
+              </tr>
+            </thead>
+            <tbody class="text-white/80">
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Dominant background</td>
+                <td class="py-3 pr-6">Mist (cool off-white)</td>
+                <td class="py-3 pr-6">Paper (warmer near-white)</td>
+                <td class="py-3 pr-6">Urmi-blue-deep (dark navy)</td>
+                <td class="py-3 pr-6 text-emerald-200">Tide-mist (blue-green tinted off-white)</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Primary blue</td>
+                <td class="py-3 pr-6">#1E5C9F</td>
+                <td class="py-3 pr-6">#2167B6 (slightly brighter)</td>
+                <td class="py-3 pr-6">#1B4F8E (deeper)</td>
+                <td class="py-3 pr-6 text-emerald-200">#1E5C9F + tide green #7FAA9C twin</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Warm accent</td>
+                <td class="py-3 pr-6">Amber #C8956D</td>
+                <td class="py-3 pr-6">None (ink hairlines only)</td>
+                <td class="py-3 pr-6">Brass #B8924E</td>
+                <td class="py-3 pr-6 text-emerald-200">Wave-blue (cool, no warm chrome)</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Display type</td>
+                <td class="py-3 pr-6">Playfair Display</td>
+                <td class="py-3 pr-6">Tiempos (Playfair fallback)</td>
+                <td class="py-3 pr-6">Tiempos + IBM Plex Mono</td>
+                <td class="py-3 pr-6 text-emerald-200">Tiempos + IBM Plex Mono (same as C)</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Hero treatment</td>
+                <td class="py-3 pr-6">Video + blue gradient</td>
+                <td class="py-3 pr-6">Type-driven, no video</td>
+                <td class="py-3 pr-6">Cinematic photograph + brass frame</td>
+                <td class="py-3 pr-6 text-emerald-200">Cinematic photo on warm sunlit gradient + wave-blue frame</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Section dividers</td>
+                <td class="py-3 pr-6">Wave-curve clip-paths</td>
+                <td class="py-3 pr-6">1px ink hairlines</td>
+                <td class="py-3 pr-6">Photographic cross-fades</td>
+                <td class="py-3 pr-6 text-emerald-200">Photographic cross-fades on light gradients</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">CTA style</td>
+                <td class="py-3 pr-6">Filled white + ghost outline</td>
+                <td class="py-3 pr-6">Text-only with underline</td>
+                <td class="py-3 pr-6">Filled cream + ghost brass</td>
+                <td class="py-3 pr-6 text-emerald-200">Filled urmi-blue + ghost tide-deep</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Photography load</td>
+                <td class="py-3 pr-6">Mid (matches current build)</td>
+                <td class="py-3 pr-6">Light (1 dedicated section)</td>
+                <td class="py-3 pr-6">Heavy (every section needs a real shot)</td>
+                <td class="py-3 pr-6 text-emerald-200">Heavy, but golden-hour tones forgive placeholders</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Animation language</td>
+                <td class="py-3 pr-6">Soft reveals + count-up</td>
+                <td class="py-3 pr-6">Static-first, gentle reveals</td>
+                <td class="py-3 pr-6">Cinematic crossfades + parallax</td>
+                <td class="py-3 pr-6 text-emerald-200">Light cross-fades + gentle parallax</td>
+              </tr>
+              <tr class="border-b border-white/5">
+                <td class="py-3 pr-6 text-white/60">Implementation cost</td>
+                <td class="py-3 pr-6 text-emerald-300">Low — 3–5 days tweaking current src/</td>
+                <td class="py-3 pr-6 text-amber-300">Medium — ~3 weeks rework</td>
+                <td class="py-3 pr-6 text-rose-300">High — 6–8 weeks + photo shoot</td>
+                <td class="py-3 pr-6 text-amber-300">Med-High — ~5–7 weeks</td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-6 text-white/60">Risk profile</td>
+                <td class="py-3 pr-6">Lowest</td>
+                <td class="py-3 pr-6">Medium (needs strict copy + type discipline)</td>
+                <td class="py-3 pr-6">Highest (depends on real photography quality)</td>
+                <td class="py-3 pr-6 text-emerald-200">Medium — light surfaces forgive placeholder photo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- DECISION PROMPT -->
+      <section class="mt-16 bg-white/5 border border-white/10 p-8 md:p-12">
+        <h2 class="text-white text-2xl mb-4">How to lock a choice</h2>
+        <ol class="text-white/80 space-y-3 list-decimal list-inside leading-relaxed mb-6">
+          <li>Open the three standalone HTML files (linked in the header).</li>
+          <li>Decide between A, B, C — or call out a Mix (e.g. "B's hero, A's body, C's CTA").</li>
+          <li>
+            Edit
+            <code class="bg-white/10 px-2 py-0.5">.claude-project/status/urmi/DESIGN_STATUS.md</code>
+            (or
+            <code class="bg-white/10 px-2 py-0.5">.claude-project/design/DESIGN_STATUS.md</code>):
+            <pre class="bg-black/40 border border-white/10 p-4 mt-2 text-amber-200 text-xs overflow-x-auto"><code>selected_variation: A   # or B / C / Mix
+approved: true
+approved_at: 2026-05-07T00:00:00Z</code></pre>
+          </li>
+          <li>
+            Re-run:
+            <code class="bg-white/10 px-2 py-0.5">/fullstack-pm urmi --phase P3-design --resume</code>
+          </li>
+        </ol>
+        <p class="text-white/60 text-xs">
+          The pipeline can also handle the AskUserQuestion prompt presented at the end of P3c —
+          just answer the next question and it will record the same fields automatically.
+        </p>
+      </section>
+    </main>
+
+    <footer class="bg-black/40 border-t border-white/10 py-8 text-center label-badge text-white/40">
+      Urmi Group · /fullstack-pm urmi --phase P3-design · Variations generated 2026-05-07
+    </footer>
+  </body>
+</html>
