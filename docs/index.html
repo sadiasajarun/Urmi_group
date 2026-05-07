@@ -1,0 +1,1806 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urmi Group — The wave that clothes the world</title>
+    <meta
+      name="description"
+      content="Urmi Group — Bangladesh's first Full-Green RMG group. Sustainable garment manufacturing for the world's leading brands."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urmi-blue':       '#1E5C9F',
+              'urmi-blue-deep':  '#143F73',
+              'wave-blue':       '#5BA0DE',
+              'wave-blue-bright':'#8FCBFF',
+              'wave-blue-soft':  '#C5DCEF',
+              'tide':            '#7FAA9C',
+              'tide-deep':       '#4A7864',
+              'tide-soft':       '#DCE9E3',
+              'tide-mist':       '#F0F5F2',
+              'mist':            '#F4F7FB',
+              'seafoam':         '#E8F0EC',
+              'paper':           '#FCFDFC',
+              'cloud':           '#E0E8E5',
+              'ink':             '#0F1E33',
+              'slate-text':      '#3F5468',
+              'cream':           '#F5EFE3',
+              'cream-text':      '#2A1F12',
+            },
+            fontFamily: {
+              serif: ["'Playfair Display'", 'Georgia', 'serif'],
+              sans: ["'Inter'", 'system-ui', 'sans-serif'],
+              mono: ["'IBM Plex Mono'", 'ui-monospace', 'monospace'],
+              display: ["'Manrope'", 'system-ui', 'sans-serif'],
+              bengali: ["'Hind Siliguri'", 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body { background: #F0F5F2; color: #3F5468; font-family: 'Inter', sans-serif; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: #0F1E33; }
+      .grain::after {
+        content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+        background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        opacity: 0.04;
+      }
+      .wave-frame::before {
+        content: ''; position: absolute; inset: 32px; border: 1px solid #5BA0DE;
+        pointer-events: none; z-index: 5;
+      }
+      @keyframes ripple {
+        0%   { transform: scale(0.95); opacity: 0.55; }
+        100% { transform: scale(1.4);  opacity: 0; }
+      }
+      .animate-ripple { animation: ripple 2.6s cubic-bezier(0.22,1,0.36,1) infinite; }
+      @keyframes pulse-line {
+        0%   { transform: scaleY(0); transform-origin: top; }
+        50%  { transform: scaleY(1); transform-origin: top; }
+        50.1%{ transform: scaleY(1); transform-origin: bottom; }
+        100% { transform: scaleY(0); transform-origin: bottom; }
+      }
+      .animate-pulse-line { animation: pulse-line 3s cubic-bezier(0.22,1,0.36,1) infinite; }
+
+      /* === Experimental hero — scroll-driven shrink ============================ */
+      /* The frame sits inside a sticky container. As the user scrolls within the
+         hero section's runway, the frame contracts from inset:0 → inset:20px and
+         the corners round from 0 → 28px. We provide three paths:
+           1. Modern: CSS scroll-driven animation (Chrome/Edge 115+, Safari 17.4+)
+           2. Fallback: JS class toggle with CSS transitions (Firefox / older)
+           3. Reduced-motion: snaps to the shrunk state with no animation
+      */
+      .hero-frame {
+        position: absolute;
+        inset: 0;
+        border-radius: 0;
+        overflow: hidden;
+        transition: inset 600ms cubic-bezier(0.22,1,0.36,1),
+                    border-radius 600ms cubic-bezier(0.22,1,0.36,1);
+      }
+      .hero-frame.shrunk {
+        inset: 20px;
+        border-radius: 28px;
+      }
+      @keyframes hero-shrink {
+        from { inset: 0;     border-radius: 0; }
+        to   { inset: 20px;  border-radius: 28px; }
+      }
+      @supports (animation-timeline: scroll()) {
+        .hero-experiment .hero-frame {
+          animation: hero-shrink linear both;
+          animation-timeline: scroll(root);
+          animation-range: 0 60vh;
+          transition: none;
+        }
+      }
+      /* Scroll cue + trust strip fade as the frame settles into its shrunk form */
+      .hero-fade-on-scroll { transition: opacity 400ms ease-out; }
+      .hero-frame.shrunk .hero-fade-on-scroll,
+      .hero-experiment[data-shrunk] .hero-fade-on-scroll { opacity: 0; pointer-events: none; }
+
+      /* Orbiting text ring around the play button (uses SVG textPath) */
+      .play-orbit { animation: orbit 22s linear infinite; transform-origin: 50% 50%; }
+      @keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        .hero-frame { inset: 20px !important; border-radius: 28px !important; }
+        .hero-experiment[data-shrunk] .hero-fade-on-scroll { opacity: 1; pointer-events: auto; }
+      }
+    </style>
+  </head>
+  <body class="antialiased overflow-x-hidden">
+    <!-- ====== EXPERIMENTAL FLOATING PILL NAVBAR — minimalistic, glass-blurred, centered ====== -->
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)]" aria-label="Primary">
+      <div class="flex items-center gap-2 md:gap-3 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full pl-2 pr-2 md:pl-3 md:pr-4 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
+        <!-- Logo mark -->
+        <a href="index.html" class="flex items-center justify-center bg-paper/8 rounded-full px-2 py-1 hover:bg-paper/15 transition-colors" aria-label="Urmi Group home">
+          <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
+        </a>
+
+        <!-- Hairline divider -->
+        <span class="w-px h-5 bg-paper/15 hidden md:inline-block" aria-hidden="true"></span>
+
+        <!-- Desktop nav links -->
+        <div class="hidden lg:flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-display font-semibold text-paper/85">
+          <a href="#about" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">About</a>
+          <a href="#craft" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Craft</a>
+          <a href="#portfolio" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Portfolio</a>
+          <a href="#sustainability" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Sustain</a>
+          <a href="#certifications" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Credentials</a>
+          <a href="#connect" class="ml-1 px-4 py-1.5 rounded-full bg-paper text-urmi-blue-deep hover:bg-wave-blue hover:text-paper transition-colors">Connect</a>
+        </div>
+
+        <!-- Mobile hamburger (collapses on <lg) -->
+        <button type="button" aria-label="Open menu" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ====== EXPERIMENTAL FLOATING ACTION CHIPS — top-right (BUY TICKETS-style adapted for Urmi) ====== -->
+    <div class="fixed top-4 md:top-6 right-4 md:right-6 z-50 flex items-center gap-2" aria-label="Quick actions">
+      <a href="#factories" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l5-3v3l5-3v3l5-3v15"/><path d="M3 21h18"/><path d="M9 21v-4M14 21v-4"/></svg>
+        <span class="hidden lg:inline">Visit Factory</span>
+      </a>
+      <a href="#connect" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v5h5"/><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5z"/><path d="M9 13h6M9 17h4"/></svg>
+        <span class="hidden lg:inline">Request Quote</span>
+      </a>
+      <button type="button" aria-label="Search" class="inline-flex items-center justify-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full p-2.5 text-paper shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+
+    <!-- ====== EXPERIMENTAL HERO — scroll-driven shrink (full-bleed → rounded inset frame) ============================
+         Outer section provides 160vh scroll runway. The sticky inner container holds
+         the frame at top:0 across the runway. The frame contracts as the user scrolls,
+         driven by CSS scroll-timeline (modern) or JS class toggle (fallback).
+         Videos remain identical to home.page.html — only the frame, layout, and overlays change.
+    ====================================================================================== -->
+    <section id="home" class="hero-experiment relative h-[160vh] bg-urmi-blue-deep grain">
+      <div class="hero-sticky sticky top-0 h-screen min-h-[680px] w-full overflow-hidden">
+
+        <!-- The shrinking frame — clips the video + all hero overlays -->
+        <div class="hero-frame">
+          <video id="hero-video-a" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-out" autoplay muted playsinline preload="auto" aria-hidden="true">
+            <source src="assets/video/hero-part-1.mp4" type="video/mp4" />
+          </video>
+          <video id="hero-video-b" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-out opacity-0" muted playsinline preload="auto" aria-hidden="true">
+            <source src="assets/video/hero-part-2.mp4" type="video/mp4" />
+          </video>
+
+          <!-- Darkening overlay — keeps the translucent caps headline legible over varied footage -->
+          <div class="absolute inset-0 z-10 pointer-events-none" style="background:
+            radial-gradient(ellipse at 50% 35%, rgba(20,63,115,0.15) 0%, transparent 55%),
+            linear-gradient(180deg, rgba(15,30,51,0.45) 0%, rgba(15,30,51,0.20) 35%, rgba(15,30,51,0.45) 100%);"></div>
+
+          <!-- ===== BIG TRANSLUCENT CAPS HEADLINE — centered focal point ===== -->
+          <div class="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6">
+            <!-- Eyebrow -->
+            <div class="flex items-center gap-3 mb-6 md:mb-8">
+              <span class="font-bengali text-2xl md:text-3xl text-paper/85 tracking-[0.12em] leading-none font-medium drop-shadow" aria-label="Urmi">ঊর্মি</span>
+              <span class="w-px h-4 bg-paper/30" aria-hidden="true"></span>
+              <span class="font-display font-medium text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-paper/80 drop-shadow">Urmi — The Wave · Est. 1955</span>
+            </div>
+
+            <!-- Translucent caps headline (à la "EXPERIENCE THE MUSIC") -->
+            <h1 class="font-display font-bold uppercase tracking-tight leading-[0.95] text-[clamp(3rem,11vw,10rem)] text-paper/35 max-w-6xl drop-shadow-[0_8px_32px_rgba(6,21,40,0.45)]">
+              The Wave<br>That Clothes<br>The World
+            </h1>
+
+            <!-- Single primary CTA below -->
+            <a href="#connect" class="group mt-8 md:mt-10 inline-flex items-center gap-3 bg-paper text-urmi-blue-deep uppercase tracking-[0.18em] text-xs font-display font-semibold px-8 py-4 rounded-full hover:bg-wave-blue hover:text-paper transition-colors shadow-[0_12px_28px_rgba(6,21,40,0.32)]">
+              <span>Partner With Us</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+
+          <!-- ===== LEFT RAIL — slide indicator + circular play button ===== -->
+          <div class="absolute left-6 md:left-10 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col items-center gap-12">
+
+            <!-- Slide indicator (1/4 + traveling pulse line + dots) -->
+            <div class="flex flex-col items-center gap-3 text-paper/85">
+              <span class="font-display font-semibold text-[11px] tracking-[0.22em]">1</span>
+              <div class="h-12 w-[1px] bg-paper/25 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full bg-paper animate-pulse-line"></div>
+              </div>
+              <span class="font-display font-medium text-[10px] tracking-[0.22em] text-paper/55">4</span>
+              <div class="flex flex-col gap-1.5 mt-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-paper" aria-hidden="true"></span>
+                <span class="w-1.5 h-1.5 rounded-full border border-paper/55" aria-hidden="true"></span>
+                <span class="w-1.5 h-1.5 rounded-full border border-paper/55" aria-hidden="true"></span>
+                <span class="w-1.5 h-1.5 rounded-full border border-paper/55" aria-hidden="true"></span>
+              </div>
+            </div>
+
+            <!-- Circular play button with orbiting text + ripple -->
+            <button type="button" aria-label="Watch the film" class="relative w-24 h-24 lg:w-28 lg:h-28 group">
+              <!-- Ripple rings -->
+              <span class="absolute inset-0 rounded-full border border-paper/35 animate-ripple" aria-hidden="true"></span>
+              <span class="absolute inset-0 rounded-full border border-paper/25 animate-ripple" style="animation-delay: 1.2s;" aria-hidden="true"></span>
+              <!-- Orbiting text ring (SVG textPath) -->
+              <svg class="absolute inset-0 w-full h-full play-orbit pointer-events-none" viewBox="0 0 120 120" aria-hidden="true">
+                <defs>
+                  <path id="orbit-path" d="M 60,60 m -52,0 a 52,52 0 1,1 104,0 a 52,52 0 1,1 -104,0"/>
+                </defs>
+                <text class="font-display font-semibold" font-size="9" letter-spacing="2.2" fill="#FCFDFC" fill-opacity="0.85">
+                  <textPath href="#orbit-path">PRESS PLAY · WATCH THE FILM · PRESS PLAY · WATCH THE FILM ·</textPath>
+                </text>
+              </svg>
+              <!-- Center disc -->
+              <span class="absolute inset-[18%] rounded-full bg-paper text-urmi-blue-deep flex items-center justify-center shadow-[0_12px_28px_rgba(6,21,40,0.35)] transition-transform group-hover:scale-105">
+                <svg class="w-6 h-6 ml-1" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><polygon points="5,3 13,8 5,13"/></svg>
+              </span>
+            </button>
+          </div>
+
+          <!-- ===== BOTTOM-RIGHT SCROLL CUE (fades on scroll) ===== -->
+          <div class="absolute bottom-10 right-10 z-30 hero-fade-on-scroll hidden md:flex items-center gap-3">
+            <span class="font-display font-medium text-[10px] tracking-[0.22em] text-paper/75 uppercase drop-shadow" id="hero-clock">PART 1 / 2</span>
+            <div class="h-10 w-[1px] bg-paper/30 relative overflow-hidden">
+              <div class="absolute top-0 left-0 w-full h-full bg-paper animate-pulse-line"></div>
+            </div>
+            <span class="font-display font-medium text-[10px] tracking-[0.22em] text-paper/75 uppercase drop-shadow">Scroll</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero video controller + scroll-shrink fallback ====================================== -->
+    <script>
+      (function () {
+        // === Video crossfade controller (identical to home.page.html) ====================
+        var a = document.getElementById('hero-video-a');
+        var b = document.getElementById('hero-video-b');
+        var clock = document.getElementById('hero-clock');
+        if (a && b) {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            a.removeAttribute('autoplay'); a.pause();
+          } else {
+            function showA() { a.style.opacity = '1'; b.style.opacity = '0'; if (clock) clock.textContent = 'PART 1 / 2'; }
+            function showB() { b.style.opacity = '1'; a.style.opacity = '0'; if (clock) clock.textContent = 'PART 2 / 2'; }
+            a.addEventListener('ended', function () { b.currentTime = 0; var p = b.play(); if (p && p.catch) p.catch(function () {}); showB(); });
+            b.addEventListener('ended', function () { a.currentTime = 0; var p = a.play(); if (p && p.catch) p.catch(function () {}); showA(); });
+            var startup = a.play(); if (startup && startup.catch) startup.catch(function () {});
+          }
+        }
+
+        // === Scroll-driven shrink fallback ================================================
+        // CSS scroll-timeline handles browsers that support it. For everything else,
+        // toggle .shrunk on the .hero-frame once the user has scrolled past ~80px.
+        var supportsScrollTimeline = CSS && CSS.supports && CSS.supports('animation-timeline: scroll()');
+        if (!supportsScrollTimeline) {
+          var frame = document.querySelector('.hero-experiment .hero-frame');
+          var section = document.querySelector('.hero-experiment');
+          if (frame && section) {
+            var ticking = false;
+            function update() {
+              var y = window.scrollY || window.pageYOffset;
+              if (y > 80) {
+                frame.classList.add('shrunk');
+                section.setAttribute('data-shrunk', '');
+              } else {
+                frame.classList.remove('shrunk');
+                section.removeAttribute('data-shrunk');
+              }
+              ticking = false;
+            }
+            window.addEventListener('scroll', function () {
+              if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+            }, { passive: true });
+            update();
+          }
+        }
+      })();
+    </script>
+
+    <!-- ====== TRUST BAND — Section 2 (#trust) — typographic brand wordmarks on navy (blends with hero outer) ====== -->
+    <!--
+      LOGO-IMAGE FALLBACK (commented out, can be re-enabled by removing the surrounding HTML comment):
+      The previous implementation used <img> partner logos in white tiles. Switched to typographic
+      wordmarks for a cleaner, more readable presentation on navy and to keep the brand list editable
+      without asset swaps. To revert: comment-out the new TYPOGRAPHIC marquee below and uncomment this block.
+
+      <div class="partner-marquee relative">
+        <div class="absolute left-0 top-0 bottom-0 w-12 md:w-28 z-10 pointer-events-none" style="background: linear-gradient(to right, #143F73, transparent);"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-12 md:w-28 z-10 pointer-events-none" style="background: linear-gradient(to left, #143F73, transparent);"></div>
+        <div class="partner-track partner-track-r flex gap-4 md:gap-6 will-change-transform py-3">
+          <article class="partner-tile shrink-0 w-[170px] md:w-[200px] h-[110px] md:h-[120px] bg-paper border border-cloud rounded-md flex items-center justify-center p-6"><img src="assets/partners/1-1.png" alt="Partner brand" loading="lazy" /></article>
+          (... all 12 partner-image tiles preserved at git history; original block lived here ...)
+        </div>
+      </div>
+    -->
+
+    <section id="trust" class="bg-urmi-blue-deep pt-6 pb-12 md:pt-8 md:pb-16 overflow-hidden relative">
+      <div class="partner-marquee relative">
+        <!-- Edge fades match the navy bg so wordmarks fade in/out at the edges -->
+        <div class="absolute left-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none" style="background: linear-gradient(to right, #143F73, transparent);"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none" style="background: linear-gradient(to left, #143F73, transparent);"></div>
+
+        <!-- Row 1: scrolls right-to-left — varied typographic wordmarks (no tile bg) -->
+        <div class="partner-track partner-track-r flex items-center gap-10 md:gap-16 will-change-transform py-5">
+          <span class="partner-word shrink-0 font-serif italic font-light text-paper/85 text-3xl md:text-4xl">ellos</span>
+          <span class="partner-word shrink-0 font-display font-extrabold uppercase text-paper text-xl md:text-2xl tracking-[0.04em]">DECATHLON</span>
+          <span class="partner-word shrink-0 font-display font-black italic uppercase text-paper text-3xl md:text-4xl">PUMA</span>
+          <span class="partner-word shrink-0 font-serif text-paper/90 text-2xl md:text-3xl">Auchan</span>
+          <span class="partner-word shrink-0 font-display font-bold text-paper text-3xl md:text-4xl tracking-tight">H&amp;M</span>
+          <span class="partner-word shrink-0 font-serif italic text-paper/85 text-xl md:text-2xl">Marks &amp; Spencer</span>
+          <!-- Duplicate set for seamless loop -->
+          <span class="partner-word shrink-0 font-serif italic font-light text-paper/85 text-3xl md:text-4xl" aria-hidden="true">ellos</span>
+          <span class="partner-word shrink-0 font-display font-extrabold uppercase text-paper text-xl md:text-2xl tracking-[0.04em]" aria-hidden="true">DECATHLON</span>
+          <span class="partner-word shrink-0 font-display font-black italic uppercase text-paper text-3xl md:text-4xl" aria-hidden="true">PUMA</span>
+          <span class="partner-word shrink-0 font-serif text-paper/90 text-2xl md:text-3xl" aria-hidden="true">Auchan</span>
+          <span class="partner-word shrink-0 font-display font-bold text-paper text-3xl md:text-4xl tracking-tight" aria-hidden="true">H&amp;M</span>
+          <span class="partner-word shrink-0 font-serif italic text-paper/85 text-xl md:text-2xl" aria-hidden="true">Marks &amp; Spencer</span>
+        </div>
+
+        <!-- Row 2: scrolls left-to-right (opposite direction) -->
+        <div class="partner-track partner-track-l flex items-center gap-10 md:gap-16 will-change-transform py-5 mt-2 md:mt-3">
+          <span class="partner-word shrink-0 font-display font-bold uppercase text-paper text-xl md:text-2xl tracking-[0.18em]">UNIQLO</span>
+          <span class="partner-word shrink-0 font-display font-medium uppercase text-paper/85 text-lg md:text-xl tracking-[0.32em]">MUJI</span>
+          <span class="partner-word shrink-0 font-display font-black uppercase text-paper text-3xl md:text-4xl">GU</span>
+          <span class="partner-word shrink-0 font-serif italic text-paper/90 text-2xl md:text-3xl">La Redoute</span>
+          <span class="partner-word shrink-0 font-display font-light uppercase text-paper/85 text-lg md:text-xl tracking-[0.32em]">EXPRESS</span>
+          <span class="partner-word shrink-0 font-serif italic text-paper text-xl md:text-2xl">N.Y. &amp; C.</span>
+          <span class="partner-word shrink-0 font-display font-bold uppercase text-paper text-xl md:text-2xl tracking-[0.18em]" aria-hidden="true">UNIQLO</span>
+          <span class="partner-word shrink-0 font-display font-medium uppercase text-paper/85 text-lg md:text-xl tracking-[0.32em]" aria-hidden="true">MUJI</span>
+          <span class="partner-word shrink-0 font-display font-black uppercase text-paper text-3xl md:text-4xl" aria-hidden="true">GU</span>
+          <span class="partner-word shrink-0 font-serif italic text-paper/90 text-2xl md:text-3xl" aria-hidden="true">La Redoute</span>
+          <span class="partner-word shrink-0 font-display font-light uppercase text-paper/85 text-lg md:text-xl tracking-[0.32em]" aria-hidden="true">EXPRESS</span>
+          <span class="partner-word shrink-0 font-serif italic text-paper text-xl md:text-2xl" aria-hidden="true">N.Y. &amp; C.</span>
+        </div>
+      </div>
+
+      <!-- Marquee styles + reduced-motion guard -->
+      <style>
+        @keyframes partner-marquee-r { from { transform: translateX(0); } to   { transform: translateX(-50%); } }
+        @keyframes partner-marquee-l { from { transform: translateX(-50%); } to   { transform: translateX(0); } }
+        .partner-track-r { animation: partner-marquee-r 36s linear infinite; }
+        .partner-track-l { animation: partner-marquee-l 42s linear infinite; }
+        .partner-marquee:hover .partner-track { animation-play-state: paused; }
+        .partner-word { transition: opacity 200ms ease-out, transform 300ms ease-out; }
+        .partner-word:hover { opacity: 1 !important; transform: translateY(-2px); }
+        @media (prefers-reduced-motion: reduce) { .partner-track-r, .partner-track-l { animation: none; transform: translateX(0); } }
+      </style>
+    </section>
+
+    <!-- ====== TRANSITION: Trust band → Pillars (navy curls into mist) ====== -->
+    <div class="section-transition relative w-full overflow-hidden" style="background:#143F73; height:96px;" aria-hidden="true">
+      <svg class="block w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 96">
+        <path d="M0,48 C200,8 480,88 720,48 C960,8 1240,88 1440,48 L1440,96 L0,96 Z" fill="#F4F7FB"/>
+        <path d="M0,72 C200,40 480,104 720,72 C960,40 1240,104 1440,72 L1440,96 L0,96 Z" fill="#F4F7FB" fill-opacity="0.55"/>
+      </svg>
+    </div>
+
+    <!-- ====== PILLARS — Section 2 (#about) — Cozyspace-inspired marquee in soft container ====== -->
+    <section id="about" class="bg-mist py-[clamp(4rem,8vw,7rem)] px-3 md:px-6">
+      <div class="mx-auto max-w-[95rem]">
+        <!-- Soft tide-mist container with rounded corners (the "Cozyspace pill") -->
+        <div class="relative bg-tide-mist rounded-[32px] md:rounded-[48px] py-14 md:py-20 px-6 md:px-12 overflow-hidden border border-tide/15">
+
+          <!-- Header inside container — centered, fashion masthead -->
+          <div class="text-center mb-12 md:mb-16 max-w-3xl mx-auto">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// COMPANY AT A GLANCE — ০১</span>
+            <h2 class="text-[clamp(2.25rem,5.5vw,4rem)] leading-[1.0] tracking-tight font-serif" style="font-weight: 600;">
+              Four pillars, <em class="italic" style="color:#4A7864">crafted just for you.</em>
+            </h2>
+            <p class="font-serif italic text-base md:text-lg text-slate-text mt-5 max-w-xl mx-auto">
+              The waves that built Urmi — flowing past, in steady current.
+            </p>
+            <a href="#connect" class="mt-8 inline-flex items-center gap-2 bg-tide-deep text-paper px-7 py-3.5 rounded-full font-mono text-[11px] uppercase tracking-[0.22em] hover:bg-tide transition-colors">
+              See the Story →
+            </a>
+          </div>
+
+          <!-- Edge gradient masks so cards fade in/out at the container edges -->
+          <div class="pillar-marquee relative -mx-6 md:-mx-12">
+            <!-- Left fade -->
+            <div class="absolute left-0 top-0 bottom-0 w-12 md:w-20 z-10 pointer-events-none" style="background: linear-gradient(to right, #F0F5F2, transparent);"></div>
+            <!-- Right fade -->
+            <div class="absolute right-0 top-0 bottom-0 w-12 md:w-20 z-10 pointer-events-none" style="background: linear-gradient(to left, #F0F5F2, transparent);"></div>
+
+            <!-- Marquee track (cards duplicated 2x for seamless loop) — caption now lives BELOW the image so the clip-path scoop never hides text -->
+            <div class="pillar-track flex gap-5 md:gap-7 px-6 md:px-12 will-change-transform">
+
+              <!-- ===== PRIMARY SET (4 cards) ===== -->
+
+              <!-- Card 1: Years of craft -->
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -2.5deg; --y: 0px;">
+                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
+                  <img src="assets/waves/pillar-01.jpg" alt="Decades of craft on the river" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
+                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 01</span>
+                </div>
+                <div class="pillar-mq-caption mt-5 px-2">
+                  <span class="font-bengali text-4xl md:text-5xl text-ink font-medium block leading-none">৪০+</span>
+                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Years of craft</span>
+                </div>
+              </article>
+
+              <!-- Card 2: Hands -->
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -1deg; --y: -8px;">
+                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
+                  <img src="assets/waves/pillar-02.jpg" alt="Hands shaping every thread" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 02</span>
+                </div>
+                <div class="pillar-mq-caption mt-5 px-2">
+                  <span class="font-serif text-4xl md:text-5xl text-ink font-semibold block leading-none">16,800</span>
+                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Hands shaping every thread</span>
+                </div>
+              </article>
+
+              <!-- Card 3: Full Green -->
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 1deg; --y: -8px;">
+                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
+                  <img src="assets/waves/pillar-03.jpg" alt="Bangladesh's first Full Green factory group" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 03</span>
+                </div>
+                <div class="pillar-mq-caption mt-5 px-2">
+                  <span class="font-serif italic text-3xl md:text-4xl text-ink font-semibold block leading-none">Full Green</span>
+                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">First green factory group</span>
+                </div>
+              </article>
+
+              <!-- Card 4: 30+ brands -->
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 2.5deg; --y: 0px;">
+                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
+                  <img src="assets/waves/pillar-04.jpg" alt="Thirty global brands trust Urmi" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
+                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 04</span>
+                </div>
+                <div class="pillar-mq-caption mt-5 px-2">
+                  <span class="font-serif text-4xl md:text-5xl text-ink font-semibold block leading-none">30+</span>
+                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Global brands</span>
+                </div>
+              </article>
+
+              <!-- ===== DUPLICATE SET (same 4 cards, aria-hidden) — needed for seamless looping marquee ===== -->
+
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -2.5deg; --y: 0px;" aria-hidden="true">
+                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
+                  <img src="assets/waves/pillar-01.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
+                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 01</span>
+                </div>
+                <div class="pillar-mq-caption mt-5 px-2">
+                  <span class="font-bengali text-4xl md:text-5xl text-ink font-medium block leading-none">৪০+</span>
+                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Years of craft</span>
+                </div>
+              </article>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -1deg; --y: -8px;" aria-hidden="true">
+                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
+                  <img src="assets/waves/pillar-02.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 02</span>
+                </div>
+                <div class="pillar-mq-caption mt-5 px-2">
+                  <span class="font-serif text-4xl md:text-5xl text-ink font-semibold block leading-none">16,800</span>
+                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Hands shaping every thread</span>
+                </div>
+              </article>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 1deg; --y: -8px;" aria-hidden="true">
+                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
+                  <img src="assets/waves/pillar-03.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 03</span>
+                </div>
+                <div class="pillar-mq-caption mt-5 px-2">
+                  <span class="font-serif italic text-3xl md:text-4xl text-ink font-semibold block leading-none">Full Green</span>
+                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">First green factory group</span>
+                </div>
+              </article>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 2.5deg; --y: 0px;" aria-hidden="true">
+                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
+                  <img src="assets/waves/pillar-04.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
+                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 04</span>
+                </div>
+                <div class="pillar-mq-caption mt-5 px-2">
+                  <span class="font-serif text-4xl md:text-5xl text-ink font-semibold block leading-none">30+</span>
+                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Global brands</span>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Marquee styles -->
+      <style>
+        /* Per-card subtle rotation + Y offset (the Cozyspace fan-tilt feel) */
+        .pillar-mq-card { transform: rotate(var(--rot, 0deg)) translateY(var(--y, 0px)); transform-origin: center center; }
+        .pillar-mq-frame {
+          /* Subtle curved-bottom + curved-top (banner / curtain feel) */
+          border-radius: 24px 24px 28px 28px;
+          /* Soft scoop on the bottom edge — clip-path pulls the bottom edge slightly inward at sides */
+          clip-path: path('M 0,30 Q 0,0 30,0 L 270,0 Q 300,0 300,30 L 300,360 Q 270,400 150,396 Q 30,400 0,360 Z');
+        }
+        @supports not (clip-path: path('M 0,0 Z')) {
+          .pillar-mq-frame { clip-path: none; }
+        }
+        /* Marquee animation: track moves -50% so duplicate set takes over seamlessly */
+        @keyframes pillar-marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        .pillar-track { animation: pillar-marquee 20s linear infinite; }
+        .pillar-marquee:hover .pillar-track { animation-play-state: paused; }
+        @media (prefers-reduced-motion: reduce) {
+          .pillar-track { animation: none; transform: translateX(0); }
+        }
+      </style>
+    </section>
+
+    <!-- ====== TRANSITION: Pillars → Numbers (tide-mist curls into mist) ====== -->
+    <div class="section-transition relative w-full overflow-hidden" style="background:#F0F5F2; height:64px;" aria-hidden="true">
+      <svg class="block w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 64">
+        <path d="M0,32 C240,8 480,56 720,32 C960,8 1200,56 1440,32 L1440,64 L0,64 Z" fill="#F4F7FB"/>
+      </svg>
+    </div>
+
+    <!-- ====== BY THE NUMBERS — Section 3 — minimalist 4-card stat row (Mahjoz-inspired, Urmi palette) ====== -->
+    <section class="bg-mist py-[clamp(5rem,10vw,9rem)] px-6 md:px-12 overflow-hidden">
+      <div class="mx-auto max-w-[80rem]">
+
+        <!-- Centered header (Mahjoz-style) -->
+        <div class="text-center mb-12 md:mb-16 max-w-2xl mx-auto">
+          <span class="font-display font-semibold text-[11px] uppercase tracking-[0.32em] text-urmi-blue mb-4 block">YOUR JOURNEY STARTS HERE</span>
+          <h2 class="text-[clamp(2rem,4.8vw,3.5rem)] leading-[1.05] tracking-tight mb-5">A workshop in <em class="italic" style="color:#1E5C9F">numbers</em>.</h2>
+          <p class="text-base md:text-lg text-slate-text font-light leading-relaxed">Every figure here is audited and updated quarterly &mdash; the fabric we weave today is the fabric we'll measure tomorrow.</p>
+        </div>
+
+        <!-- 4 stat cards in a horizontal row (responsive: 1 / 2 / 4 columns) -->
+        <div class="bento grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+
+          <!-- Card 1: 250K+ Garments / day -->
+          <article class="stat-card relative rounded-2xl overflow-hidden bg-gradient-to-br from-urmi-blue to-urmi-blue-deep aspect-[3/4] flex flex-col items-center justify-center text-center p-6 md:p-7 group">
+            <!-- Diagonal sash with subtle text running across -->
+            <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+              <div class="absolute -left-1/4 top-1/2 -translate-y-1/2 w-[160%] h-14 -rotate-[22deg] bg-gradient-to-r from-wave-blue/35 via-wave-blue/15 to-transparent flex items-center pl-12 overflow-hidden">
+                <span class="font-display font-bold text-[10px] uppercase tracking-[0.32em] text-paper/35 whitespace-nowrap">URMI &middot; GLOBAL CRAFT &middot; URMI &middot; GLOBAL CRAFT &middot; URMI</span>
+              </div>
+            </div>
+            <!-- Top-left wave logo mark -->
+            <div class="absolute top-4 left-4 md:top-5 md:left-5 w-8 h-8 md:w-9 md:h-9 bg-urmi-blue-deep border border-paper/15 rounded-lg flex items-center justify-center" aria-hidden="true">
+              <svg class="w-4 h-4 md:w-5 md:h-5 text-paper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 C 6 8, 9 16, 12 12 S 18 8, 21 12"/><path d="M3 17 C 6 13, 9 21, 12 17 S 18 13, 21 17" stroke-opacity="0.55"/></svg>
+            </div>
+            <!-- Number + label -->
+            <div class="relative z-10">
+              <div class="font-serif font-semibold text-paper leading-none mb-3" style="font-size: clamp(2.5rem, 5.5vw, 4rem);">
+                <span class="bento-count" data-target="250" data-format="int">0</span><span>K+</span>
+              </div>
+              <p class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-paper/85">Garments / day</p>
+            </div>
+          </article>
+
+          <!-- Card 2: 16,800 Hands -->
+          <article class="stat-card relative rounded-2xl overflow-hidden bg-gradient-to-br from-urmi-blue to-urmi-blue-deep aspect-[3/4] flex flex-col items-center justify-center text-center p-6 md:p-7 group">
+            <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+              <div class="absolute -left-1/4 top-1/2 -translate-y-1/2 w-[160%] h-14 -rotate-[22deg] bg-gradient-to-r from-wave-blue/35 via-wave-blue/15 to-transparent flex items-center pl-12 overflow-hidden">
+                <span class="font-display font-bold text-[10px] uppercase tracking-[0.32em] text-paper/35 whitespace-nowrap">SIXTEEN THOUSAND HANDS &middot; CRAFTED ON THE PADMA</span>
+              </div>
+            </div>
+            <div class="absolute top-4 left-4 md:top-5 md:left-5 w-8 h-8 md:w-9 md:h-9 bg-urmi-blue-deep border border-paper/15 rounded-lg flex items-center justify-center" aria-hidden="true">
+              <svg class="w-4 h-4 md:w-5 md:h-5 text-paper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 C 6 8, 9 16, 12 12 S 18 8, 21 12"/><path d="M3 17 C 6 13, 9 21, 12 17 S 18 13, 21 17" stroke-opacity="0.55"/></svg>
+            </div>
+            <div class="relative z-10">
+              <div class="font-serif font-semibold text-paper leading-none mb-3" style="font-size: clamp(2.25rem, 5vw, 3.5rem);">
+                <span class="bento-count" data-target="16800" data-format="comma">0</span>
+              </div>
+              <p class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-paper/85">Hands shaping every thread</p>
+            </div>
+          </article>
+
+          <!-- Card 3: 4,000+ m³ Water purified -->
+          <article class="stat-card relative rounded-2xl overflow-hidden bg-gradient-to-br from-tide-deep to-urmi-blue-deep aspect-[3/4] flex flex-col items-center justify-center text-center p-6 md:p-7 group">
+            <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+              <div class="absolute -left-1/4 top-1/2 -translate-y-1/2 w-[160%] h-14 -rotate-[22deg] bg-gradient-to-r from-wave-blue/35 via-wave-blue/15 to-transparent flex items-center pl-12 overflow-hidden">
+                <span class="font-display font-bold text-[10px] uppercase tracking-[0.32em] text-paper/35 whitespace-nowrap">ZERO DISCHARGE &middot; CLOSED LOOP &middot; ZERO DISCHARGE</span>
+              </div>
+            </div>
+            <div class="absolute top-4 left-4 md:top-5 md:left-5 w-8 h-8 md:w-9 md:h-9 bg-urmi-blue-deep border border-paper/15 rounded-lg flex items-center justify-center" aria-hidden="true">
+              <svg class="w-4 h-4 md:w-5 md:h-5 text-paper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 C 6 8, 9 16, 12 12 S 18 8, 21 12"/><path d="M3 17 C 6 13, 9 21, 12 17 S 18 13, 21 17" stroke-opacity="0.55"/></svg>
+            </div>
+            <div class="relative z-10">
+              <div class="font-serif font-semibold text-paper leading-none mb-3" style="font-size: clamp(2.5rem, 5.5vw, 4rem);">
+                <span class="bento-count" data-target="4000" data-format="comma">0</span><span>+</span>
+              </div>
+              <p class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-paper/85">m&sup3; water purified / day</p>
+            </div>
+          </article>
+
+          <!-- Card 4: 30+ Global brands -->
+          <article class="stat-card relative rounded-2xl overflow-hidden bg-gradient-to-br from-urmi-blue to-urmi-blue-deep aspect-[3/4] flex flex-col items-center justify-center text-center p-6 md:p-7 group">
+            <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+              <div class="absolute -left-1/4 top-1/2 -translate-y-1/2 w-[160%] h-14 -rotate-[22deg] bg-gradient-to-r from-wave-blue/35 via-wave-blue/15 to-transparent flex items-center pl-12 overflow-hidden">
+                <span class="font-display font-bold text-[10px] uppercase tracking-[0.32em] text-paper/35 whitespace-nowrap">TRUSTED WORLDWIDE &middot; BRANDS THAT SET THE STANDARD</span>
+              </div>
+            </div>
+            <div class="absolute top-4 left-4 md:top-5 md:left-5 w-8 h-8 md:w-9 md:h-9 bg-urmi-blue-deep border border-paper/15 rounded-lg flex items-center justify-center" aria-hidden="true">
+              <svg class="w-4 h-4 md:w-5 md:h-5 text-paper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 C 6 8, 9 16, 12 12 S 18 8, 21 12"/><path d="M3 17 C 6 13, 9 21, 12 17 S 18 13, 21 17" stroke-opacity="0.55"/></svg>
+            </div>
+            <div class="relative z-10">
+              <div class="font-serif font-semibold text-paper leading-none mb-3" style="font-size: clamp(2.5rem, 5.5vw, 4rem);">
+                <span class="bento-count" data-target="30" data-format="int">0</span><span>+</span>
+              </div>
+              <p class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-paper/85">Global brands</p>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Footer caption row -->
+        <div class="mt-10 md:mt-12 pt-6 border-t border-cloud flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-text/75">
+          <p class="font-mono uppercase tracking-[0.2em] text-[10px]">Last audit &middot; Q1 2026 &middot; Better Works + GRI verified</p>
+          <a href="#sustainability" class="font-mono uppercase tracking-[0.2em] text-[10px] text-urmi-blue hover:text-tide-deep transition-colors">&rarr; See sustainability detail</a>
+        </div>
+      </div>
+
+      <!-- Hover lift + count-up animation -->
+      <style>
+        .stat-card { transition: transform 500ms cubic-bezier(0.22,1,0.36,1), box-shadow 400ms ease; box-shadow: 0 12px 32px rgba(20,63,115,0.10); }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px rgba(20,63,115,0.18); }
+        @media (prefers-reduced-motion: reduce) { .stat-card:hover { transform: none; } }
+      </style>
+      <script>
+        (function () {
+          var bento = document.querySelector('.bento');
+          if (!bento) return;
+          var nodes = bento.querySelectorAll('.bento-count');
+
+          function fmt(node, value) {
+            var format = node.getAttribute('data-format');
+            if (format === 'comma')    return value.toLocaleString('en-IN');
+            if (format === 'comma-in') return value.toLocaleString('en-IN');
+            return String(value);
+          }
+          function animate(node, target, duration) {
+            node.textContent = fmt(node, target);
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            var start = Math.round(target * 0.65);
+            var begin = performance.now();
+            node.textContent = fmt(node, start);
+            function tick(now) {
+              var t = Math.min((now - begin) / duration, 1);
+              var eased = 1 - Math.pow(1 - t, 3);
+              var v = Math.round(start + (target - start) * eased);
+              node.textContent = fmt(node, v);
+              if (t < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          }
+          function activate() {
+            nodes.forEach(function (n) {
+              animate(n, parseFloat(n.getAttribute('data-target')), 1700);
+            });
+          }
+          nodes.forEach(function (n) {
+            n.textContent = fmt(n, parseFloat(n.getAttribute('data-target')));
+          });
+          if (!('IntersectionObserver' in window)) { activate(); return; }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { activate(); io.disconnect(); }
+            });
+          }, { threshold: 0.3 });
+          io.observe(bento);
+        })();
+      </script>
+    </section>
+
+    <!-- ====== TRANSITION: Numbers → Crafts (mist curls into tide-mist) ====== -->
+    <div class="section-transition relative w-full overflow-hidden" style="background:#F4F7FB; height:64px;" aria-hidden="true">
+      <svg class="block w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 64">
+        <path d="M0,28 C240,52 480,4 720,28 C960,52 1200,4 1440,28 L1440,64 L0,64 Z" fill="#F0F5F2"/>
+      </svg>
+    </div>
+
+    <!-- ====== CRAFTS — Section 4 (#craft) — Workflow pipeline with wavy connectors representing innovation ====== -->
+    <section id="craft" class="relative bg-tide-mist py-[clamp(5rem,10vw,9rem)] px-6 md:px-12 overflow-hidden">
+
+      <!-- Section header -->
+      <div class="mx-auto max-w-[90rem] mb-16 md:mb-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+        <div class="lg:col-span-7">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// CAPABILITY — ০২</span>
+          <span class="block font-mono text-[12px] md:text-[13px] uppercase tracking-[0.18em] text-urmi-blue mb-6">Our strategic workflow</span>
+          <h2 class="text-[clamp(2rem,4.8vw,3.75rem)] leading-[1.05] tracking-tight">Six crafts. <em class="italic" style="color:#4A7864">One unbroken current.</em></h2>
+        </div>
+        <div class="lg:col-span-5 lg:pl-8 border-t lg:border-t-0 lg:border-l border-tide/40 pt-6 lg:pt-0">
+          <p class="font-serif italic text-lg md:text-xl text-slate-text leading-relaxed mb-3">Yarn enters one end. The world wears the other.</p>
+          <p class="text-sm md:text-base text-slate-text font-light leading-relaxed">Vertically integrated under one roof — each stage feeds the next, and innovation rides between them as a continuous wave.</p>
+        </div>
+      </div>
+
+      <!-- ====== WORKFLOW PIPELINE ====== -->
+      <div class="craft-workflow relative mx-auto max-w-[90rem]">
+
+        <!-- DESKTOP: horizontal flow with wavy SVG connectors between nodes -->
+        <div class="hidden lg:block relative">
+          <!-- Background wavy connector lines (full width, sit behind the nodes) -->
+          <svg class="absolute left-0 right-0 top-1/2 -translate-y-1/2 w-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 1440 220" aria-hidden="true" style="height: 220px;">
+            <defs>
+              <!-- Subtle gradient that fades at the ends -->
+              <linearGradient id="flow-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#5BA0DE" stop-opacity="0"/>
+                <stop offset="10%"  stop-color="#5BA0DE" stop-opacity="0.6"/>
+                <stop offset="90%"  stop-color="#4A7864" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#4A7864" stop-opacity="0"/>
+              </linearGradient>
+              <!-- Pulse marker (the dot that travels along the path) -->
+              <radialGradient id="pulse-glow">
+                <stop offset="0%"  stop-color="#5BA0DE" stop-opacity="1"/>
+                <stop offset="60%" stop-color="#5BA0DE" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#5BA0DE" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Main flow path that snakes between all 6 nodes (wavy, representing innovation) -->
+            <path id="flow-path"
+                  d="M 100,110
+                     C 180,40 240,180 320,110
+                     C 400,40 460,180 540,110
+                     C 620,40 680,180 760,110
+                     C 840,40 900,180 980,110
+                     C 1060,40 1120,180 1200,110
+                     C 1280,40 1340,180 1340,110"
+                  fill="none"
+                  stroke="url(#flow-gradient)"
+                  stroke-width="2"
+                  stroke-dasharray="4 4"
+                  stroke-linecap="round"/>
+
+            <!-- A second slightly-offset wave path for depth -->
+            <path d="M 100,110
+                     C 180,60 240,160 320,110
+                     C 400,60 460,160 540,110
+                     C 620,60 680,160 760,110
+                     C 840,60 900,160 980,110
+                     C 1060,60 1120,160 1200,110
+                     C 1280,60 1340,160 1340,110"
+                  fill="none"
+                  stroke="#7FAA9C"
+                  stroke-width="1"
+                  stroke-opacity="0.35"/>
+
+            <!-- Three pulse dots traveling along the path with staggered delays — represents "innovation flowing through the workflow" -->
+            <circle r="6" fill="url(#pulse-glow)">
+              <animateMotion dur="9s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#flow-path"/>
+              </animateMotion>
+            </circle>
+            <circle r="6" fill="url(#pulse-glow)">
+              <animateMotion dur="9s" begin="3s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#flow-path"/>
+              </animateMotion>
+            </circle>
+            <circle r="6" fill="url(#pulse-glow)">
+              <animateMotion dur="9s" begin="6s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#flow-path"/>
+              </animateMotion>
+            </circle>
+          </svg>
+
+          <!-- Workflow nodes (6 craft circles in a horizontal row) -->
+          <div class="relative grid grid-cols-6 gap-x-4">
+            <!-- Each node = circular image + number badge + name + stat -->
+
+            <!-- 01 Textile -->
+            <article class="craft-node relative flex flex-col items-center text-center group cursor-default" style="--delay: 0ms;">
+              <span class="craft-node-num font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep mb-3">01</span>
+              <div class="craft-node-circle relative w-[150px] h-[150px] xl:w-[170px] xl:h-[170px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_18px_36px_rgba(20,63,115,0.18)] transition-transform duration-700 group-hover:scale-[1.07]">
+                <img src="assets/crafts/textile.png" alt="Textile — knitting yarn into fabric" loading="lazy" class="absolute inset-0 w-full h-full object-cover"/>
+                <div class="absolute inset-0 rounded-full ring-1 ring-tide/40"></div>
+              </div>
+              <h3 class="font-serif text-xl xl:text-2xl text-ink mt-5">Textile</h3>
+              <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-tide-deep mt-2">25,000 kg yarn / day</p>
+              <p class="text-xs text-slate-text/85 font-light leading-relaxed mt-2 max-w-[180px]">84 knitting machines turning yarn into fabric.</p>
+            </article>
+
+            <!-- 02 Printing -->
+            <article class="craft-node relative flex flex-col items-center text-center group cursor-default" style="--delay: 150ms;">
+              <span class="craft-node-num font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep mb-3">02</span>
+              <div class="craft-node-circle relative w-[150px] h-[150px] xl:w-[170px] xl:h-[170px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_18px_36px_rgba(20,63,115,0.18)] transition-transform duration-700 group-hover:scale-[1.07]">
+                <img src="assets/crafts/printing.png" alt="Printing — multi-colour carousel" loading="lazy" class="absolute inset-0 w-full h-full object-cover"/>
+                <div class="absolute inset-0 rounded-full ring-1 ring-tide/40"></div>
+              </div>
+              <h3 class="font-serif text-xl xl:text-2xl text-ink mt-5">Printing</h3>
+              <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-tide-deep mt-2">40,000 pcs / day</p>
+              <p class="text-xs text-slate-text/85 font-light leading-relaxed mt-2 max-w-[180px]">Carousel machines · water-based, low-impact dye.</p>
+            </article>
+
+            <!-- 03 Embroidery -->
+            <article class="craft-node relative flex flex-col items-center text-center group cursor-default" style="--delay: 300ms;">
+              <span class="craft-node-num font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep mb-3">03</span>
+              <div class="craft-node-circle relative w-[150px] h-[150px] xl:w-[170px] xl:h-[170px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_18px_36px_rgba(20,63,115,0.18)] transition-transform duration-700 group-hover:scale-[1.07]">
+                <img src="assets/crafts/embroidery.png" alt="Embroidery — heritage detail with modern precision" loading="lazy" class="absolute inset-0 w-full h-full object-cover"/>
+                <div class="absolute inset-0 rounded-full ring-1 ring-tide/40"></div>
+              </div>
+              <h3 class="font-serif text-xl xl:text-2xl text-ink mt-5">Embroidery</h3>
+              <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-tide-deep mt-2">3M stitches / day</p>
+              <p class="text-xs text-slate-text/85 font-light leading-relaxed mt-2 max-w-[180px]">Heritage technique, programmed precision.</p>
+            </article>
+
+            <!-- 04 Garments -->
+            <article class="craft-node relative flex flex-col items-center text-center group cursor-default" style="--delay: 450ms;">
+              <span class="craft-node-num font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep mb-3">04</span>
+              <div class="craft-node-circle relative w-[150px] h-[150px] xl:w-[170px] xl:h-[170px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_18px_36px_rgba(20,63,115,0.18)] transition-transform duration-700 group-hover:scale-[1.07]">
+                <img src="assets/crafts/garments.png" alt="Garments — cut and sew across 90 lines" loading="lazy" class="absolute inset-0 w-full h-full object-cover"/>
+                <div class="absolute inset-0 rounded-full ring-1 ring-tide/40"></div>
+              </div>
+              <h3 class="font-serif text-xl xl:text-2xl text-ink mt-5">Garments</h3>
+              <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-tide-deep mt-2">150,000 pcs / day</p>
+              <p class="text-xs text-slate-text/85 font-light leading-relaxed mt-2 max-w-[180px]">90 lines · 8,000 hands · precision cut and sewn.</p>
+            </article>
+
+            <!-- 05 Washing -->
+            <article class="craft-node relative flex flex-col items-center text-center group cursor-default" style="--delay: 600ms;">
+              <span class="craft-node-num font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep mb-3">05</span>
+              <div class="craft-node-circle relative w-[150px] h-[150px] xl:w-[170px] xl:h-[170px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_18px_36px_rgba(20,63,115,0.18)] transition-transform duration-700 group-hover:scale-[1.07]">
+                <img src="assets/crafts/washing.jpg" alt="Washing — closed-loop water, zero discharge" loading="lazy" class="absolute inset-0 w-full h-full object-cover"/>
+                <div class="absolute inset-0 rounded-full ring-1 ring-tide/40"></div>
+              </div>
+              <h3 class="font-serif text-xl xl:text-2xl text-ink mt-5">Washing</h3>
+              <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-tide-deep mt-2">Closed-loop water</p>
+              <p class="text-xs text-slate-text/85 font-light leading-relaxed mt-2 max-w-[180px]">Acid · stone · pigment · zero discharge.</p>
+            </article>
+
+            <!-- 06 Shipping -->
+            <article class="craft-node relative flex flex-col items-center text-center group cursor-default" style="--delay: 750ms;">
+              <span class="craft-node-num font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep mb-3">06</span>
+              <div class="craft-node-circle relative w-[150px] h-[150px] xl:w-[170px] xl:h-[170px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_18px_36px_rgba(20,63,115,0.18)] transition-transform duration-700 group-hover:scale-[1.07]">
+                <img src="assets/crafts/shipping.png" alt="Shipping — global logistics on Bangladesh's rivers since 1970" loading="lazy" class="absolute inset-0 w-full h-full object-cover"/>
+                <div class="absolute inset-0 rounded-full ring-1 ring-tide/40"></div>
+              </div>
+              <h3 class="font-serif text-xl xl:text-2xl text-ink mt-5">Shipping</h3>
+              <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-tide-deep mt-2">Operating since 1970</p>
+              <p class="text-xs text-slate-text/85 font-light leading-relaxed mt-2 max-w-[180px]">Bangladesh's rivers, then the world's oceans.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- TABLET / MOBILE: vertical flow with vertical wavy connectors -->
+        <div class="lg:hidden relative">
+          <!-- Vertical wavy line down the center -->
+          <svg class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 pointer-events-none" preserveAspectRatio="none" viewBox="0 0 60 1200" aria-hidden="true" style="width: 60px; height: 100%;">
+            <defs>
+              <linearGradient id="flow-gradient-v" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"   stop-color="#5BA0DE" stop-opacity="0"/>
+                <stop offset="10%"  stop-color="#5BA0DE" stop-opacity="0.6"/>
+                <stop offset="90%"  stop-color="#4A7864" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#4A7864" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path id="flow-path-v"
+                  d="M 30,40
+                     C 0,140 60,240 30,340
+                     C 0,440 60,540 30,640
+                     C 0,740 60,840 30,940
+                     C 0,1040 60,1140 30,1180"
+                  fill="none"
+                  stroke="url(#flow-gradient-v)"
+                  stroke-width="2"
+                  stroke-dasharray="4 4"/>
+            <circle r="5" fill="#5BA0DE">
+              <animateMotion dur="8s" repeatCount="indefinite">
+                <mpath href="#flow-path-v"/>
+              </animateMotion>
+            </circle>
+          </svg>
+
+          <!-- Vertical stack of nodes alternating left/right of the wave line -->
+          <div class="relative space-y-12">
+            <article class="flex items-center gap-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep w-6">01</span><div class="w-[110px] h-[110px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_12px_24px_rgba(20,63,115,0.18)]"><img src="assets/crafts/textile.png" alt="Textile" class="w-full h-full object-cover"/></div><div class="flex-1"><h3 class="font-serif text-xl text-ink">Textile</h3><p class="font-mono text-[9px] uppercase tracking-[0.2em] text-tide-deep mt-1">25,000 kg yarn / day</p></div></article>
+            <article class="flex items-center gap-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep w-6">02</span><div class="w-[110px] h-[110px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_12px_24px_rgba(20,63,115,0.18)]"><img src="assets/crafts/printing.png" alt="Printing" class="w-full h-full object-cover"/></div><div class="flex-1"><h3 class="font-serif text-xl text-ink">Printing</h3><p class="font-mono text-[9px] uppercase tracking-[0.2em] text-tide-deep mt-1">40,000 pcs / day</p></div></article>
+            <article class="flex items-center gap-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep w-6">03</span><div class="w-[110px] h-[110px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_12px_24px_rgba(20,63,115,0.18)]"><img src="assets/crafts/embroidery.png" alt="Embroidery" class="w-full h-full object-cover"/></div><div class="flex-1"><h3 class="font-serif text-xl text-ink">Embroidery</h3><p class="font-mono text-[9px] uppercase tracking-[0.2em] text-tide-deep mt-1">3M stitches / day</p></div></article>
+            <article class="flex items-center gap-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep w-6">04</span><div class="w-[110px] h-[110px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_12px_24px_rgba(20,63,115,0.18)]"><img src="assets/crafts/garments.png" alt="Garments" class="w-full h-full object-cover"/></div><div class="flex-1"><h3 class="font-serif text-xl text-ink">Garments</h3><p class="font-mono text-[9px] uppercase tracking-[0.2em] text-tide-deep mt-1">150,000 pcs / day</p></div></article>
+            <article class="flex items-center gap-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep w-6">05</span><div class="w-[110px] h-[110px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_12px_24px_rgba(20,63,115,0.18)]"><img src="assets/crafts/washing.jpg" alt="Washing" class="w-full h-full object-cover"/></div><div class="flex-1"><h3 class="font-serif text-xl text-ink">Washing</h3><p class="font-mono text-[9px] uppercase tracking-[0.2em] text-tide-deep mt-1">Closed-loop water</p></div></article>
+            <article class="flex items-center gap-5"><span class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep w-6">06</span><div class="w-[110px] h-[110px] rounded-full overflow-hidden bg-paper border-2 border-paper shadow-[0_12px_24px_rgba(20,63,115,0.18)]"><img src="assets/crafts/shipping.png" alt="Shipping" class="w-full h-full object-cover"/></div><div class="flex-1"><h3 class="font-serif text-xl text-ink">Shipping</h3><p class="font-mono text-[9px] uppercase tracking-[0.2em] text-tide-deep mt-1">Operating since 1970</p></div></article>
+          </div>
+        </div>
+
+        <!-- INNOVATION CLOSING — wavy ring animation around a closing statement -->
+        <div class="mt-20 md:mt-28 relative flex flex-col items-center text-center">
+          <!-- Wave-rings emanating outward (the "innovation in wavy layout animation") -->
+          <div class="relative w-44 h-44 md:w-56 md:h-56 mb-8 flex items-center justify-center">
+            <span class="absolute inset-0 rounded-full border border-tide/40 animate-ripple"></span>
+            <span class="absolute inset-0 rounded-full border border-tide/30 animate-ripple" style="animation-delay: 0.9s;"></span>
+            <span class="absolute inset-0 rounded-full border border-wave-blue/50 animate-ripple" style="animation-delay: 1.8s;"></span>
+            <span class="absolute inset-[18%] rounded-full bg-paper shadow-xl flex items-center justify-center">
+              <span class="font-serif italic text-base md:text-lg text-tide-deep px-4 text-center leading-tight">Innovation,<br>continuous.</span>
+            </span>
+          </div>
+          <p class="font-serif italic text-lg md:text-xl text-slate-text max-w-2xl">Six departments. One unbroken wave — and the next improvement is already building.</p>
+          <a href="#connect" class="mt-8 inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-urmi-blue-deep hover:text-tide-deep transition-colors border border-tide-deep/40 hover:border-tide-deep px-7 py-4">
+            Tour all six on a factory visit →
+          </a>
+        </div>
+      </div>
+
+      <!-- Workflow styles + scroll-triggered scale-in for nodes -->
+      <style>
+        .craft-node { opacity: 0; transform: translateY(28px) scale(0.96); }
+        .craft-workflow.in-view .craft-node {
+          animation: craft-node-in 900ms cubic-bezier(0.22,1,0.36,1) forwards;
+          animation-delay: var(--delay, 0ms);
+        }
+        @keyframes craft-node-in {
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .craft-node { opacity: 1 !important; transform: none !important; animation: none !important; }
+          .craft-workflow svg circle[r="6"] { display: none; }
+        }
+      </style>
+      <script>
+        (function () {
+          var wf = document.querySelector('.craft-workflow');
+          if (!wf || !('IntersectionObserver' in window)) {
+            if (wf) wf.classList.add('in-view');
+            return;
+          }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                wf.classList.add('in-view');
+                io.disconnect();
+              }
+            });
+          }, { threshold: 0.2 });
+          io.observe(wf);
+        })();
+      </script>
+    </section>
+
+    <!-- ====== SUSTAINABILITY — Section 5 (#sustainability) — editorial magazine layout: hero image + manifesto pull quote + numbered index + commitment grid ====== -->
+    <section id="sustainability" class="relative py-[clamp(5rem,10vw,9rem)] px-6 md:px-12 overflow-hidden" style="background: linear-gradient(180deg, #DCE9E3 0%, #F0F5F2 100%);">
+
+      <div class="mx-auto max-w-[90rem]">
+
+        <!-- Editorial header -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-14 md:mb-20">
+          <div class="lg:col-span-7">
+            <div class="flex items-center gap-6 mb-6">
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">// SUSTAINABILITY — ০৩</span>
+              <span class="hidden md:inline-flex font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep/55">FIVE COMMITMENTS &middot; ANNUALLY AUDITED</span>
+            </div>
+            <h2 class="text-[clamp(2rem,5vw,4rem)] leading-[1.0] tracking-tight max-w-4xl font-serif" style="font-weight: 600;">
+              Five commitments. <em class="italic" style="color:#4A7864">One responsible thread.</em>
+            </h2>
+          </div>
+          <div class="lg:col-span-5 lg:pl-10 border-t lg:border-t-0 lg:border-l border-tide/40 pt-6 lg:pt-0">
+            <p class="font-serif italic text-base md:text-lg text-slate-text leading-relaxed">The river leaves cleaner than it arrived &mdash; Bangladesh's first Full-Green RMG group.</p>
+          </div>
+        </div>
+
+        <!-- ============ EDITORIAL HERO ROW: image + manifesto + numbered index ============ -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6 mb-12 md:mb-16">
+
+          <!-- LEFT (col 5): Featured commitment hero image -->
+          <article class="relative lg:col-span-5 aspect-[4/5] lg:aspect-auto lg:min-h-[640px] overflow-hidden bg-cloud group">
+            <img src="assets/waves/pillar-03.jpg" alt="Bangladesh's first Full-Green RMG group" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]" />
+            <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/85 via-urmi-blue-deep/20 to-transparent" aria-hidden="true"></div>
+            <!-- Top-left commitment badge stack -->
+            <div class="absolute top-6 left-6 flex flex-col items-start gap-2">
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/65 backdrop-blur-sm px-3 py-1.5">// COMMITMENT (02)</span>
+              <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/70">FEATURED</span>
+            </div>
+            <!-- Bottom-left content -->
+            <div class="absolute bottom-7 left-7 right-7">
+              <h3 class="font-serif italic text-paper leading-[1.05] mb-3" style="font-size: clamp(2rem, 4vw, 3.25rem); font-weight: 600;">Full Green <em class="not-italic">Factory.</em></h3>
+              <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85 mb-3">LEED Certified &middot; JV with Toray Japan</p>
+              <p class="text-sm md:text-base text-paper/85 font-light leading-relaxed max-w-md">Bangladesh's first vertically integrated Full-Green RMG group &mdash; every site audited, every metric reported.</p>
+            </div>
+          </article>
+
+          <!-- CENTER (col 4): Manifesto pull quote -->
+          <article class="relative lg:col-span-4 bg-tide-deep text-paper p-8 md:p-10 lg:p-12 flex flex-col justify-between min-h-[480px] lg:min-h-[640px]">
+            <div>
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue-soft mb-6 block">// MANIFESTO</span>
+              <p class="font-serif italic leading-[1.25] text-paper" style="font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 500;">
+                Inspired by the river that built Bangladesh &mdash; we make textiles that leave the water <em class="not-italic font-semibold">cleaner</em> than they found it.
+              </p>
+            </div>
+            <div>
+              <div class="h-px w-12 bg-paper/35 mb-5" aria-hidden="true"></div>
+              <p class="text-sm text-paper/80 font-light leading-relaxed mb-6 max-w-xs">Every shift, every stitch, every drop &mdash; audited annually by international standards bodies.</p>
+              <a href="#" class="inline-flex items-center gap-3 font-display font-semibold text-[11px] uppercase tracking-[0.18em] text-paper hover:text-wave-blue-bright transition-colors border-b border-paper/40 hover:border-wave-blue-bright pb-1 w-fit">
+                Read the Manifesto
+                <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- RIGHT (col 3): Numbered index of all 5 commitments -->
+          <div class="lg:col-span-3 bg-paper border border-tide/30 p-6 md:p-7 flex flex-col justify-between min-h-[480px] lg:min-h-[640px]">
+            <div>
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-6 block">// COMMITMENTS &middot; 5</span>
+              <ul class="space-y-5">
+                <li class="commitment-item group cursor-pointer pb-4 border-b border-tide/15">
+                  <div class="flex items-start gap-3">
+                    <span class="font-mono font-semibold text-tide-deep text-sm shrink-0 mt-1">(01)</span>
+                    <div>
+                      <h4 class="font-serif italic text-lg text-ink group-hover:text-tide-deep transition-colors leading-snug">Zero-Discharge ETP</h4>
+                      <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-text/70 block mt-1">4,000 m&sup3; / day</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="commitment-item commitment-active group cursor-pointer pb-4 border-b border-tide/15">
+                  <div class="flex items-start gap-3">
+                    <span class="font-mono font-semibold text-tide-deep text-sm shrink-0 mt-1">(02)</span>
+                    <div>
+                      <h4 class="font-serif italic text-lg text-tide-deep leading-snug">Full Green Factory</h4>
+                      <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-text/70 block mt-1">LEED &middot; Toray JV</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="commitment-item group cursor-pointer pb-4 border-b border-tide/15">
+                  <div class="flex items-start gap-3">
+                    <span class="font-mono font-semibold text-tide-deep text-sm shrink-0 mt-1">(03)</span>
+                    <div>
+                      <h4 class="font-serif italic text-lg text-ink group-hover:text-tide-deep transition-colors leading-snug">Decarbonization 2030</h4>
+                      <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-text/70 block mt-1">50% reduction target</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="commitment-item group cursor-pointer pb-4 border-b border-tide/15">
+                  <div class="flex items-start gap-3">
+                    <span class="font-mono font-semibold text-tide-deep text-sm shrink-0 mt-1">(04)</span>
+                    <div>
+                      <h4 class="font-serif italic text-lg text-ink group-hover:text-tide-deep transition-colors leading-snug">Circular Water</h4>
+                      <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-text/70 block mt-1">100% returned, purified</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="commitment-item group cursor-pointer">
+                  <div class="flex items-start gap-3">
+                    <span class="font-mono font-semibold text-tide-deep text-sm shrink-0 mt-1">(05)</span>
+                    <div>
+                      <h4 class="font-serif italic text-lg text-ink group-hover:text-tide-deep transition-colors leading-snug">Certified &amp; Accountable</h4>
+                      <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-text/70 block mt-1">OEKO-TEX &middot; GOTS &middot; GRS</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <p class="font-serif italic text-sm text-slate-text mt-6 pt-6 border-t border-tide/20">Read each in full in our annual sustainability report.</p>
+          </div>
+        </div>
+
+        <!-- ============ COMMITMENT GRID — 4 supporting cards (excluding the featured Full Green) ============ -->
+        <div class="commitment-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 mb-12">
+
+          <!-- 01 Zero-Discharge ETP -->
+          <article class="commitment-card group" style="--delay: 0ms;">
+            <div class="relative aspect-[4/5] overflow-hidden bg-cloud border border-tide/30 group-hover:border-tide-deep group-hover:shadow-lg transition-all">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #C5DCEF 0%, #5BA0DE 50%, #1E5C9F 100%);" aria-hidden="true"></div>
+              <svg class="absolute inset-0 w-full h-full opacity-30 transition-transform duration-[1500ms] group-hover:scale-110" viewBox="0 0 100 125" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <path d="M50,25 C 50,25 25,50 25,70 a 25,25 0 0 0 50,0 C 75,50 50,25 50,25 z" fill="#FCFDFC" fill-opacity="0.28"/>
+                <path d="M40,70 a 10,10 0 0 0 10,10" fill="none" stroke="#FCFDFC" stroke-width="1.5" stroke-opacity="0.55"/>
+              </svg>
+              <span class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">(01)</span>
+              <div class="absolute bottom-5 left-5 right-5 text-paper">
+                <h4 class="font-serif italic text-xl md:text-2xl leading-tight mb-1">Zero-Discharge ETP</h4>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/85 block">4,000 m&sup3; / day</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- 03 Decarbonization 2030 -->
+          <article class="commitment-card group" style="--delay: 150ms;">
+            <div class="relative aspect-[4/5] overflow-hidden bg-cloud border border-tide/30 group-hover:border-tide-deep group-hover:shadow-lg transition-all">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #DCE9E3 0%, #7FAA9C 50%, #4A7864 100%);" aria-hidden="true"></div>
+              <svg class="absolute inset-0 w-full h-full opacity-35 transition-transform duration-[1500ms] group-hover:scale-110" viewBox="0 0 100 125" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <rect x="20" y="50" width="10" height="50" fill="#FCFDFC" fill-opacity="0.42"/>
+                <rect x="35" y="60" width="10" height="40" fill="#FCFDFC" fill-opacity="0.36"/>
+                <rect x="50" y="70" width="10" height="30" fill="#FCFDFC" fill-opacity="0.30"/>
+                <rect x="65" y="80" width="10" height="20" fill="#FCFDFC" fill-opacity="0.25"/>
+                <line x1="20" y1="100" x2="80" y2="100" stroke="#FCFDFC" stroke-width="1" stroke-opacity="0.50"/>
+                <path d="M22 47 L 78 47 M 78 47 L 72 41 M 78 47 L 72 53" fill="none" stroke="#FCFDFC" stroke-width="1.2" stroke-opacity="0.5" stroke-linecap="round"/>
+              </svg>
+              <span class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper bg-tide-deep/65 backdrop-blur-sm px-2.5 py-1">(03)</span>
+              <div class="absolute bottom-5 left-5 right-5 text-paper">
+                <h4 class="font-serif italic text-xl md:text-2xl leading-tight mb-1">Decarbonization 2030</h4>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/85 block">50% reduction target</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- 04 Circular Water -->
+          <article class="commitment-card group" style="--delay: 300ms;">
+            <div class="relative aspect-[4/5] overflow-hidden bg-cloud border border-tide/30 group-hover:border-tide-deep group-hover:shadow-lg transition-all">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #E8F0EC 0%, #C5DCEF 50%, #5BA0DE 100%);" aria-hidden="true"></div>
+              <svg class="absolute inset-0 w-full h-full opacity-35 transition-transform duration-[1500ms] group-hover:scale-110 group-hover:rotate-12" viewBox="0 0 100 125" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <circle cx="50" cy="62.5" r="22" fill="none" stroke="#FCFDFC" stroke-width="1.5" stroke-opacity="0.55" stroke-dasharray="4 3"/>
+                <path d="M30 62.5 L 25 67.5 L 30 72.5" fill="none" stroke="#FCFDFC" stroke-width="1.5" stroke-opacity="0.55" stroke-linecap="round"/>
+                <path d="M70 62.5 L 75 57.5 L 70 52.5" fill="none" stroke="#FCFDFC" stroke-width="1.5" stroke-opacity="0.55" stroke-linecap="round"/>
+                <path d="M50,52 C 50,52 44,58 44,63 a 6,6 0 0 0 12,0 C 56,58 50,52 50,52 z" fill="#FCFDFC" fill-opacity="0.55"/>
+              </svg>
+              <span class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">(04)</span>
+              <div class="absolute bottom-5 left-5 right-5 text-paper">
+                <h4 class="font-serif italic text-xl md:text-2xl leading-tight mb-1">Circular Water</h4>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/85 block">100% returned, purified</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- 05 Certified & Accountable -->
+          <article class="commitment-card group" style="--delay: 450ms;">
+            <div class="relative aspect-[4/5] overflow-hidden bg-cloud border border-tide/30 group-hover:border-tide-deep group-hover:shadow-lg transition-all">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #143F73 0%, #1E5C9F 50%, #4A7864 100%);" aria-hidden="true"></div>
+              <svg class="absolute inset-0 w-full h-full opacity-35 transition-transform duration-[1500ms] group-hover:scale-110" viewBox="0 0 100 125" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <path d="M50,30 L 25,42 V 65 C 25,80 35,90 50,95 C 65,90 75,80 75,65 V 42 z" fill="#FCFDFC" fill-opacity="0.18"/>
+                <path d="M40,65 L 47,72 L 60,55" fill="none" stroke="#FCFDFC" stroke-width="2" stroke-opacity="0.65" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper bg-urmi-blue-deep/65 backdrop-blur-sm px-2.5 py-1">(05)</span>
+              <div class="absolute bottom-5 left-5 right-5 text-paper">
+                <h4 class="font-serif italic text-xl md:text-2xl leading-tight mb-1">Certified &amp; Accountable</h4>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/85 block">OEKO-TEX &middot; GOTS &middot; GRS</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Closing CTAs -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8 border-t border-tide/30">
+          <a href="#" class="border border-tide-deep text-tide-deep uppercase tracking-[0.18em] text-xs font-display font-semibold px-7 py-4 hover:bg-tide-deep hover:text-paper transition-colors text-center">Read Sustainability Report</a>
+          <a href="#" class="bg-tide-deep text-paper uppercase tracking-[0.18em] text-xs font-display font-semibold px-7 py-4 hover:bg-tide transition-colors text-center inline-flex items-center gap-2 justify-center">
+            See Decarbonization 2030 Plan
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll-trigger fade-in + commitment-item hover -->
+      <style>
+        .commitment-card { opacity: 0; transform: translateY(28px); }
+        .commitment-grid.in-view .commitment-card {
+          animation: commitment-in 700ms cubic-bezier(0.22,1,0.36,1) forwards;
+          animation-delay: var(--delay, 0ms);
+        }
+        @keyframes commitment-in { to { opacity: 1; transform: translateY(0); } }
+        .commitment-item { transition: transform 300ms ease, padding-left 300ms ease; }
+        .commitment-item:hover { transform: translateX(4px); }
+        @media (prefers-reduced-motion: reduce) {
+          .commitment-card { opacity: 1 !important; transform: none !important; animation: none !important; }
+          .commitment-item:hover { transform: none; }
+        }
+      </style>
+      <script>
+        (function () {
+          var grid = document.querySelector('.commitment-grid');
+          if (!grid) return;
+          if (!('IntersectionObserver' in window)) { grid.classList.add('in-view'); return; }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { grid.classList.add('in-view'); io.disconnect(); }
+            });
+          }, { threshold: 0.15 });
+          io.observe(grid);
+        })();
+      </script>
+    </section>
+
+    <!-- ====== TRANSITION: Sustainability → Portfolio (light tide-mist crashes into deep urmi-blue) ====== -->
+    <div class="section-transition relative w-full overflow-hidden" style="background:#F0F5F2; height:120px;" aria-hidden="true">
+      <svg class="block w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 120">
+        <path d="M0,52 C240,8 480,108 720,52 C960,-4 1200,108 1440,52 L1440,120 L0,120 Z" fill="#143F73"/>
+        <path d="M0,82 C240,42 480,128 720,82 C960,40 1200,128 1440,82 L1440,120 L0,120 Z" fill="#143F73" fill-opacity="0.55"/>
+      </svg>
+    </div>
+
+    <!-- ====== PORTFOLIO — Section 6 (#portfolio) — 5-category showcase grid with scroll-triggered reveal ====== -->
+    <section id="portfolio" class="relative bg-urmi-blue-deep text-paper py-[clamp(6rem,12vw,10rem)] overflow-hidden">
+
+      <!-- Ocean wave background pattern (kept for atmosphere) -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-[0.18]" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <pattern id="ocean-waves" x="0" y="0" width="240" height="60" patternUnits="userSpaceOnUse">
+            <path d="M0,30 C30,10 60,50 90,30 C120,10 150,50 180,30 C210,10 240,50 240,30" fill="none" stroke="#5BA0DE" stroke-width="1.5"/>
+            <path d="M0,42 C30,22 60,62 90,42 C120,22 150,62 180,42 C210,22 240,62 240,42" fill="none" stroke="#7FAA9C" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#ocean-waves)"/>
+      </svg>
+      <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 40%, rgba(20,63,115,0.15) 0%, rgba(14,39,72,0.85) 70%, rgba(6,21,40,0.95) 100%);" aria-hidden="true"></div>
+
+      <div class="relative z-10 mx-auto max-w-[90rem] px-6 md:px-12">
+
+        <!-- Header (mono eyebrow + campaign-style headline + side description) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-14 md:mb-20">
+          <div class="lg:col-span-8">
+            <div class="flex items-center gap-6 mb-6">
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue">// PORTFOLIO — ০৪</span>
+              <span class="hidden md:inline-flex font-mono text-[10px] uppercase tracking-[0.22em] text-paper/40">CAMPAIGN &middot; SS &lsquo;26</span>
+            </div>
+            <h2 class="text-paper text-[clamp(2rem,5.5vw,4.5rem)] leading-[1.0] tracking-tight max-w-4xl font-serif" style="font-weight: 600;">
+              Garments worn from the gym to the gala &mdash; and <em class="font-serif italic" style="color:#5BA0DE">to bed</em>.
+            </h2>
+          </div>
+          <div class="lg:col-span-4 lg:pl-10 border-t lg:border-t-0 lg:border-l border-wave-blue/30 pt-6 lg:pt-0">
+            <p class="font-serif italic text-base md:text-lg text-paper/85 leading-relaxed">Five families. One thread of intention.</p>
+          </div>
+        </div>
+
+        <!-- 5-card category grid — scroll-triggered staggered fade-in -->
+        <div class="portfolio-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 md:gap-6">
+
+          <!-- Card 1: Active Wear -->
+          <article class="portfolio-card group cursor-pointer" style="--delay: 0ms;">
+            <div class="relative aspect-[3/4] overflow-hidden bg-urmi-blue-deep border border-paper/15 group-hover:border-wave-blue/60 transition-colors">
+              <img src="assets/portfolio/active-wear.webp" alt="Active Wear — performance with a conscience" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
+              <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/85 via-urmi-blue-deep/15 to-transparent transition-opacity duration-500 group-hover:from-urmi-blue-deep/65"></div>
+              <span class="absolute top-4 right-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">(01)</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <h3 class="font-serif text-paper text-2xl md:text-3xl leading-tight mb-1">Active <em class="italic text-wave-blue-soft">Wear</em></h3>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 block">Performance with a conscience</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Evening Wear -->
+          <article class="portfolio-card group cursor-pointer" style="--delay: 120ms;">
+            <div class="relative aspect-[3/4] overflow-hidden bg-urmi-blue-deep border border-paper/15 group-hover:border-wave-blue/60 transition-colors">
+              <img src="assets/portfolio/evening-wear.webp" alt="Evening Wear — silhouettes for the gala" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
+              <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/85 via-urmi-blue-deep/15 to-transparent transition-opacity duration-500 group-hover:from-urmi-blue-deep/65"></div>
+              <span class="absolute top-4 right-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">(02)</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <h3 class="font-serif text-paper text-2xl md:text-3xl leading-tight mb-1">Evening <em class="italic text-wave-blue-soft">Wear</em></h3>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 block">Silhouettes for the gala</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Night Wear -->
+          <article class="portfolio-card group cursor-pointer" style="--delay: 240ms;">
+            <div class="relative aspect-[3/4] overflow-hidden bg-urmi-blue-deep border border-paper/15 group-hover:border-wave-blue/60 transition-colors">
+              <img src="assets/portfolio/night-wear.webp" alt="Night Wear — soft hand, easy fit" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
+              <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/85 via-urmi-blue-deep/15 to-transparent transition-opacity duration-500 group-hover:from-urmi-blue-deep/65"></div>
+              <span class="absolute top-4 right-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">(03)</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <h3 class="font-serif text-paper text-2xl md:text-3xl leading-tight mb-1">Night <em class="italic text-wave-blue-soft">Wear</em></h3>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 block">Soft hand, easy fit</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4: Knitwear -->
+          <article class="portfolio-card group cursor-pointer" style="--delay: 360ms;">
+            <div class="relative aspect-[3/4] overflow-hidden bg-urmi-blue-deep border border-paper/15 group-hover:border-wave-blue/60 transition-colors">
+              <img src="assets/portfolio/knitwear.webp" alt="Knitwear — yarn into fabric, fabric into form" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
+              <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/85 via-urmi-blue-deep/15 to-transparent transition-opacity duration-500 group-hover:from-urmi-blue-deep/65"></div>
+              <span class="absolute top-4 right-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">(04)</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <h3 class="font-serif text-paper text-2xl md:text-3xl leading-tight mb-1">Knit<em class="italic text-wave-blue-soft">wear</em></h3>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 block">Yarn into fabric, fabric into form</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5: Kidswear -->
+          <article class="portfolio-card group cursor-pointer" style="--delay: 480ms;">
+            <div class="relative aspect-[3/4] overflow-hidden bg-urmi-blue-deep border border-paper/15 group-hover:border-wave-blue/60 transition-colors">
+              <img src="assets/portfolio/kidswear.jpg" alt="Kidswear — built to grow with them" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
+              <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/85 via-urmi-blue-deep/15 to-transparent transition-opacity duration-500 group-hover:from-urmi-blue-deep/65"></div>
+              <span class="absolute top-4 right-4 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">(05)</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <h3 class="font-serif text-paper text-2xl md:text-3xl leading-tight mb-1">Kids<em class="italic text-wave-blue-soft">wear</em></h3>
+                <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 block">Built to grow with them</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Section closer — italic quote + sample-pack CTA -->
+        <div class="mt-16 md:mt-20 pt-8 border-t border-wave-blue/20 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p class="font-serif italic text-base text-paper/75">Five families, five fits. <em>All made on a single river.</em></p>
+          <a href="#connect" class="inline-flex items-center gap-3 font-display font-semibold text-[11px] uppercase tracking-[0.18em] text-paper hover:text-wave-blue transition-colors border border-wave-blue/40 hover:border-wave-blue px-7 py-4">
+            Request Sample Pack
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll-triggered fade-in stagger + hover lift -->
+      <style>
+        .portfolio-card { opacity: 0; transform: translateY(36px); transition: transform 500ms cubic-bezier(0.22,1,0.36,1); }
+        .portfolio-grid.in-view .portfolio-card {
+          animation: portfolio-in 800ms cubic-bezier(0.22,1,0.36,1) forwards;
+          animation-delay: var(--delay, 0ms);
+        }
+        .portfolio-grid.in-view .portfolio-card:hover { transform: translateY(-6px); }
+        @keyframes portfolio-in { to { opacity: 1; transform: translateY(0); } }
+        @media (prefers-reduced-motion: reduce) {
+          .portfolio-card { opacity: 1 !important; transform: none !important; animation: none !important; }
+        }
+      </style>
+      <script>
+        (function () {
+          var grid = document.querySelector('.portfolio-grid');
+          if (!grid) return;
+          if (!('IntersectionObserver' in window)) { grid.classList.add('in-view'); return; }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { grid.classList.add('in-view'); io.disconnect(); }
+            });
+          }, { threshold: 0.15 });
+          io.observe(grid);
+        })();
+      </script>
+    </section>
+
+    <!-- ====== TRANSITION: Portfolio → Impact (deep navy gives way to mist) ====== -->
+    <div class="section-transition relative w-full overflow-hidden" style="background:#143F73; height:120px;" aria-hidden="true">
+      <svg class="block w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 120">
+        <path d="M0,68 C240,108 480,8 720,68 C960,128 1200,8 1440,68 L1440,120 L0,120 Z" fill="#F4F7FB"/>
+        <path d="M0,90 C240,128 480,42 720,90 C960,128 1200,42 1440,90 L1440,120 L0,120 Z" fill="#F4F7FB" fill-opacity="0.55"/>
+      </svg>
+    </div>
+
+    <!-- ====== CORE VALUES — Section 7 (#values) — alternating navy/cloud pillars with dot patterns + outline numbers ====== -->
+    <section id="values" class="relative bg-mist overflow-hidden">
+
+      <!-- Vertical "CORE VALUES" label on far left, rotated 90° -->
+      <div class="absolute left-0 top-0 bottom-0 w-8 md:w-12 flex items-center justify-center bg-mist z-20 pointer-events-none">
+        <span class="font-display font-bold text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-tide-deep" style="writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap;">CORE VALUES</span>
+      </div>
+
+      <!-- 4-column pillar grid (alternating bg-urmi-blue-deep + bg-cloud) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 min-h-[480px] md:min-h-[640px] pl-8 md:pl-12">
+
+        <!-- Column 1: NAVY — Quality Work -->
+        <div class="value-pillar relative bg-urmi-blue-deep text-paper px-6 md:px-9 py-10 md:py-16 flex flex-col justify-end overflow-hidden">
+          <!-- Dot pattern at top -->
+          <div class="absolute top-0 left-0 right-0 h-28 md:h-40 pointer-events-none opacity-50" style="background-image: radial-gradient(circle, #FCFDFC 1px, transparent 1px); background-size: 14px 14px;" aria-hidden="true"></div>
+          <!-- Large outline number behind text -->
+          <span class="absolute right-2 md:right-3 bottom-28 md:bottom-40 font-display font-black text-[6rem] md:text-[9rem] leading-none text-paper/[0.10] select-none pointer-events-none" aria-hidden="true">01</span>
+          <!-- Value name + tagline -->
+          <h3 class="relative font-display font-bold text-2xl md:text-3xl lg:text-5xl text-paper leading-[0.95] mb-3 lowercase">quality<br>work</h3>
+          <span class="relative font-display font-medium text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-paper/85 leading-tight">CONTINUED<br>IMPROVEMENT</span>
+        </div>
+
+        <!-- Column 2: CLOUD — Sustainable Threads -->
+        <div class="value-pillar relative bg-cloud text-ink px-6 md:px-9 py-10 md:py-16 flex flex-col justify-end overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-28 md:h-40 pointer-events-none opacity-55" style="background-image: radial-gradient(circle, #143F73 1px, transparent 1px); background-size: 14px 14px;" aria-hidden="true"></div>
+          <span class="absolute right-2 md:right-3 bottom-28 md:bottom-40 font-display font-black text-[6rem] md:text-[9rem] leading-none text-ink/[0.08] select-none pointer-events-none" aria-hidden="true">02</span>
+          <h3 class="relative font-display font-bold text-2xl md:text-3xl lg:text-5xl text-urmi-blue-deep leading-[0.95] mb-3 lowercase">sustainable<br>threads</h3>
+          <span class="relative font-display font-medium text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-tide-deep leading-tight">BETTER<br>ENVIRONMENT</span>
+        </div>
+
+        <!-- Column 3: NAVY — Above & Beyond -->
+        <div class="value-pillar relative bg-urmi-blue-deep text-paper px-6 md:px-9 py-10 md:py-16 flex flex-col justify-end overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-28 md:h-40 pointer-events-none opacity-50" style="background-image: radial-gradient(circle, #FCFDFC 1px, transparent 1px); background-size: 14px 14px;" aria-hidden="true"></div>
+          <span class="absolute right-2 md:right-3 bottom-28 md:bottom-40 font-display font-black text-[6rem] md:text-[9rem] leading-none text-paper/[0.10] select-none pointer-events-none" aria-hidden="true">03</span>
+          <h3 class="relative font-display font-bold text-2xl md:text-3xl lg:text-5xl text-paper leading-[0.95] mb-3 lowercase">above<br>&amp; beyond</h3>
+          <span class="relative font-display font-medium text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-paper/85 leading-tight">PASSION FOR<br>CRAFT</span>
+        </div>
+
+        <!-- Column 4: CLOUD — Client Satisfaction -->
+        <div class="value-pillar relative bg-cloud text-ink px-6 md:px-9 py-10 md:py-16 flex flex-col justify-end overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-28 md:h-40 pointer-events-none opacity-55" style="background-image: radial-gradient(circle, #143F73 1px, transparent 1px); background-size: 14px 14px;" aria-hidden="true"></div>
+          <span class="absolute right-2 md:right-3 bottom-28 md:bottom-40 font-display font-black text-[6rem] md:text-[9rem] leading-none text-ink/[0.08] select-none pointer-events-none" aria-hidden="true">04</span>
+          <h3 class="relative font-display font-bold text-2xl md:text-3xl lg:text-5xl text-urmi-blue-deep leading-[0.95] mb-3 lowercase">client<br>satisfaction</h3>
+          <span class="relative font-display font-medium text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-tide-deep leading-tight">RESPONSIVE<br>ACTION</span>
+        </div>
+
+      </div>
+
+      <!-- Pillar hover lift -->
+      <style>
+        .value-pillar { transition: transform 500ms cubic-bezier(0.22,1,0.36,1); }
+        .value-pillar:hover { transform: translateY(-4px); }
+        @media (prefers-reduced-motion: reduce) { .value-pillar:hover { transform: none; } }
+      </style>
+    </section>
+
+    <!-- ====== FACTORIES — Section 8 (#factories) — animated global mechanism map + factory cards ====== -->
+    <section id="factories" class="bg-paper py-[clamp(5rem,10vw,9rem)] px-6 md:px-12 overflow-hidden">
+      <div class="mx-auto max-w-[90rem]">
+
+        <!-- Two-column header (consistent with Crafts/Awards/Sustainability) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-14 md:mb-16 items-end">
+          <div class="lg:col-span-7">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// FACTORIES — ০৬</span>
+            <h2 class="text-[clamp(2rem,4.8vw,3.75rem)] leading-[1.05] tracking-tight">Three rivers. Three factories. <em class="italic" style="color:#1E5C9F">One standard.</em></h2>
+          </div>
+          <div class="lg:col-span-5 lg:pl-10 border-t lg:border-t-0 lg:border-l border-cloud pt-6 lg:pt-0">
+            <p class="font-serif italic text-base md:text-lg text-slate-text leading-relaxed mb-2">From Bangladesh to the world — every shipment trackable, every shift accounted for.</p>
+            <p class="text-sm md:text-base text-slate-text font-light leading-relaxed">Three sites operating to a single playbook: own water treatment, on-site child care, on-site medical.</p>
+          </div>
+        </div>
+
+        <!-- Two-column body: animated map (left) + factory cards (right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+
+          <!-- LEFT: Animated globe / supply-chain mechanism map -->
+          <div class="factory-map relative lg:col-span-7 h-[420px] md:h-[520px] lg:h-[620px] bg-urmi-blue-deep overflow-hidden rounded-sm">
+            <!-- Map GIF — supply-chain mechanism: globe with animated flow lines -->
+            <img src="assets/factories-map.gif" alt="Global manufacturing &amp; shipment mechanism — animated map" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+            <!-- Subtle navy overlay so labels stay legible -->
+            <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at center, rgba(20,63,115,0.10) 0%, rgba(20,63,115,0.55) 100%);" aria-hidden="true"></div>
+
+            <!-- Top-left mono caption: mechanism explainer -->
+            <div class="absolute top-5 md:top-7 left-5 md:left-7 right-5 md:right-auto max-w-xs flex flex-col gap-2 z-10">
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85">// MECHANISM · LIVE</span>
+              <span class="font-serif italic text-paper text-base md:text-lg leading-snug">Yarn enters Bangladesh. Garments leave for 30+ countries.</span>
+            </div>
+
+            <!-- Bottom-right metric chip -->
+            <div class="absolute bottom-5 md:bottom-7 right-5 md:right-7 z-10 flex flex-col items-end gap-2">
+              <div class="bg-paper/10 backdrop-blur-md border border-paper/20 rounded-full px-4 py-2 flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-wave-blue-bright animate-pulse" aria-hidden="true"></span>
+                <span class="font-display font-semibold text-[11px] uppercase tracking-[0.18em] text-paper">3 sites · 9,998 colleagues</span>
+              </div>
+              <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/65">Updated quarterly · last audit Q1 2026</span>
+            </div>
+
+            <!-- Top-right: small ▲ scroll cue / mechanism marker -->
+            <div class="absolute top-5 md:top-7 right-5 md:right-7 z-10 flex items-center gap-2 text-paper/75">
+              <svg class="w-3.5 h-3.5 animate-pulse" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5" fill="currentColor"/></svg>
+              <span class="font-mono text-[9px] uppercase tracking-[0.22em]">DHAKA, BD</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: Factory cards panel -->
+          <div class="lg:col-span-5 bg-tide-mist p-7 md:p-9 lg:p-10 flex flex-col">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-urmi-blue mb-3 block">// Group at a glance</span>
+            <h3 class="font-serif text-2xl md:text-3xl lg:text-4xl text-ink mb-5 leading-tight">Three factories, <em class="italic" style="color:#4A7864">one operating standard.</em></h3>
+            <p class="text-sm md:text-base text-slate-text font-light leading-relaxed mb-7 md:mb-8">Every site runs its own water treatment plant, on-site childcare, and medical facilities.</p>
+
+            <!-- Top-line stats -->
+            <div class="grid grid-cols-2 gap-x-6 gap-y-5 mb-7 md:mb-8 pb-6 md:pb-8 border-b border-tide/30">
+              <div>
+                <div class="font-serif font-semibold text-3xl md:text-4xl text-urmi-blue-deep leading-none">9,998</div>
+                <span class="font-display font-medium text-[10px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Total colleagues</span>
+              </div>
+              <div>
+                <div class="font-serif font-semibold text-3xl md:text-4xl text-urmi-blue-deep leading-none">166,920+</div>
+                <span class="font-display font-medium text-[10px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Pieces / day</span>
+              </div>
+            </div>
+
+            <!-- 3 factory cards -->
+            <div class="space-y-3 md:space-y-4">
+              <article class="factory-card group border border-cloud bg-paper px-5 py-4 hover:border-urmi-blue hover:shadow-md transition-all">
+                <div class="flex items-start justify-between gap-3 mb-1.5">
+                  <div class="font-serif text-lg text-ink leading-snug">Fakhruddin Textile Mills (FTML)</div>
+                  <span class="shrink-0 font-mono text-[9px] uppercase tracking-[0.22em] text-tide-deep bg-tide-soft/60 px-2 py-1 rounded-full">FTML</span>
+                </div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-text/75">6,218 colleagues · 80,000 garments / day</div>
+              </article>
+              <article class="factory-card group border border-cloud bg-paper px-5 py-4 hover:border-urmi-blue hover:shadow-md transition-all">
+                <div class="flex items-start justify-between gap-3 mb-1.5">
+                  <div class="font-serif text-lg text-ink leading-snug">Urmi Garments Limited (UGL)</div>
+                  <span class="shrink-0 font-mono text-[9px] uppercase tracking-[0.22em] text-tide-deep bg-tide-soft/60 px-2 py-1 rounded-full">UGL</span>
+                </div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-text/75">1,710 colleagues · 26,920 pieces / day</div>
+              </article>
+              <article class="factory-card group border border-cloud bg-paper px-5 py-4 hover:border-urmi-blue hover:shadow-md transition-all">
+                <div class="flex items-start justify-between gap-3 mb-1.5">
+                  <div class="font-serif text-lg text-ink leading-snug">UHM Limited (Toray JV)</div>
+                  <span class="shrink-0 font-mono text-[9px] uppercase tracking-[0.22em] text-paper bg-tide-deep px-2 py-1 rounded-full">LEED</span>
+                </div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-text/75">2,070 colleagues · LEED Green Factory · JV with Toray Japan</div>
+              </article>
+            </div>
+
+            <a href="#connect" class="mt-7 md:mt-8 inline-flex items-center gap-3 font-display font-semibold text-[11px] uppercase tracking-[0.18em] text-urmi-blue-deep hover:text-tide-deep transition-colors border-b border-urmi-blue-deep/40 hover:border-tide-deep w-fit pb-1">
+              Schedule a factory visit
+              <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hover lift on factory cards -->
+      <style>
+        .factory-card { transition: transform 400ms cubic-bezier(0.22,1,0.36,1), border-color 200ms ease, box-shadow 300ms ease; }
+        .factory-card:hover { transform: translateY(-2px); }
+        @media (prefers-reduced-motion: reduce) { .factory-card:hover { transform: none; } .factory-map img { animation: none !important; } }
+      </style>
+    </section>
+
+    <!-- ====== CERTIFICATIONS — Section 9 (#certifications) — six standards-body badges (partners moved to Section 2) ====== -->
+    <section id="certifications" class="bg-tide-mist py-[clamp(5rem,10vw,9rem)] px-6 md:px-12">
+      <div class="mx-auto max-w-[90rem]">
+        <div class="text-center max-w-3xl mx-auto mb-10 md:mb-12">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// CREDENTIALS — ০৭</span>
+          <h2 class="text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.15] tracking-tight">Independently <em class="italic" style="color:#4A7864">verified</em>, every year.</h2>
+          <p class="font-serif italic text-base md:text-lg text-slate-text mt-5 max-w-xl mx-auto">Six certifications. Audited annually by international standards bodies. Verifiable claims, not marketing copy.</p>
+        </div>
+        <div class="flex flex-wrap items-stretch justify-center gap-3 md:gap-4">
+          <div class="cert-tile flex items-center gap-3 bg-paper border border-cloud px-5 py-3.5 hover:border-tide-deep hover:shadow-md transition-all">
+            <svg class="w-7 h-7 text-tide-deep shrink-0" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4 C 16 4, 7 9, 7 17 a 9 9 0 0 0 18 0 C 25 9, 16 4, 16 4 z"/><path d="M16 28 V 18"/><path d="M16 18 C 13 18, 10 15, 10 15"/></svg>
+            <div class="flex flex-col"><span class="font-display font-bold text-sm uppercase tracking-[0.14em] text-ink leading-none">LEED</span><span class="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-text mt-1">Green Building</span></div>
+          </div>
+          <div class="cert-tile flex items-center gap-3 bg-paper border border-cloud px-5 py-3.5 hover:border-tide-deep hover:shadow-md transition-all">
+            <svg class="w-7 h-7 text-tide-deep shrink-0" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3 L 5 7 V 14 C 5 21, 9 27, 16 29 C 23 27, 27 21, 27 14 V 7 z"/><path d="M11 16 L 14 19 L 21 12"/></svg>
+            <div class="flex flex-col"><span class="font-display font-bold text-sm uppercase tracking-[0.14em] text-ink leading-none">OEKO-TEX</span><span class="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-text mt-1">STeP &amp; Standard 100</span></div>
+          </div>
+          <div class="cert-tile flex items-center gap-3 bg-paper border border-cloud px-5 py-3.5 hover:border-tide-deep hover:shadow-md transition-all">
+            <svg class="w-7 h-7 text-tide-deep shrink-0" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 28 V 16"/><path d="M16 16 C 16 11, 12 8, 7 8 C 7 13, 11 16, 16 16"/><path d="M16 16 C 16 11, 20 8, 25 8 C 25 13, 21 16, 16 16"/><line x1="10" y1="28" x2="22" y2="28"/></svg>
+            <div class="flex flex-col"><span class="font-display font-bold text-sm uppercase tracking-[0.14em] text-ink leading-none">GOTS</span><span class="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-text mt-1">Global Organic Textile</span></div>
+          </div>
+          <div class="cert-tile flex items-center gap-3 bg-paper border border-cloud px-5 py-3.5 hover:border-tide-deep hover:shadow-md transition-all">
+            <svg class="w-7 h-7 text-tide-deep shrink-0" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 24 L 5 20 L 9 16"/><path d="M5 20 H 21 A 5 5 0 0 0 26 15 V 13"/><path d="M23 8 L 27 12 L 23 16"/><path d="M27 12 H 11 A 5 5 0 0 0 6 17"/></svg>
+            <div class="flex flex-col"><span class="font-display font-bold text-sm uppercase tracking-[0.14em] text-ink leading-none">GRS</span><span class="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-text mt-1">Global Recycled Standard</span></div>
+          </div>
+          <div class="cert-tile flex items-center gap-3 bg-paper border border-cloud px-5 py-3.5 hover:border-tide-deep hover:shadow-md transition-all">
+            <svg class="w-7 h-7 text-tide-deep shrink-0" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M5 16 H 27"/><path d="M16 5 a 14 14 0 0 1 0 22 a 14 14 0 0 1 0 -22"/><path d="M11 18 L 14 21 L 21 13" stroke-width="2"/></svg>
+            <div class="flex flex-col"><span class="font-display font-bold text-sm uppercase tracking-[0.14em] text-ink leading-none">ISO 14001</span><span class="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-text mt-1">Environmental Mgmt</span></div>
+          </div>
+          <div class="cert-tile flex items-center gap-3 bg-paper border border-cloud px-5 py-3.5 hover:border-tide-deep hover:shadow-md transition-all">
+            <svg class="w-7 h-7 text-tide-deep shrink-0" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18 L 9 13 L 13 17 L 16 14 L 19 17 L 23 13 L 28 18"/><path d="M9 13 L 11 11 H 14 L 16 13"/><path d="M16 13 L 18 11 H 21 L 23 13"/><line x1="4" y1="22" x2="28" y2="22"/></svg>
+            <div class="flex flex-col"><span class="font-display font-bold text-sm uppercase tracking-[0.14em] text-ink leading-none">Toray JV</span><span class="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-text mt-1">Japanese Joint Venture</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== AWARDS — Section 10 (#awards) — recognition showcase grid with award medals + scroll-triggered fade-in ====== -->
+    <section id="awards" class="bg-paper py-[clamp(5rem,10vw,9rem)] px-6 md:px-12 overflow-hidden">
+      <div class="mx-auto max-w-[90rem]">
+
+        <!-- Two-column header (matches Crafts/Sustainability pattern) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-14 md:mb-20 items-end">
+          <div class="lg:col-span-7">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// RECOGNITION — ০৮</span>
+            <h2 class="text-[clamp(2rem,4.8vw,3.75rem)] leading-[1.05] tracking-tight">Recognised by <em class="italic" style="color:#1E5C9F">the industry</em>.</h2>
+          </div>
+          <div class="lg:col-span-5 lg:pl-10 border-t lg:border-t-0 lg:border-l border-cloud pt-6 lg:pt-0">
+            <p class="font-serif italic text-base md:text-lg text-slate-text leading-relaxed">A dozen honours from BGMEA, HSBC, and the Government — earned every audit, every export, every shift on the floor.</p>
+          </div>
+        </div>
+
+        <!-- 12-tile award showcase — staggered scroll-fade -->
+        <div class="awards-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-7">
+
+          <article class="award-card group" style="--delay: 0ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/1-3-300x300.jpg" alt="National Export Trophy — Gold" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">National Export Trophy &mdash; Gold</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2024</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 80ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/2-3-300x300.jpg" alt="BGMEA Excellence Award" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">BGMEA Excellence Award</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2023</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 160ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/3-3-300x300.jpg" alt="HSBC Export Excellence Award" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">HSBC Export Excellence</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2022</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 240ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/RFID-2022-1-300x300.png" alt="RFID Innovation Award" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">RFID Innovation Award</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2022</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 320ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/4-3-300x300.jpg" alt="Best Green Factory Award" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">Best Green Factory</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2022</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 400ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/5-3-300x300.jpg" alt="Sustainability Leadership" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">Sustainability Leadership</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2021</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 480ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/6-3-300x300.jpg" alt="Innovation in Manufacturing" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">Innovation in Manufacturing</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2021</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 560ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/8-3-300x300.jpg" alt="Worker Welfare Recognition" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">Worker Welfare Recognition</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2020</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 640ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/11-3-300x300.jpg" alt="LEED Platinum Certification" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">LEED Platinum Certification</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2020</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 720ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/12-2-300x300.jpg" alt="Industry Pioneer Award" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">Industry Pioneer Award</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2019</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 800ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/13-2-300x300.jpg" alt="Made in Bangladesh — Recognition" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">Made in Bangladesh</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2019</span>
+            </div>
+          </article>
+
+          <article class="award-card group" style="--delay: 880ms;">
+            <div class="relative aspect-square overflow-hidden bg-mist border border-cloud group-hover:border-wave-blue group-hover:shadow-lg transition-all flex items-center justify-center">
+              <img src="assets/awards/IMG_4105-300x254.png" alt="Brand Partner of the Year" loading="lazy" class="w-full h-full object-contain p-7 transition-transform duration-700 group-hover:scale-[1.06]" />
+            </div>
+            <div class="mt-3 md:mt-4">
+              <h3 class="font-serif text-base md:text-lg text-ink leading-snug mb-1">Brand Partner of the Year</h3>
+              <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-tide-deep">2018</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Scroll-triggered fade-in stagger -->
+      <style>
+        .award-card { opacity: 0; transform: translateY(28px); }
+        .awards-grid.in-view .award-card {
+          animation: award-in 700ms cubic-bezier(0.22,1,0.36,1) forwards;
+          animation-delay: var(--delay, 0ms);
+        }
+        @keyframes award-in { to { opacity: 1; transform: translateY(0); } }
+        @media (prefers-reduced-motion: reduce) {
+          .award-card { opacity: 1 !important; transform: none !important; animation: none !important; }
+        }
+      </style>
+      <script>
+        (function () {
+          var grid = document.querySelector('.awards-grid');
+          if (!grid) return;
+          if (!('IntersectionObserver' in window)) { grid.classList.add('in-view'); return; }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { grid.classList.add('in-view'); io.disconnect(); }
+            });
+          }, { threshold: 0.15 });
+          io.observe(grid);
+        })();
+      </script>
+    </section>
+
+    <!-- ====== TRANSITION: Awards → CTA (paper crashes into deep navy CTA) ====== -->
+    <div class="section-transition relative w-full overflow-hidden" style="background:#FCFDFC; height:120px;" aria-hidden="true">
+      <svg class="block w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 120">
+        <path d="M0,52 C240,12 480,104 720,52 C960,0 1200,104 1440,52 L1440,120 L0,120 Z" fill="#143F73"/>
+        <path d="M0,82 C240,46 480,124 720,82 C960,40 1200,124 1440,82 L1440,120 L0,120 Z" fill="#143F73" fill-opacity="0.55"/>
+      </svg>
+    </div>
+
+    <!-- ====== CALL TO ACTION — Section 11 (#connect) ====== -->
+    <section id="connect" class="relative bg-urmi-blue-deep text-paper py-[clamp(6rem,12vw,10rem)] px-6 md:px-12 text-center wave-frame overflow-hidden">
+      <svg class="absolute inset-0 w-full h-full opacity-30 pointer-events-none" preserveAspectRatio="none" viewBox="0 0 1440 900" aria-hidden="true">
+        <path d="M0,300 C240,360 480,240 720,300 C960,360 1200,240 1440,300 L1440,400 C1200,460 960,340 720,400 C480,460 240,340 0,400 Z" fill="#5BA0DE" opacity="0.25"/>
+        <path d="M0,500 C240,560 480,440 720,500 C960,560 1200,440 1440,500 L1440,600 C1200,660 960,540 720,600 C480,660 240,540 0,600 Z" fill="#7FAA9C" opacity="0.18"/>
+        <path d="M0,700 C240,760 480,640 720,700 C960,760 1200,640 1440,700 L1440,800 C1200,860 960,740 720,800 C480,860 240,740 0,800 Z" fill="#5BA0DE" opacity="0.12"/>
+      </svg>
+      <div class="relative z-10">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue mb-8 block">// CARRY THE WAVE — ০৯</span>
+        <h2 class="text-cream text-[clamp(2.5rem,7vw,5.75rem)] leading-[1.05] tracking-tight max-w-4xl mx-auto mb-10 font-serif">The next wave is waiting.</h2>
+        <p class="italic font-serif text-paper/85 text-lg max-w-md mx-auto mb-14">Whether you're a global buyer, a young designer, or a future colleague — there's a place for you here.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="#" class="bg-cream text-urmi-blue-deep uppercase tracking-[0.18em] text-xs font-display font-semibold px-9 py-5 hover:bg-wave-blue hover:text-paper transition-colors">→ Become a Buyer</a>
+          <a href="#" class="border border-wave-blue text-wave-blue uppercase tracking-[0.18em] text-xs font-display font-semibold px-9 py-5 hover:bg-wave-blue hover:text-urmi-blue-deep transition-colors">→ Join the Team</a>
+          <a href="#" class="border border-wave-blue text-wave-blue uppercase tracking-[0.18em] text-xs font-display font-semibold px-9 py-5 hover:bg-wave-blue hover:text-urmi-blue-deep transition-colors">→ Visit a Factory</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== FOOTER — Section 12 ====== -->
+    <footer class="bg-urmi-blue-deep text-paper">
+      <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-20 grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div>
+          <div class="flex items-baseline gap-3 mb-6">
+            <span class="font-bengali text-4xl text-paper font-medium">ঊর্মি</span>
+            <span class="font-serif text-xl tracking-widest uppercase">Urmi Group</span>
+          </div>
+          <p class="text-paper/75 text-sm leading-relaxed max-w-xs mb-6">Bangladesh's first Full-Green RMG group. Forty years of craft, woven thread by thread, for the world.</p>
+          <address class="not-italic font-mono text-xs text-paper/70 leading-relaxed uppercase tracking-[0.15em]">Sam Tower, Gulshan-1<br>Dhaka, Bangladesh</address>
+        </div>
+        <div>
+          <h3 class="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50 mb-6">// Sitemap</h3>
+          <ul class="space-y-3">
+            <li><a href="index.html" class="text-sm text-paper hover:text-wave-blue transition-colors">Home</a></li>
+            <li><a href="#about" class="text-sm text-paper hover:text-wave-blue transition-colors">About</a></li>
+            <li><a href="#craft" class="text-sm text-paper hover:text-wave-blue transition-colors">Craft</a></li>
+            <li><a href="#portfolio" class="text-sm text-paper hover:text-wave-blue transition-colors">Portfolio</a></li>
+            <li><a href="#sustainability" class="text-sm text-paper hover:text-wave-blue transition-colors">Sustainability</a></li>
+            <li><a href="#certifications" class="text-sm text-paper hover:text-wave-blue transition-colors">Credentials</a></li>
+            <li><a href="#connect" class="text-sm text-paper hover:text-wave-blue transition-colors">Connect</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50 mb-6">// Newsletter</h3>
+          <p class="text-sm text-paper/70 mb-6">Updates from the floor — sustainability reports, capability releases, the occasional quiet announcement.</p>
+          <form class="flex flex-col sm:flex-row gap-3" onsubmit="event.preventDefault();">
+            <label class="sr-only" for="newsletter-email">Email address</label>
+            <input id="newsletter-email" type="email" required placeholder="your@email.com" class="flex-1 bg-paper/10 border border-paper/20 px-4 py-3 text-sm text-paper placeholder:text-paper/40 focus:outline-none focus:border-wave-blue transition-colors" />
+            <button type="submit" class="bg-paper text-urmi-blue-deep px-5 py-3 text-xs uppercase tracking-[0.18em] font-display font-semibold hover:bg-wave-blue hover:text-paper transition-colors">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="border-t border-paper/10">
+        <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-paper/60 font-mono uppercase tracking-[0.18em]">
+          <p>© 2026 Urmi Group. All rights reserved.</p>
+          <div class="flex items-center gap-5">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" class="hover:text-wave-blue transition-colors normal-case tracking-normal">LinkedIn</a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Instagram</a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Facebook</a>
+          </div>
+          <p class="italic font-serif normal-case tracking-normal">Crafted on the Padma.</p>
+        </div>
+        <!-- Variant comparison link — bidirectional with home.experiment.html -->
+        <div class="mx-auto max-w-[90rem] px-6 md:px-12 pb-6 flex justify-center">
+          <a href="experiment.html" class="font-display font-semibold text-[10px] uppercase tracking-[0.22em] text-paper/55 hover:text-wave-blue transition-colors inline-flex items-center gap-2">
+            <span>View experimental sandbox →</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
