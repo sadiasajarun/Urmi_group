@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connect with Urmi — A wave begins where you write to us.</title>
+    <meta name="description" content="Connect with Urmi Group — buyers, partners, candidates and visitors. Tell us where you'd like the wave to take you." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urmi-blue':       '#1E5C9F',
+              'urmi-blue-deep':  '#143F73',
+              'wave-blue':       '#5BA0DE',
+              'wave-blue-bright':'#8FCBFF',
+              'wave-blue-soft':  '#C5DCEF',
+              'tide':            '#7FAA9C',
+              'tide-deep':       '#4A7864',
+              'tide-soft':       '#DCE9E3',
+              'tide-mist':       '#F0F5F2',
+              'mist':            '#F4F7FB',
+              'seafoam':         '#E8F0EC',
+              'paper':           '#FCFDFC',
+              'cloud':           '#E0E8E5',
+              'ink':             '#0F1E33',
+              'slate-text':      '#3F5468',
+              'cream':           '#F5EFE3',
+            },
+            fontFamily: {
+              serif: ["'Playfair Display'", 'Georgia', 'serif'],
+              sans: ["'Inter'", 'system-ui', 'sans-serif'],
+              mono: ["'IBM Plex Mono'", 'ui-monospace', 'monospace'],
+              display: ["'Manrope'", 'system-ui', 'sans-serif'],
+              bengali: ["'Hind Siliguri'", 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body { background: #F0F5F2; color: #3F5468; font-family: 'Inter', sans-serif; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: #0F1E33; }
+
+      /* Reveal-on-load (stagger via data-delay) */
+      .reveal { opacity: 0; transform: translateY(20px); transition: opacity 800ms cubic-bezier(0.22,1,0.36,1), transform 800ms cubic-bezier(0.22,1,0.36,1); }
+      .reveal.is-visible { opacity: 1; transform: translateY(0); }
+      .reveal[data-delay="80"]  { transition-delay: 80ms; }
+      .reveal[data-delay="160"] { transition-delay: 160ms; }
+      .reveal[data-delay="240"] { transition-delay: 240ms; }
+      .reveal[data-delay="320"] { transition-delay: 320ms; }
+      .reveal[data-delay="400"] { transition-delay: 400ms; }
+      .reveal[data-delay="480"] { transition-delay: 480ms; }
+      .reveal[data-delay="560"] { transition-delay: 560ms; }
+
+      /* The five editorial portraits with subtle vertical staggering */
+      .connect-strip-card { transition: transform 600ms cubic-bezier(0.22,1,0.36,1); }
+      .connect-strip-card[data-shift="up"]   { transform: translateY(-18px); }
+      .connect-strip-card[data-shift="down"] { transform: translateY(18px); }
+      .connect-strip-card:hover { transform: translateY(-6px) !important; }
+
+      /* Wave-line input — animated draw on focus */
+      .wave-line { stroke-dasharray: 600; stroke-dashoffset: 0; transition: stroke 250ms ease; }
+      .wave-input { background: transparent; border: 0; outline: 0; }
+      .wave-input:focus { outline: none; }
+      .wave-field:focus-within .wave-line { stroke: #1E5C9F; }
+
+      /* The big "URMI" watermark */
+      .urmi-mark {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 600;
+        color: rgba(20, 63, 115, 0.06);
+        letter-spacing: -0.04em;
+        line-height: 0.85;
+        user-select: none;
+        pointer-events: none;
+      }
+
+      /* Continuously flowing wave behind the URMI watermark */
+      .urmi-wave-bg path { stroke-dasharray: 1200; animation: urmi-wave 12s linear infinite; }
+      @keyframes urmi-wave { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1200; } }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        .reveal { opacity: 1 !important; transform: none !important; }
+        .connect-strip-card[data-shift] { transform: none !important; }
+        .urmi-wave-bg path { animation: none !important; }
+      }
+    </style>
+  </head>
+
+  <body class="antialiased overflow-x-hidden">
+
+    <!-- ============================================================
+         NAVBAR — Logo standalone (top-left), pill nav centered
+         ============================================================ -->
+    <a href="index.html" class="fixed top-4 md:top-6 left-4 md:left-6 z-[60] inline-flex items-center bg-urmi-blue-deep/85 backdrop-blur-md rounded-full px-3 md:px-4 py-2 shadow-[0_12px_28px_rgba(6,21,40,0.35)] border border-paper/15 hover:bg-urmi-blue-deep transition-colors" aria-label="Urmi Group home">
+      <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
+    </a>
+
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-12rem)]" aria-label="Primary">
+      <div class="flex items-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-2 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
+        <div class="hidden lg:flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-display font-semibold text-paper/85">
+          <a href="index.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Home</a>
+          <a href="about.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">About</a>
+          <a href="index.html#craft" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Craft</a>
+          <a href="index.html#portfolio" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Portfolio</a>
+          <a href="index.html#sustainability" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Sustain</a>
+          <a href="connect.html" aria-current="page" class="ml-1 px-4 py-1.5 rounded-full bg-paper text-urmi-blue-deep transition-colors">Connect</a>
+        </div>
+        <button type="button" aria-label="Open menu" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Floating action chips (top-right) -->
+    <div class="fixed top-4 md:top-6 right-4 md:right-6 z-50 flex items-center gap-2" aria-label="Quick actions">
+      <a href="index.html#factories" data-factory-visit class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l5-3v3l5-3v3l5-3v15"/><path d="M3 21h18"/><path d="M9 21v-4M14 21v-4"/></svg>
+        <span class="hidden lg:inline">Visit Factory</span>
+      </a>
+      <a href="#connect-form" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v5h5"/><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5z"/><path d="M9 13h6M9 17h4"/></svg>
+        <span class="hidden lg:inline">Request Quote</span>
+      </a>
+      <button type="button" aria-label="Search" class="inline-flex items-center justify-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full p-2.5 text-paper shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+
+    <!-- ============================================================
+         CONNECT — editorial form (Cael.lo-inspired, Urmi colours)
+         ============================================================ -->
+    <section id="connect-form" class="relative bg-tide-mist pt-32 md:pt-40 pb-20 md:pb-28 px-6 md:px-12 overflow-hidden">
+
+      <!-- Eyebrow + title -->
+      <div class="text-center max-w-3xl mx-auto reveal">
+        <h1 class="font-display font-bold text-urmi-blue-deep uppercase" style="font-size: clamp(20px, 2.4vw, 28px); letter-spacing: 0.32em;">
+          Connect with us
+        </h1>
+        <p class="font-serif italic text-slate-text mt-3" style="font-size: clamp(15px, 1.4vw, 17px);">
+          Buyers. Partners. Candidates. Visitors. The wave begins where you write to us.
+        </p>
+      </div>
+
+      <!-- 5-portrait editorial strip -->
+      <div class="mt-12 md:mt-16 max-w-6xl mx-auto grid grid-cols-5 gap-3 md:gap-5">
+        <article class="connect-strip-card relative aspect-[2/3] overflow-hidden bg-cloud reveal" data-delay="80" data-shift="down">
+          <img src="assets/waves/pillar-01.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.65) contrast(1.05);" />
+          <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/35 via-transparent to-transparent"></div>
+          <span class="absolute bottom-2 left-2 font-mono text-[9px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-1.5 py-0.5">01</span>
+        </article>
+        <article class="connect-strip-card relative aspect-[2/3] overflow-hidden bg-cloud reveal" data-delay="160" data-shift="up">
+          <img src="assets/about/asif-ashraf.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.65) contrast(1.05);" />
+          <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/35 via-transparent to-transparent"></div>
+          <span class="absolute bottom-2 left-2 font-mono text-[9px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-1.5 py-0.5">02</span>
+        </article>
+        <article class="connect-strip-card relative aspect-[2/3] overflow-hidden bg-cloud reveal" data-delay="240">
+          <img src="assets/about/factory-floor-hero.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.65) contrast(1.05);" />
+          <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/35 via-transparent to-transparent"></div>
+          <span class="absolute bottom-2 left-2 font-mono text-[9px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-1.5 py-0.5">03</span>
+        </article>
+        <article class="connect-strip-card relative aspect-[2/3] overflow-hidden bg-cloud reveal" data-delay="320" data-shift="up">
+          <img src="assets/about/faiaz-rahman.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.65) contrast(1.05);" />
+          <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/35 via-transparent to-transparent"></div>
+          <span class="absolute bottom-2 left-2 font-mono text-[9px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-1.5 py-0.5">04</span>
+        </article>
+        <article class="connect-strip-card relative aspect-[2/3] overflow-hidden bg-cloud reveal" data-delay="400" data-shift="down">
+          <img src="assets/waves/pillar-02.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.65) contrast(1.05);" />
+          <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/35 via-transparent to-transparent"></div>
+          <span class="absolute bottom-2 left-2 font-mono text-[9px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-1.5 py-0.5">05</span>
+        </article>
+      </div>
+
+      <!-- URMI watermark + form -->
+      <div class="relative mt-20 md:mt-28 max-w-5xl mx-auto">
+
+        <!-- Big URMI watermark behind the form -->
+        <span class="urmi-mark absolute inset-x-0 text-center pointer-events-none" style="font-size: clamp(140px, 28vw, 360px); top: 50%; transform: translateY(-50%);" aria-hidden="true">URMI</span>
+
+        <!-- Continuously flowing wave SVG behind the URMI watermark -->
+        <svg class="urmi-wave-bg absolute left-0 right-0 top-1/2 -translate-y-1/2 w-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 1200 240" aria-hidden="true" style="height: 200px; opacity: 0.18;">
+          <path d="M 0 120 C 100 40, 200 200, 300 120 C 400 40, 500 200, 600 120 C 700 40, 800 200, 900 120 C 1000 40, 1100 200, 1200 120" stroke="#5BA0DE" stroke-width="2" fill="none" stroke-dasharray="6 6"/>
+          <path d="M 0 130 C 100 70, 200 190, 300 130 C 400 70, 500 190, 600 130 C 700 70, 800 190, 900 130 C 1000 70, 1100 190, 1200 130" stroke="#7FAA9C" stroke-width="1" stroke-opacity="0.55" fill="none"/>
+        </svg>
+
+        <!-- Form (sits on top of watermark/wave) -->
+        <form id="connect-form-el" class="relative z-10 max-w-2xl mx-auto space-y-10" onsubmit="return false;">
+
+          <!-- Name -->
+          <label class="wave-field block reveal" data-delay="80">
+            <div class="flex items-baseline gap-3">
+              <span class="font-serif italic text-tide-deep" style="font-size: 18px;">[ Your name ]</span>
+              <input type="text" name="name" required placeholder="" class="wave-input flex-1 text-urmi-blue-deep font-serif" style="font-size: 20px;" />
+            </div>
+            <svg class="block mt-2 w-full" height="14" viewBox="0 0 600 14" preserveAspectRatio="none" aria-hidden="true">
+              <path class="wave-line" d="M 0 7 C 50 0, 100 14, 150 7 C 200 0, 250 14, 300 7 C 350 0, 400 14, 450 7 C 500 0, 550 14, 600 7" stroke="#7FAA9C" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            </svg>
+          </label>
+
+          <!-- Email -->
+          <label class="wave-field block reveal" data-delay="160">
+            <div class="flex items-baseline gap-3">
+              <span class="font-serif italic text-tide-deep" style="font-size: 18px;">[ Your email ]</span>
+              <input type="email" name="email" required placeholder="" class="wave-input flex-1 text-urmi-blue-deep font-serif" style="font-size: 20px;" />
+            </div>
+            <svg class="block mt-2 w-full" height="14" viewBox="0 0 600 14" preserveAspectRatio="none" aria-hidden="true">
+              <path class="wave-line" d="M 0 7 C 50 0, 100 14, 150 7 C 200 0, 250 14, 300 7 C 350 0, 400 14, 450 7 C 500 0, 550 14, 600 7" stroke="#7FAA9C" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            </svg>
+          </label>
+
+          <!-- Intent (dropdown) -->
+          <label class="wave-field block reveal" data-delay="240">
+            <div class="flex items-baseline gap-3">
+              <span class="font-serif italic text-tide-deep" style="font-size: 18px;">[ I'm here to ]</span>
+              <select name="intent" required class="wave-input flex-1 text-urmi-blue-deep font-serif" style="font-size: 20px;">
+                <option value="">choose one&hellip;</option>
+                <option>Source garments &mdash; become a buyer</option>
+                <option>Visit a factory</option>
+                <option>Join the team</option>
+                <option>Press / media enquiry</option>
+                <option>Sustainability / partnership</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <svg class="block mt-2 w-full" height="14" viewBox="0 0 600 14" preserveAspectRatio="none" aria-hidden="true">
+              <path class="wave-line" d="M 0 7 C 50 0, 100 14, 150 7 C 200 0, 250 14, 300 7 C 350 0, 400 14, 450 7 C 500 0, 550 14, 600 7" stroke="#7FAA9C" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            </svg>
+          </label>
+
+          <!-- Message -->
+          <label class="wave-field block reveal" data-delay="320">
+            <div class="flex items-baseline gap-3">
+              <span class="font-serif italic text-tide-deep" style="font-size: 18px;">[ Message ]</span>
+              <textarea name="message" rows="2" required placeholder="" class="wave-input flex-1 text-urmi-blue-deep font-serif resize-none" style="font-size: 20px;"></textarea>
+            </div>
+            <svg class="block mt-2 w-full" height="14" viewBox="0 0 600 14" preserveAspectRatio="none" aria-hidden="true">
+              <path class="wave-line" d="M 0 7 C 50 0, 100 14, 150 7 C 200 0, 250 14, 300 7 C 350 0, 400 14, 450 7 C 500 0, 550 14, 600 7" stroke="#7FAA9C" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            </svg>
+          </label>
+
+          <!-- Bottom row: descriptive text + submit -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end pt-6 reveal" data-delay="400">
+            <p class="font-serif italic text-slate-text max-w-sm" style="font-size: 13px; line-height: 1.7; letter-spacing: 0.04em;">
+              Connect with <span class="font-semibold text-urmi-blue-deep">URMI</span> and become part of a wave that defines every detail, and every conversation, treated with the utmost <em class="text-tide-deep">care</em> and <em class="text-tide-deep">intention</em>.
+            </p>
+            <div class="flex justify-start md:justify-end">
+              <button type="submit" class="inline-flex items-center gap-3 bg-urmi-blue-deep text-paper px-10 py-3.5 rounded-full font-display font-semibold uppercase tracking-[0.18em] hover:bg-urmi-blue transition-colors shadow-[0_12px_28px_rgba(6,21,40,0.28)]" style="font-size: 12px;">
+                Submit
+                <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Success state (replaces form on submit) -->
+        <div id="connect-success" class="hidden relative z-10 max-w-xl mx-auto text-center mt-16">
+          <svg class="w-14 h-14 text-tide-deep mx-auto" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M16 24 L 22 30 L 32 18"/></svg>
+          <h2 class="font-serif text-urmi-blue-deep mt-5" style="font-size: clamp(22px, 2.4vw, 30px); font-weight: 600;">The wave is moving.</h2>
+          <p class="text-slate-text mt-3 font-serif italic" style="font-size: 16px; line-height: 1.65;">
+            Thank you. Someone from our team will be in touch within one working day.
+          </p>
+        </div>
+      </div>
+
+      <!-- Address strip -->
+      <div class="mt-24 md:mt-32 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pt-12 border-t border-tide/30">
+        <div class="reveal">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block mb-3">Corporate office</span>
+          <p class="text-slate-text leading-relaxed" style="font-size: 14px;">
+            Urmi Group<br>
+            Gulshan, Dhaka<br>
+            Bangladesh
+          </p>
+        </div>
+        <div class="reveal" data-delay="160">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block mb-3">Sourcing &amp; Buyers</span>
+          <p class="text-slate-text leading-relaxed" style="font-size: 14px;">
+            <a href="mailto:sourcing@urmi.com" class="hover:text-urmi-blue transition-colors">sourcing@urmi.com</a><br>
+            <a href="mailto:info@urmi.com" class="hover:text-urmi-blue transition-colors">info@urmi.com</a>
+          </p>
+        </div>
+        <div class="reveal" data-delay="320">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block mb-3">Press &amp; Media</span>
+          <p class="text-slate-text leading-relaxed" style="font-size: 14px;">
+            <a href="mailto:press@urmi.com" class="hover:text-urmi-blue transition-colors">press@urmi.com</a><br>
+            <span class="text-slate-text/70">For brand assets, leadership interviews, sustainability reports.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="bg-urmi-blue-deep text-paper">
+      <div class="border-t border-paper/10">
+        <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-paper/60 font-mono uppercase tracking-[0.18em]">
+          <p>&copy; 2026 Urmi Group. All rights reserved.</p>
+          <div class="flex items-center gap-5">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">LinkedIn</a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Instagram</a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Facebook</a>
+          </div>
+          <p class="italic font-serif normal-case tracking-normal">Crafted on the Padma.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Reveal-on-load
+      (function(){
+        var els = document.querySelectorAll('.reveal');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          els.forEach(function(el){ el.classList.add('is-visible'); });
+          return;
+        }
+        if (!('IntersectionObserver' in window)) {
+          els.forEach(function(el){ el.classList.add('is-visible'); });
+          return;
+        }
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){
+            if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.1 });
+        els.forEach(function(el){ io.observe(el); });
+      })();
+
+      // Form submit handler — show success
+      (function(){
+        var form = document.getElementById('connect-form-el');
+        var success = document.getElementById('connect-success');
+        if (!form) return;
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          form.classList.add('hidden');
+          if (success) {
+            success.classList.remove('hidden');
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+      })();
+    </script>
+
+    <!-- ============================================================
+         FACTORY VISIT MODAL (shared)
+         ============================================================ -->
+    <div id="factory-modal" class="hidden fixed inset-0 z-[100]" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="factory-modal-title">
+      <button type="button" data-factory-close aria-label="Close" class="absolute inset-0 bg-urmi-blue-deep/70 backdrop-blur-sm cursor-default"></button>
+      <div class="relative max-w-lg w-[calc(100%-2rem)] mx-auto mt-12 md:mt-20 bg-paper rounded-[20px] p-7 md:p-9 shadow-[0_30px_80px_rgba(6,21,40,0.45)] border border-cloud max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <button type="button" data-factory-close aria-label="Close" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-tide-mist hover:bg-cloud transition-colors flex items-center justify-center text-urmi-blue-deep">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+        </button>
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">// SCHEDULE A VISIT</span>
+        <h3 id="factory-modal-title" class="font-serif text-urmi-blue-deep mt-3" style="font-size: clamp(22px, 2.6vw, 30px); font-weight: 600; line-height: 1.15;">Visit one of our <em class="italic" style="color:#1E5C9F">three factories</em>.</h3>
+        <p class="text-slate-text mt-2" style="font-size: 14px; line-height: 1.6;">Tell us when, and we'll make sure the floor is ready &mdash; with the right colleagues, the right paperwork, and a guided tour of every craft.</p>
+        <form id="factory-form" class="mt-6 space-y-4" onsubmit="return false;">
+          <div>
+            <label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Factory</label>
+            <select name="factory" required class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;">
+              <option value="">Select a factory&hellip;</option>
+              <option>FTML &mdash; Fakhruddin Textile Mills, Sreepur</option>
+              <option>UGL &mdash; Urmi Garments Limited, Demra</option>
+              <option>UHM &mdash; Toray JV (LEED Platinum), Sreepur</option>
+              <option>All three sites</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Date</label><input type="date" name="date" required class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+            <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Group size</label><input type="number" name="group_size" min="1" max="50" placeholder="e.g. 4" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          </div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Full name</label><input type="text" name="name" required placeholder="Your name" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Work email</label><input type="email" name="email" required placeholder="you@brand.com" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Anything we should know?</label><textarea name="message" rows="3" placeholder="Specific lines, certifications, sample requirements&hellip;" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors resize-none" style="font-size: 15px;"></textarea></div>
+          <button type="submit" class="w-full bg-urmi-blue-deep text-paper px-7 py-3.5 rounded-full font-display font-semibold uppercase tracking-[0.18em] hover:bg-urmi-blue transition-colors inline-flex items-center justify-center gap-2 mt-2" style="font-size: 12px;">
+            Request Visit
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </button>
+        </form>
+        <div id="factory-success" class="hidden mt-6 text-center">
+          <svg class="w-12 h-12 text-tide-deep mx-auto" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M16 24 L 22 30 L 32 18"/></svg>
+          <h4 class="font-serif text-urmi-blue-deep mt-4" style="font-size: 22px; font-weight: 600;">We've got it.</h4>
+          <p class="text-slate-text mt-2" style="font-size: 14px; line-height: 1.6;">Our visits team will reach out within one working day to confirm the date and arrange logistics.</p>
+          <button type="button" data-factory-close class="mt-5 inline-flex items-center gap-2 font-display font-semibold uppercase tracking-[0.18em] text-urmi-blue-deep hover:text-tide-deep transition-colors" style="font-size: 11px;">Close &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        var modal = document.getElementById('factory-modal');
+        if (!modal) return;
+        var form = document.getElementById('factory-form');
+        var success = document.getElementById('factory-success');
+        function openModal(e){ if (e) e.preventDefault(); modal.classList.remove('hidden'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden'; }
+        function closeModal(){ modal.classList.add('hidden'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; if (form && success) { form.classList.remove('hidden'); success.classList.add('hidden'); try { form.reset(); } catch (_) {} } }
+        document.querySelectorAll('[data-factory-visit]').forEach(function(el){ el.addEventListener('click', openModal); });
+        document.querySelectorAll('[data-factory-close]').forEach(function(el){ el.addEventListener('click', closeModal); });
+        document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
+        if (form) { form.addEventListener('submit', function(e){ e.preventDefault(); form.classList.add('hidden'); if (success) success.classList.remove('hidden'); }); }
+      })();
+    </script>
+
+  </body>
+</html>
