@@ -389,7 +389,6 @@
 
           <!-- Header inside container — centered, fashion masthead -->
           <div class="text-center mb-12 md:mb-16 max-w-3xl mx-auto">
-            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// COMPANY AT A GLANCE — ০১</span>
             <h2 class="text-[clamp(2.25rem,5.5vw,4rem)] leading-[1.0] tracking-tight font-serif" style="font-weight: 600;">
               Four pillars, <em class="italic" style="color:#4A7864">crafted just for you.</em>
             </h2>
@@ -408,107 +407,139 @@
             <!-- Right fade -->
             <div class="absolute right-0 top-0 bottom-0 w-12 md:w-20 z-10 pointer-events-none" style="background: linear-gradient(to left, #F0F5F2, transparent);"></div>
 
-            <!-- Marquee track (cards duplicated 2x for seamless loop) — caption now lives BELOW the image so the clip-path scoop never hides text -->
+            <!-- Marquee track — flip cards (front: image · back: number + label on hover) -->
             <div class="pillar-track flex gap-5 md:gap-7 px-6 md:px-12 will-change-transform">
 
-              <!-- ===== PRIMARY SET (4 cards) ===== -->
+              <!-- ===== PRIMARY SET (4 flip cards) ===== -->
 
               <!-- Card 1: Years of craft -->
-              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -2.5deg; --y: 0px;">
-                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
-                  <img src="assets/waves/pillar-01.jpg" alt="Decades of craft on the river" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
-                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 01</span>
-                </div>
-                <div class="pillar-mq-caption mt-5 px-2">
-                  <span class="font-bengali text-4xl md:text-5xl text-ink font-medium block leading-none">৪০+</span>
-                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Years of craft</span>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -2.5deg; --y: 0px; perspective: 1200px;">
+                <div class="flip-frame relative aspect-[3/4]" style="transform-style: preserve-3d; transition: transform 700ms cubic-bezier(0.22,1,0.36,1);">
+                  <div class="flip-front absolute inset-0 overflow-hidden bg-cloud rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+                    <img src="assets/waves/flip-years.jpg" alt="Decades of craft on the river" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
+                    <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 01</span>
+                  </div>
+                  <div class="flip-back absolute inset-0 overflow-hidden bg-urmi-blue-deep text-paper rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)] p-7 flex flex-col justify-end" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-wave-blue-bright">// 01</span>
+                    <span class="font-bengali text-5xl md:text-6xl text-paper font-medium block leading-none mt-3">৪০+</span>
+                    <span class="font-display font-semibold text-[12px] uppercase tracking-[0.18em] text-paper/85 mt-2 block">Years of craft</span>
+                    <p class="font-serif italic text-paper/85 mt-4" style="font-size: 14px; line-height: 1.55;">From a brickfield on the Buriganga &mdash; 1955.</p>
+                  </div>
                 </div>
               </article>
 
               <!-- Card 2: Hands -->
-              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -1deg; --y: -8px;">
-                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
-                  <img src="assets/waves/pillar-02.jpg" alt="Hands shaping every thread" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
-                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 02</span>
-                </div>
-                <div class="pillar-mq-caption mt-5 px-2">
-                  <span class="font-serif text-4xl md:text-5xl text-ink font-semibold block leading-none">16,800</span>
-                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Hands shaping every thread</span>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -1deg; --y: -8px; perspective: 1200px;">
+                <div class="flip-frame relative aspect-[3/4]" style="transform-style: preserve-3d; transition: transform 700ms cubic-bezier(0.22,1,0.36,1);">
+                  <div class="flip-front absolute inset-0 overflow-hidden bg-cloud rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+                    <img src="assets/waves/flip-hands.jpg" alt="Hands shaping every thread" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+                    <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 02</span>
+                  </div>
+                  <div class="flip-back absolute inset-0 overflow-hidden bg-tide-deep text-paper rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)] p-7 flex flex-col justify-end" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-tide-soft">// 02</span>
+                    <span class="font-serif text-5xl md:text-6xl text-paper font-semibold block leading-none mt-3">16,800</span>
+                    <span class="font-display font-semibold text-[12px] uppercase tracking-[0.18em] text-paper/85 mt-2 block">Hands shaping every thread</span>
+                    <p class="font-serif italic text-paper/85 mt-4" style="font-size: 14px; line-height: 1.55;">Across five locations in Bangladesh.</p>
+                  </div>
                 </div>
               </article>
 
               <!-- Card 3: Full Green -->
-              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 1deg; --y: -8px;">
-                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
-                  <img src="assets/waves/pillar-03.jpg" alt="Bangladesh's first Full Green factory group" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
-                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 03</span>
-                </div>
-                <div class="pillar-mq-caption mt-5 px-2">
-                  <span class="font-serif italic text-3xl md:text-4xl text-ink font-semibold block leading-none">Full Green</span>
-                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">First green factory group</span>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 1deg; --y: -8px; perspective: 1200px;">
+                <div class="flip-frame relative aspect-[3/4]" style="transform-style: preserve-3d; transition: transform 700ms cubic-bezier(0.22,1,0.36,1);">
+                  <div class="flip-front absolute inset-0 overflow-hidden bg-cloud rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+                    <img src="assets/waves/flip-green.jpg" alt="Bangladesh's first Full Green factory group" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+                    <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 03</span>
+                  </div>
+                  <div class="flip-back absolute inset-0 overflow-hidden bg-tide-deep text-paper rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)] p-7 flex flex-col justify-end" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-tide-soft">// 03</span>
+                    <span class="font-serif italic text-4xl md:text-5xl text-paper font-semibold block leading-none mt-3">Full Green</span>
+                    <span class="font-display font-semibold text-[12px] uppercase tracking-[0.18em] text-paper/85 mt-2 block">First green factory group</span>
+                    <p class="font-serif italic text-paper/85 mt-4" style="font-size: 14px; line-height: 1.55;">LEED Platinum &middot; Toray JV.</p>
+                  </div>
                 </div>
               </article>
 
               <!-- Card 4: 30+ brands -->
-              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 2.5deg; --y: 0px;">
-                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
-                  <img src="assets/waves/pillar-04.jpg" alt="Thirty global brands trust Urmi" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
-                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 04</span>
-                </div>
-                <div class="pillar-mq-caption mt-5 px-2">
-                  <span class="font-serif text-4xl md:text-5xl text-ink font-semibold block leading-none">30+</span>
-                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Global brands</span>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 2.5deg; --y: 0px; perspective: 1200px;">
+                <div class="flip-frame relative aspect-[3/4]" style="transform-style: preserve-3d; transition: transform 700ms cubic-bezier(0.22,1,0.36,1);">
+                  <div class="flip-front absolute inset-0 overflow-hidden bg-cloud rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+                    <img src="assets/waves/flip-brands.webp" alt="Thirty global brands trust Urmi" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
+                    <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 04</span>
+                  </div>
+                  <div class="flip-back absolute inset-0 overflow-hidden bg-urmi-blue-deep text-paper rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)] p-7 flex flex-col justify-end" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-wave-blue-bright">// 04</span>
+                    <span class="font-serif text-5xl md:text-6xl text-paper font-semibold block leading-none mt-3">30+</span>
+                    <span class="font-display font-semibold text-[12px] uppercase tracking-[0.18em] text-paper/85 mt-2 block">Global brands</span>
+                    <p class="font-serif italic text-paper/85 mt-4" style="font-size: 14px; line-height: 1.55;">H&amp;M &middot; M&amp;S &middot; Levi's &middot; Gap &middot; Uniqlo.</p>
+                  </div>
                 </div>
               </article>
 
-              <!-- ===== DUPLICATE SET (same 4 cards, aria-hidden) — needed for seamless looping marquee ===== -->
+              <!-- ===== DUPLICATE SET (aria-hidden — needed for seamless looping marquee) ===== -->
 
-              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -2.5deg; --y: 0px;" aria-hidden="true">
-                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
-                  <img src="assets/waves/pillar-01.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
-                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 01</span>
-                </div>
-                <div class="pillar-mq-caption mt-5 px-2">
-                  <span class="font-bengali text-4xl md:text-5xl text-ink font-medium block leading-none">৪০+</span>
-                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Years of craft</span>
-                </div>
-              </article>
-              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -1deg; --y: -8px;" aria-hidden="true">
-                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
-                  <img src="assets/waves/pillar-02.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
-                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 02</span>
-                </div>
-                <div class="pillar-mq-caption mt-5 px-2">
-                  <span class="font-serif text-4xl md:text-5xl text-ink font-semibold block leading-none">16,800</span>
-                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Hands shaping every thread</span>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -2.5deg; --y: 0px; perspective: 1200px;" aria-hidden="true">
+                <div class="flip-frame relative aspect-[3/4]" style="transform-style: preserve-3d; transition: transform 700ms cubic-bezier(0.22,1,0.36,1);">
+                  <div class="flip-front absolute inset-0 overflow-hidden bg-cloud rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+                    <img src="assets/waves/flip-years.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
+                    <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 01</span>
+                  </div>
+                  <div class="flip-back absolute inset-0 overflow-hidden bg-urmi-blue-deep text-paper rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)] p-7 flex flex-col justify-end" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-wave-blue-bright">// 01</span>
+                    <span class="font-bengali text-5xl md:text-6xl text-paper font-medium block leading-none mt-3">৪০+</span>
+                    <span class="font-display font-semibold text-[12px] uppercase tracking-[0.18em] text-paper/85 mt-2 block">Years of craft</span>
+                    <p class="font-serif italic text-paper/85 mt-4" style="font-size: 14px; line-height: 1.55;">From a brickfield on the Buriganga &mdash; 1955.</p>
+                  </div>
                 </div>
               </article>
-              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 1deg; --y: -8px;" aria-hidden="true">
-                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
-                  <img src="assets/waves/pillar-03.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
-                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 03</span>
-                </div>
-                <div class="pillar-mq-caption mt-5 px-2">
-                  <span class="font-serif italic text-3xl md:text-4xl text-ink font-semibold block leading-none">Full Green</span>
-                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">First green factory group</span>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: -1deg; --y: -8px; perspective: 1200px;" aria-hidden="true">
+                <div class="flip-frame relative aspect-[3/4]" style="transform-style: preserve-3d; transition: transform 700ms cubic-bezier(0.22,1,0.36,1);">
+                  <div class="flip-front absolute inset-0 overflow-hidden bg-cloud rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+                    <img src="assets/waves/flip-hands.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+                    <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 02</span>
+                  </div>
+                  <div class="flip-back absolute inset-0 overflow-hidden bg-tide-deep text-paper rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)] p-7 flex flex-col justify-end" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-tide-soft">// 02</span>
+                    <span class="font-serif text-5xl md:text-6xl text-paper font-semibold block leading-none mt-3">16,800</span>
+                    <span class="font-display font-semibold text-[12px] uppercase tracking-[0.18em] text-paper/85 mt-2 block">Hands shaping every thread</span>
+                    <p class="font-serif italic text-paper/85 mt-4" style="font-size: 14px; line-height: 1.55;">Across five locations in Bangladesh.</p>
+                  </div>
                 </div>
               </article>
-              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 2.5deg; --y: 0px;" aria-hidden="true">
-                <div class="pillar-mq-frame relative aspect-[3/4] overflow-hidden bg-cloud shadow-[0_24px_48px_rgba(20,63,115,0.15)]">
-                  <img src="assets/waves/pillar-04.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
-                  <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 04</span>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 1deg; --y: -8px; perspective: 1200px;" aria-hidden="true">
+                <div class="flip-frame relative aspect-[3/4]" style="transform-style: preserve-3d; transition: transform 700ms cubic-bezier(0.22,1,0.36,1);">
+                  <div class="flip-front absolute inset-0 overflow-hidden bg-cloud rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+                    <img src="assets/waves/flip-green.jpg" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-tide-deep/30 via-transparent to-transparent"></div>
+                    <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1">No. 03</span>
+                  </div>
+                  <div class="flip-back absolute inset-0 overflow-hidden bg-tide-deep text-paper rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)] p-7 flex flex-col justify-end" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-tide-soft">// 03</span>
+                    <span class="font-serif italic text-4xl md:text-5xl text-paper font-semibold block leading-none mt-3">Full Green</span>
+                    <span class="font-display font-semibold text-[12px] uppercase tracking-[0.18em] text-paper/85 mt-2 block">First green factory group</span>
+                    <p class="font-serif italic text-paper/85 mt-4" style="font-size: 14px; line-height: 1.55;">LEED Platinum &middot; Toray JV.</p>
+                  </div>
                 </div>
-                <div class="pillar-mq-caption mt-5 px-2">
-                  <span class="font-serif text-4xl md:text-5xl text-ink font-semibold block leading-none">30+</span>
-                  <span class="font-display font-medium text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-2 block">Global brands</span>
+              </article>
+              <article class="pillar-mq-card group shrink-0 w-[68vw] sm:w-[280px] md:w-[300px] lg:w-[330px]" style="--rot: 2.5deg; --y: 0px; perspective: 1200px;" aria-hidden="true">
+                <div class="flip-frame relative aspect-[3/4]" style="transform-style: preserve-3d; transition: transform 700ms cubic-bezier(0.22,1,0.36,1);">
+                  <div class="flip-front absolute inset-0 overflow-hidden bg-cloud rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+                    <img src="assets/waves/flip-brands.webp" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-urmi-blue-deep/30 via-transparent to-transparent"></div>
+                    <span class="absolute top-5 left-5 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">No. 04</span>
+                  </div>
+                  <div class="flip-back absolute inset-0 overflow-hidden bg-urmi-blue-deep text-paper rounded-md shadow-[0_24px_48px_rgba(20,63,115,0.15)] p-7 flex flex-col justify-end" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-wave-blue-bright">// 04</span>
+                    <span class="font-serif text-5xl md:text-6xl text-paper font-semibold block leading-none mt-3">30+</span>
+                    <span class="font-display font-semibold text-[12px] uppercase tracking-[0.18em] text-paper/85 mt-2 block">Global brands</span>
+                    <p class="font-serif italic text-paper/85 mt-4" style="font-size: 14px; line-height: 1.55;">H&amp;M &middot; M&amp;S &middot; Levi's &middot; Gap &middot; Uniqlo.</p>
+                  </div>
                 </div>
               </article>
 
@@ -518,19 +549,17 @@
         </div>
       </div>
 
-      <!-- Marquee styles -->
+      <!-- Marquee + flip-card styles -->
       <style>
         /* Per-card subtle rotation + Y offset (the Cozyspace fan-tilt feel) */
         .pillar-mq-card { transform: rotate(var(--rot, 0deg)) translateY(var(--y, 0px)); transform-origin: center center; }
-        .pillar-mq-frame {
-          /* Subtle curved-bottom + curved-top (banner / curtain feel) */
-          border-radius: 24px 24px 28px 28px;
-          /* Soft scoop on the bottom edge — clip-path pulls the bottom edge slightly inward at sides */
-          clip-path: path('M 0,30 Q 0,0 30,0 L 270,0 Q 300,0 300,30 L 300,360 Q 270,400 150,396 Q 30,400 0,360 Z');
+
+        /* Flip on hover — back face shows the number + label */
+        .pillar-mq-card:hover .flip-frame,
+        .pillar-mq-card:focus-within .flip-frame {
+          transform: rotateY(180deg);
         }
-        @supports not (clip-path: path('M 0,0 Z')) {
-          .pillar-mq-frame { clip-path: none; }
-        }
+
         /* Marquee animation: track moves -50% so duplicate set takes over seamlessly */
         @keyframes pillar-marquee {
           from { transform: translateX(0); }
@@ -538,8 +567,11 @@
         }
         .pillar-track { animation: pillar-marquee 20s linear infinite; }
         .pillar-marquee:hover .pillar-track { animation-play-state: paused; }
+
         @media (prefers-reduced-motion: reduce) {
           .pillar-track { animation: none; transform: translateX(0); }
+          .pillar-mq-card:hover .flip-frame,
+          .pillar-mq-card:focus-within .flip-frame { transform: none; }
         }
       </style>
     </section>
@@ -557,7 +589,6 @@
 
         <!-- Centered header (Mahjoz-style) -->
         <div class="text-center mb-12 md:mb-16 max-w-2xl mx-auto">
-          <span class="font-display font-semibold text-[11px] uppercase tracking-[0.32em] text-urmi-blue mb-4 block">YOUR JOURNEY STARTS HERE</span>
           <h2 class="text-[clamp(2rem,4.8vw,3.5rem)] leading-[1.05] tracking-tight mb-5">A workshop in <em class="italic" style="color:#1E5C9F">numbers</em>.</h2>
           <p class="text-base md:text-lg text-slate-text font-light leading-relaxed">Every figure here is audited and updated quarterly &mdash; the fabric we weave today is the fabric we'll measure tomorrow.</p>
         </div>
@@ -714,7 +745,6 @@
       <!-- Section header -->
       <div class="mx-auto max-w-[90rem] mb-16 md:mb-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
         <div class="lg:col-span-7">
-          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// CAPABILITY — ০২</span>
           <span class="block font-mono text-[12px] md:text-[13px] uppercase tracking-[0.18em] text-urmi-blue mb-6">Our strategic workflow</span>
           <h2 class="text-[clamp(2rem,4.8vw,3.75rem)] leading-[1.05] tracking-tight">Six crafts. <em class="italic" style="color:#4A7864">One unbroken current.</em></h2>
         </div>
@@ -973,7 +1003,6 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-14 md:mb-20">
           <div class="lg:col-span-7">
             <div class="flex items-center gap-6 mb-6">
-              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">// SUSTAINABILITY — ০৩</span>
               <span class="hidden md:inline-flex font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep/55">FIVE COMMITMENTS &middot; ANNUALLY AUDITED</span>
             </div>
             <h2 class="text-[clamp(2rem,5vw,4rem)] leading-[1.0] tracking-tight max-w-4xl font-serif" style="font-weight: 600;">
@@ -1222,7 +1251,6 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-14 md:mb-20">
           <div class="lg:col-span-8">
             <div class="flex items-center gap-6 mb-6">
-              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue">// PORTFOLIO — ০৪</span>
               <span class="hidden md:inline-flex font-mono text-[10px] uppercase tracking-[0.22em] text-paper/40">CAMPAIGN &middot; SS &lsquo;26</span>
             </div>
             <h2 class="text-paper text-[clamp(2rem,5.5vw,4.5rem)] leading-[1.0] tracking-tight max-w-4xl font-serif" style="font-weight: 600;">
@@ -1517,7 +1545,6 @@
     <section id="certifications" class="bg-tide-mist py-[clamp(5rem,10vw,9rem)] px-6 md:px-12">
       <div class="mx-auto max-w-[90rem]">
         <div class="text-center max-w-3xl mx-auto mb-10 md:mb-12">
-          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// CREDENTIALS — ০৭</span>
           <h2 class="text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.15] tracking-tight">Independently <em class="italic" style="color:#4A7864">verified</em>, every year.</h2>
           <p class="font-serif italic text-base md:text-lg text-slate-text mt-5 max-w-xl mx-auto">Six certifications. Audited annually by international standards bodies. Verifiable claims, not marketing copy.</p>
         </div>
@@ -1557,7 +1584,6 @@
         <!-- Two-column header (matches Crafts/Sustainability pattern) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-14 md:mb-20 items-end">
           <div class="lg:col-span-7">
-            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mb-4 block">// RECOGNITION — ০৮</span>
             <h2 class="text-[clamp(2rem,4.8vw,3.75rem)] leading-[1.05] tracking-tight">Recognised by <em class="italic" style="color:#1E5C9F">the industry</em>.</h2>
           </div>
           <div class="lg:col-span-5 lg:pl-10 border-t lg:border-t-0 lg:border-l border-cloud pt-6 lg:pt-0">
@@ -1734,7 +1760,6 @@
         <path d="M0,700 C240,760 480,640 720,700 C960,760 1200,640 1440,700 L1440,800 C1200,860 960,740 720,800 C480,860 240,740 0,800 Z" fill="#5BA0DE" opacity="0.12"/>
       </svg>
       <div class="relative z-10">
-        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue mb-8 block">// CARRY THE WAVE — ০৯</span>
         <h2 class="text-cream text-[clamp(2.5rem,7vw,5.75rem)] leading-[1.05] tracking-tight max-w-4xl mx-auto mb-10 font-serif">The next wave is waiting.</h2>
         <p class="italic font-serif text-paper/85 text-lg max-w-md mx-auto mb-14">Whether you're a global buyer, a young designer, or a future colleague — there's a place for you here.</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
