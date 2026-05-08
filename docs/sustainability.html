@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sustainability — Urmi Group · Bangladesh's first complete green RMG group.</title>
+    <meta name="description" content="Bangladesh's first complete green RMG group — 4,000 m³/day zero-discharge ETP, LEED Platinum, Decarbonisation 2030. Read the audited numbers." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urmi-blue':       '#1E5C9F',
+              'urmi-blue-deep':  '#143F73',
+              'wave-blue':       '#5BA0DE',
+              'wave-blue-bright':'#8FCBFF',
+              'wave-blue-soft':  '#C5DCEF',
+              'tide':            '#7FAA9C',
+              'tide-deep':       '#4A7864',
+              'tide-soft':       '#DCE9E3',
+              'tide-mist':       '#F0F5F2',
+              'mist':            '#F4F7FB',
+              'seafoam':         '#E8F0EC',
+              'paper':           '#FCFDFC',
+              'cloud':           '#E0E8E5',
+              'ink':             '#0F1E33',
+              'slate-text':      '#3F5468',
+              'cream':           '#F5EFE3',
+            },
+            fontFamily: {
+              serif: ["'Playfair Display'", 'Georgia', 'serif'],
+              sans: ["'Inter'", 'system-ui', 'sans-serif'],
+              mono: ["'IBM Plex Mono'", 'ui-monospace', 'monospace'],
+              display: ["'Manrope'", 'system-ui', 'sans-serif'],
+              bengali: ["'Hind Siliguri'", 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body { background: #F0F5F2; color: #3F5468; font-family: 'Inter', sans-serif; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: #0F1E33; }
+      section { scroll-margin-top: 80px; }
+
+      /* Reveal-on-scroll */
+      .reveal { opacity: 0; transform: translateY(20px); transition: opacity 800ms cubic-bezier(0.22,1,0.36,1), transform 800ms cubic-bezier(0.22,1,0.36,1); }
+      .reveal.is-visible { opacity: 1; transform: translateY(0); }
+      .reveal[data-delay="80"]  { transition-delay: 80ms; }
+      .reveal[data-delay="160"] { transition-delay: 160ms; }
+      .reveal[data-delay="240"] { transition-delay: 240ms; }
+      .reveal[data-delay="320"] { transition-delay: 320ms; }
+      .reveal[data-delay="400"] { transition-delay: 400ms; }
+      .reveal[data-delay="480"] { transition-delay: 480ms; }
+      .reveal[data-delay="560"] { transition-delay: 560ms; }
+      .reveal[data-delay="640"] { transition-delay: 640ms; }
+      .reveal[data-delay="720"] { transition-delay: 720ms; }
+
+      /* Hero ripple — single droplet expanding outward, 4s loop */
+      @keyframes ripple-out {
+        0%   { transform: scale(0.05); opacity: 0; }
+        15%  { opacity: 1; }
+        100% { transform: scale(1);    opacity: 0; }
+      }
+      .ripple-ring { transform-origin: center center; animation: ripple-out 4s cubic-bezier(0.22,1,0.36,1) infinite; }
+      .ripple-ring[data-d="1"] { animation-delay: 1s; }
+      .ripple-ring[data-d="2"] { animation-delay: 2s; }
+      .ripple-ring[data-d="3"] { animation-delay: 3s; }
+
+      /* Cert chip hover */
+      .cert-chip { transition: border-color 180ms ease, color 180ms ease; }
+      .cert-chip:hover { border-color: #4A7864; color: #4A7864; }
+
+      /* Award + report card hover lift */
+      .award-card, .report-card { transition: transform 250ms ease, border-color 250ms ease; }
+      .award-card:hover, .report-card:hover { border-color: #4A7864; transform: translateY(-4px); }
+
+      /* Number tile — left accent bar */
+      .num-tile { position: relative; }
+      .num-tile::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #4A7864; }
+
+      /* HIGG arc — drawn on scroll-in */
+      .higg-arc-fill { transition: stroke-dashoffset 1400ms ease-out; }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        .reveal { opacity: 1 !important; transform: none !important; }
+        .award-card:hover, .report-card:hover { transform: none !important; }
+        .ripple-ring { animation: none !important; opacity: 0.15 !important; transform: scale(1) !important; }
+      }
+    </style>
+  </head>
+
+  <body class="antialiased overflow-x-hidden">
+
+    <!-- ============================================================
+         NAVBAR — Logo standalone (top-left), pill nav centered
+         ============================================================ -->
+    <a href="index.html" class="fixed top-4 md:top-6 left-4 md:left-6 z-[60] inline-flex items-center bg-urmi-blue-deep/85 backdrop-blur-md rounded-full px-3 md:px-4 py-2 shadow-[0_12px_28px_rgba(6,21,40,0.35)] border border-paper/15 hover:bg-urmi-blue-deep transition-colors" aria-label="Urmi Group home">
+      <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
+    </a>
+
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-12rem)]" aria-label="Primary">
+      <div class="flex items-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-2 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
+        <div class="hidden lg:flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-display font-semibold text-paper/85">
+          <a href="index.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Home</a>
+          <a href="about.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">About</a>
+          <a href="index.html#craft" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Craft</a>
+          <a href="portfolio.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Portfolio</a>
+          <a href="sustainability.html" aria-current="page" class="px-3 py-1.5 rounded-full bg-paper/15 text-paper transition-colors">Sustain</a>
+          <a href="connect.html" class="ml-1 px-4 py-1.5 rounded-full bg-paper text-urmi-blue-deep hover:bg-wave-blue hover:text-paper transition-colors">Connect</a>
+        </div>
+        <button type="button" aria-label="Open menu" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Floating action chips (top-right) -->
+    <div class="fixed top-4 md:top-6 right-4 md:right-6 z-50 flex items-center gap-2" aria-label="Quick actions">
+      <a href="index.html#factories" data-factory-visit class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l5-3v3l5-3v3l5-3v15"/><path d="M3 21h18"/><path d="M9 21v-4M14 21v-4"/></svg>
+        <span class="hidden lg:inline">Visit Factory</span>
+      </a>
+      <a href="connect.html" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v5h5"/><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5z"/><path d="M9 13h6M9 17h4"/></svg>
+        <span class="hidden lg:inline">Request Quote</span>
+      </a>
+      <button type="button" aria-label="Search" class="inline-flex items-center justify-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full p-2.5 text-paper shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+
+    <!-- ============================================================
+         01 — HERO (full vh, ripple bg, italic manifesto + 3 stat pills)
+         ============================================================ -->
+    <section id="hero" class="relative min-h-screen bg-tide-mist overflow-hidden flex items-center justify-center px-6 md:px-12">
+
+      <!-- Ripple SVG bg — single droplet expanding outward, 4 staggered rings, tide-deep at 15% opacity -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 800" aria-hidden="true">
+        <g fill="none" stroke="#4A7864" stroke-width="1" stroke-opacity="0.18">
+          <circle class="ripple-ring" cx="400" cy="400" r="200" data-d="0"/>
+          <circle class="ripple-ring" cx="400" cy="400" r="200" data-d="1"/>
+          <circle class="ripple-ring" cx="400" cy="400" r="200" data-d="2"/>
+          <circle class="ripple-ring" cx="400" cy="400" r="200" data-d="3"/>
+        </g>
+        <!-- Central drop -->
+        <circle cx="400" cy="400" r="6" fill="#4A7864" fill-opacity="0.45"/>
+      </svg>
+
+      <div class="relative max-w-4xl mx-auto text-center">
+        <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block reveal" style="font-size: 11px;">SUSTAINABILITY &mdash; ০১</span>
+        <h1 class="font-serif italic text-urmi-blue-deep mt-5 reveal" data-delay="80" style="font-size: clamp(40px, 5.5vw, 72px); line-height: 1.05; font-weight: 600;">
+          We don't borrow the planet from our buyers.<br>
+          We borrow it from <em class="not-italic">our grandchildren.</em>
+        </h1>
+        <p class="text-slate-text max-w-xl mx-auto mt-6 reveal" data-delay="160" style="font-size: 17px; line-height: 1.7;">
+          Bangladesh's first complete green RMG group. A river that flows back cleaner than it came. A 2030 promise we're keeping early.
+        </p>
+
+        <!-- Three stat pills -->
+        <div class="mt-12 max-w-2xl mx-auto border-t border-b border-slate-text/20 grid grid-cols-1 md:grid-cols-3 md:divide-x md:divide-slate-text/20 reveal" data-delay="240">
+          <div class="text-center px-6 py-7">
+            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">4,000 m&sup3;<span class="text-slate-text/55"> / day</span></div>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">Zero discharge</span>
+          </div>
+          <div class="text-center px-6 py-7 border-t md:border-t-0 border-slate-text/20">
+            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">LEED Platinum</div>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">UHM Green Factory</span>
+          </div>
+          <div class="text-center px-6 py-7 border-t md:border-t-0 border-slate-text/20">
+            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">2030</div>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">Decarbonisation target</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         02 — THE NUMBERS (dark band, 9 tiles + HIGG arcs)
+         ============================================================ -->
+    <section id="numbers" class="relative bg-urmi-blue-deep text-paper py-24 md:py-32 px-6 md:px-12">
+      <div class="max-w-[88rem] mx-auto">
+
+        <!-- Header -->
+        <div class="max-w-3xl reveal">
+          <span class="font-mono uppercase tracking-[0.32em] text-paper/55 block" style="font-size: 11px;">2023&ndash;24 IN NUMBERS &mdash; ০২</span>
+          <h2 class="font-serif text-paper mt-5" style="font-size: clamp(34px, 4.6vw, 52px); line-height: 1.0; font-weight: 600;">
+            A year of proof, <em class="italic" style="color:#7FAA9C">not promise</em>.
+          </h2>
+        </div>
+
+        <!-- 9-tile grid -->
+        <div class="numbers-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-12 md:mt-16">
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="0">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="9517" data-format="comma" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">GJ</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">Renewable energy generated</span>
+          </article>
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="80">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="3145" data-format="comma" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">MWh</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">Solar generation per year</span>
+          </article>
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="160">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="4000" data-format="comma" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">m&sup3;</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">Wastewater purified daily</span>
+          </article>
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="240">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="35" data-format="int" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">%</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">Energy intensity reduction since 2017</span>
+          </article>
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="320">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="64" data-format="int" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">tons</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">Fabric waste recycled</span>
+          </article>
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="400">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="6300" data-format="comma" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">tons</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">BCI cotton sourced</span>
+          </article>
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="480">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="236" data-format="int" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">ML</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">Blue water saved</span>
+          </article>
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="560">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="48124" data-format="comma" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">hrs</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">Training provided</span>
+          </article>
+          <article class="num-tile pl-7 pr-6 py-7 border border-paper/10 reveal" data-delay="640">
+            <div class="leading-none flex items-baseline gap-2">
+              <span class="font-display font-semibold text-paper count-up" data-target="2054" data-format="comma" aria-live="polite" style="font-size: clamp(36px, 4vw, 52px);">0</span>
+              <span class="font-display text-tide" style="font-size: 22px;">tons</span>
+            </div>
+            <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-paper/60 mt-3 block">CO&sub2; saved via solar per year</span>
+          </article>
+        </div>
+
+        <!-- HIGG arcs -->
+        <div class="mt-16 md:mt-20 reveal" data-delay="240">
+          <div class="flex flex-wrap items-end justify-center gap-12 md:gap-16">
+            <!-- FTML 81% -->
+            <div class="text-center">
+              <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#FCFDFC" stroke-opacity="0.20" stroke-width="8"/>
+                <circle class="higg-arc-fill" cx="60" cy="60" r="48" fill="none" stroke="#4A7864" stroke-width="8" stroke-linecap="butt"
+                        stroke-dasharray="301.6" stroke-dashoffset="301.6" data-score="81" transform="rotate(-90 60 60)"/>
+                <text x="60" y="68" font-family="Manrope" font-size="24" font-weight="600" fill="#FCFDFC" text-anchor="middle" aria-live="polite" class="higg-text" data-score="81">0%</text>
+              </svg>
+              <span class="font-mono uppercase tracking-[0.18em] text-paper/60 mt-3 block" style="font-size: 12px;">FTML</span>
+            </div>
+            <!-- UGL 75% -->
+            <div class="text-center">
+              <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#FCFDFC" stroke-opacity="0.20" stroke-width="8"/>
+                <circle class="higg-arc-fill" cx="60" cy="60" r="48" fill="none" stroke="#4A7864" stroke-width="8" stroke-linecap="butt"
+                        stroke-dasharray="301.6" stroke-dashoffset="301.6" data-score="75" transform="rotate(-90 60 60)"/>
+                <text x="60" y="68" font-family="Manrope" font-size="24" font-weight="600" fill="#FCFDFC" text-anchor="middle" aria-live="polite" class="higg-text" data-score="75">0%</text>
+              </svg>
+              <span class="font-mono uppercase tracking-[0.18em] text-paper/60 mt-3 block" style="font-size: 12px;">UGL</span>
+            </div>
+            <!-- UHM 64% -->
+            <div class="text-center">
+              <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#FCFDFC" stroke-opacity="0.20" stroke-width="8"/>
+                <circle class="higg-arc-fill" cx="60" cy="60" r="48" fill="none" stroke="#4A7864" stroke-width="8" stroke-linecap="butt"
+                        stroke-dasharray="301.6" stroke-dashoffset="301.6" data-score="64" transform="rotate(-90 60 60)"/>
+                <text x="60" y="68" font-family="Manrope" font-size="24" font-weight="600" fill="#FCFDFC" text-anchor="middle" aria-live="polite" class="higg-text" data-score="64">0%</text>
+              </svg>
+              <span class="font-mono uppercase tracking-[0.18em] text-paper/60 mt-3 block" style="font-size: 12px;">UHM</span>
+            </div>
+          </div>
+          <p class="font-serif italic text-paper/40 text-center mt-6" style="font-size: 13px;">
+            Higg FEM Verified Scores &mdash; 2023&ndash;24
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         03 — CERTIFICATIONS + AWARDS (two columns)
+         ============================================================ -->
+    <section id="compliance" class="bg-tide-mist py-24 md:py-32 px-6 md:px-12">
+      <div class="max-w-[88rem] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
+
+        <!-- LEFT — Certifications -->
+        <div>
+          <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block reveal" style="font-size: 11px;">COMPLIANCE &mdash; ০৩</span>
+          <h2 class="font-serif text-urmi-blue-deep mt-5 reveal" data-delay="80" style="font-size: clamp(28px, 3.6vw, 44px); line-height: 1.1; font-weight: 600;">
+            Audited by the bodies that hold <em class="italic" style="color:#1E5C9F">the industry to its word</em>.
+          </h2>
+          <p class="text-slate-text mt-5 max-w-md reveal" data-delay="160" style="font-size: 17px; line-height: 1.7;">
+            Every claim on this page is independently verified. We don't grade our own homework.
+          </p>
+
+          <div class="flex flex-wrap gap-2.5 mt-10">
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="0" style="letter-spacing: 0.05em;">Amfori BSCI</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="40" style="letter-spacing: 0.05em;">UN Global Compact</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="80" style="letter-spacing: 0.05em;">OEKO-TEX</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="80" style="letter-spacing: 0.05em;">OEKO-TEX Standard 100</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="120" style="letter-spacing: 0.05em;">Fair Wear Foundation</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="120" style="letter-spacing: 0.05em;">Sedex</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="160" style="letter-spacing: 0.05em;">RSC</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="160" style="letter-spacing: 0.05em;">Fairtrade</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="200" style="letter-spacing: 0.05em;">Worldly &middot; Higg</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="200" style="letter-spacing: 0.05em;">GOTS</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="240" style="letter-spacing: 0.05em;">Global Recycled Standard</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="240" style="letter-spacing: 0.05em;">Fair Labor</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="280" style="letter-spacing: 0.05em;">Social &amp; Labor Convergence</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="280" style="letter-spacing: 0.05em;">BetterWork Bangladesh</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="320" style="letter-spacing: 0.05em;">LEED Platinum</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="320" style="letter-spacing: 0.05em;">WRAP</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="360" style="letter-spacing: 0.05em;">OCS</span>
+            <span class="cert-chip border border-slate-text/30 text-slate-text px-3 py-1.5 text-xs reveal" data-delay="360" style="letter-spacing: 0.05em;">Recycled Claim Standard</span>
+          </div>
+        </div>
+
+        <!-- RIGHT — Awards -->
+        <div>
+          <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block reveal" style="font-size: 11px;">RECOGNITION</span>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mt-7">
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="0"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">HSBC Export Excellence</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2011 &amp; 2018</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="60"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">LEED Platinum</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2009</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="120"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">H&amp;M Fast as a Bullet</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2018</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="180"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">GU Partner Certification</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2019</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="240"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">M&amp;S Certification Award</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2016</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="300"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">M&amp;S Rising Star Award</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2023</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="360"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">Social &amp; Environmental Excellence (Gold)</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2014</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="420"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">Carbon Performance &mdash; Top Factory</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2014 &amp; 2015</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="480"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">Digital Bangladesh Award</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2022</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="540"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">RFID Journal Award</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2022</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="600"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">GREEN BUTTON Certificate</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">2024</span></article>
+            <article class="award-card p-5 border border-slate-text/15 reveal" data-delay="660"><h4 class="font-serif text-urmi-blue-deep" style="font-size: 15px; line-height: 1.3; font-weight: 600;">BGAPMEA Export Trophy</h4><span class="font-mono uppercase tracking-[0.18em] text-slate-text/60 mt-2 block" style="font-size: 11px;">Bronze</span></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         04 — REPORTS + CTA
+         ============================================================ -->
+    <section id="reports" class="bg-tide-mist pt-12 md:pt-16 pb-0 px-6 md:px-12">
+      <div class="max-w-[88rem] mx-auto py-24 md:py-28">
+
+        <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block reveal" style="font-size: 11px;">DOCUMENTATION &mdash; ০৪</span>
+        <h2 class="font-serif text-urmi-blue-deep mt-5 max-w-3xl reveal" data-delay="80" style="font-size: clamp(28px, 3.6vw, 44px); line-height: 1.1; font-weight: 600;">
+          Read it for yourself. <em class="italic" style="color:#4A7864">We publish everything.</em>
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 mt-12">
+          <a href="https://anyflip.com/wrqaf/cydy/" target="_blank" rel="noreferrer" class="report-card border border-slate-text/15 cursor-pointer block bg-tide-mist reveal" data-delay="0">
+            <div class="aspect-[4/5] w-full overflow-hidden bg-cloud relative">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #DCE9E3 0%, #4A7864 100%);"></div>
+              <span class="absolute top-5 left-5 font-mono uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1" style="font-size: 10px;">2024</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <span class="font-serif italic text-paper" style="font-size: 22px; font-weight: 600;">Sustainability<br>Report</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <span class="font-mono uppercase tracking-[0.18em] text-tide-deep block" style="font-size: 11px;">2024</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 18px; line-height: 1.3; font-weight: 600;">Sustainability Report 2024</h4>
+              <span class="font-display font-medium text-tide-deep mt-4 block" style="font-size: 14px;">Download &rarr;</span>
+            </div>
+          </a>
+
+          <a href="https://urmigroup.com/sustainability/" target="_blank" rel="noreferrer" class="report-card border border-slate-text/15 cursor-pointer block bg-tide-mist reveal" data-delay="120">
+            <div class="aspect-[4/5] w-full overflow-hidden bg-cloud relative">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #C5DCEF 0%, #1E5C9F 100%);"></div>
+              <span class="absolute top-5 left-5 font-mono uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1" style="font-size: 10px;">2023</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <span class="font-serif italic text-paper" style="font-size: 22px; font-weight: 600;">Sustainability<br>Report</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <span class="font-mono uppercase tracking-[0.18em] text-tide-deep block" style="font-size: 11px;">2023</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 18px; line-height: 1.3; font-weight: 600;">Sustainability Report 2023</h4>
+              <span class="font-display font-medium text-tide-deep mt-4 block" style="font-size: 14px;">Download &rarr;</span>
+            </div>
+          </a>
+
+          <a href="https://urmigroup.com" target="_blank" rel="noreferrer" class="report-card border border-slate-text/15 cursor-pointer block bg-tide-mist reveal" data-delay="240">
+            <div class="aspect-[4/5] w-full overflow-hidden bg-cloud relative">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #F5EFE3 0%, #4A7864 100%);"></div>
+              <span class="absolute top-5 left-5 font-mono uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2.5 py-1" style="font-size: 10px;">2020</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <span class="font-serif italic text-paper" style="font-size: 22px; font-weight: 600;">Sustainability<br>Report</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <span class="font-mono uppercase tracking-[0.18em] text-tide-deep block" style="font-size: 11px;">2020</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 18px; line-height: 1.3; font-weight: 600;">Sustainability Report 2020</h4>
+              <span class="font-display font-medium text-tide-deep mt-4 block" style="font-size: 14px;">Download &rarr;</span>
+            </div>
+          </a>
+
+          <article class="report-card border border-slate-text/15 block bg-tide-mist reveal" data-delay="360">
+            <div class="aspect-[4/5] w-full overflow-hidden bg-cloud relative">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #143F73 0%, #4A7864 100%);"></div>
+              <span class="absolute top-5 left-5 font-mono uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/65 backdrop-blur-sm px-2.5 py-1" style="font-size: 10px;">2030 PLAN</span>
+              <div class="absolute bottom-5 left-5 right-5">
+                <span class="font-serif italic text-paper" style="font-size: 22px; font-weight: 600;">Decarbonisation<br>2030 Plan</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <span class="font-mono uppercase tracking-[0.18em] text-tide-deep block" style="font-size: 11px;">2026</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 18px; line-height: 1.3; font-weight: 600;">Decarbonisation 2030 Plan</h4>
+              <span class="font-display font-medium text-slate-text/60 mt-4 block" style="font-size: 14px;">Coming Q3 2026</span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- CTA band — full bleed within the section -->
+      <div class="-mx-6 md:-mx-12 bg-tide-deep text-paper py-24 md:py-28 px-6 md:px-12 relative overflow-hidden">
+
+        <!-- Ripple SVG bg (cotton/10 — same idea as hero) -->
+        <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 600" aria-hidden="true">
+          <g fill="none" stroke="#FCFDFC" stroke-width="1" stroke-opacity="0.18">
+            <circle class="ripple-ring" cx="400" cy="300" r="200" data-d="0"/>
+            <circle class="ripple-ring" cx="400" cy="300" r="200" data-d="1"/>
+            <circle class="ripple-ring" cx="400" cy="300" r="200" data-d="2"/>
+            <circle class="ripple-ring" cx="400" cy="300" r="200" data-d="3"/>
+          </g>
+        </svg>
+
+        <div class="relative max-w-3xl mx-auto text-center">
+          <h2 class="font-serif italic text-paper" style="font-size: clamp(34px, 4.6vw, 56px); line-height: 1.1; font-weight: 600;">
+            If your standard is the planet's standard,<br>
+            <em class="not-italic">you'll feel at home here.</em>
+          </h2>
+
+          <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-0 sm:divide-x sm:divide-paper/20">
+            <a href="connect.html" class="cta-link group inline-flex items-center gap-2 text-paper px-7" style="font-size: 15px; letter-spacing: 0.04em;">
+              Source from Urmi
+              <span class="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+            </a>
+            <a href="index.html#factories" data-factory-visit class="cta-link group inline-flex items-center gap-2 text-paper px-7" style="font-size: 15px; letter-spacing: 0.04em;">
+              Visit a Factory
+              <span class="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+            </a>
+            <a href="connect.html" class="cta-link group inline-flex items-center gap-2 text-paper px-7" style="font-size: 15px; letter-spacing: 0.04em;">
+              Request an Audit
+              <span class="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="bg-urmi-blue-deep text-paper">
+      <div class="border-t border-paper/10">
+        <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-paper/60 font-mono uppercase tracking-[0.18em]">
+          <p>&copy; 2026 Urmi Group. All rights reserved.</p>
+          <div class="flex items-center gap-5">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">LinkedIn</a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Instagram</a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Facebook</a>
+          </div>
+          <p class="italic font-serif normal-case tracking-normal">Crafted on the Padma.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function(){
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // ===== Reveal-on-scroll =====
+        var reveals = document.querySelectorAll('.reveal');
+        if (prefersReduced || !('IntersectionObserver' in window)) {
+          reveals.forEach(function(el){ el.classList.add('is-visible'); });
+        } else {
+          var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+              if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+            });
+          }, { threshold: 0.12 });
+          reveals.forEach(function(el){ io.observe(el); });
+        }
+
+        // ===== Count-up on scroll-in (2s ease-out, triggerOnce) =====
+        function fmt(value, format) {
+          if (format === 'comma') return value.toLocaleString('en-US');
+          return String(Math.round(value));
+        }
+        function animateCount(el) {
+          var target = parseFloat(el.getAttribute('data-target')) || 0;
+          var format = el.getAttribute('data-format') || 'int';
+          if (prefersReduced) { el.textContent = fmt(target, format); return; }
+          var dur = 2000, begin = performance.now();
+          function tick(now){
+            var t = Math.min((now - begin) / dur, 1);
+            var eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = fmt(target * eased, format);
+            if (t < 1) requestAnimationFrame(tick);
+          }
+          el.textContent = fmt(0, format);
+          requestAnimationFrame(tick);
+        }
+        var counts = document.querySelectorAll('.count-up');
+        if (prefersReduced || !('IntersectionObserver' in window)) {
+          counts.forEach(animateCount);
+        } else {
+          var ioCount = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+              if (e.isIntersecting) { animateCount(e.target); ioCount.unobserve(e.target); }
+            });
+          }, { threshold: 0.4 });
+          counts.forEach(function(el){ ioCount.observe(el); });
+        }
+
+        // ===== HIGG arc draw + score countup =====
+        var arcs = document.querySelectorAll('.higg-arc-fill');
+        var arcTexts = document.querySelectorAll('.higg-text');
+        function animateHigg(arc, text) {
+          var score = parseFloat(arc.getAttribute('data-score')) || 0;
+          var circumference = 301.6;
+          var targetOffset = circumference * (1 - score / 100);
+          if (prefersReduced) {
+            arc.style.strokeDashoffset = targetOffset;
+            if (text) text.textContent = score + '%';
+            return;
+          }
+          arc.style.strokeDashoffset = targetOffset;
+          // text countup
+          var dur = 1400, begin = performance.now();
+          function tick(now){
+            var t = Math.min((now - begin) / dur, 1);
+            var eased = 1 - Math.pow(1 - t, 3);
+            if (text) text.textContent = Math.round(score * eased) + '%';
+            if (t < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+        if (prefersReduced || !('IntersectionObserver' in window)) {
+          arcs.forEach(function(arc, i){ animateHigg(arc, arcTexts[i]); });
+        } else {
+          var ioHigg = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+              if (e.isIntersecting) {
+                var i = Array.prototype.indexOf.call(arcs, e.target);
+                animateHigg(e.target, arcTexts[i]);
+                ioHigg.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.5 });
+          arcs.forEach(function(arc){ ioHigg.observe(arc); });
+        }
+      })();
+    </script>
+
+    <!-- ============================================================
+         FACTORY VISIT MODAL (shared)
+         ============================================================ -->
+    <div id="factory-modal" class="hidden fixed inset-0 z-[100]" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="factory-modal-title">
+      <button type="button" data-factory-close aria-label="Close" class="absolute inset-0 bg-urmi-blue-deep/70 backdrop-blur-sm cursor-default"></button>
+      <div class="relative max-w-lg w-[calc(100%-2rem)] mx-auto mt-12 md:mt-20 bg-paper rounded-[20px] p-7 md:p-9 shadow-[0_30px_80px_rgba(6,21,40,0.45)] border border-cloud max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <button type="button" data-factory-close aria-label="Close" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-tide-mist hover:bg-cloud transition-colors flex items-center justify-center text-urmi-blue-deep">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+        </button>
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">// SCHEDULE A VISIT</span>
+        <h3 id="factory-modal-title" class="font-serif text-urmi-blue-deep mt-3" style="font-size: clamp(22px, 2.6vw, 30px); font-weight: 600; line-height: 1.15;">Visit one of our <em class="italic" style="color:#1E5C9F">three factories</em>.</h3>
+        <p class="text-slate-text mt-2" style="font-size: 14px; line-height: 1.6;">Tell us when, and we'll make sure the floor is ready &mdash; with the right colleagues, the right paperwork, and a guided tour of every craft.</p>
+        <form id="factory-form" class="mt-6 space-y-4" onsubmit="return false;">
+          <div>
+            <label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Factory</label>
+            <select name="factory" required class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;">
+              <option value="">Select a factory&hellip;</option>
+              <option>FTML &mdash; Fakhruddin Textile Mills, Sreepur</option>
+              <option>UGL &mdash; Urmi Garments Limited, Demra</option>
+              <option>UHM &mdash; Toray JV (LEED Platinum), Sreepur</option>
+              <option>All three sites</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Date</label><input type="date" name="date" required class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+            <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Group size</label><input type="number" name="group_size" min="1" max="50" placeholder="e.g. 4" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          </div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Full name</label><input type="text" name="name" required placeholder="Your name" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Work email</label><input type="email" name="email" required placeholder="you@brand.com" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Anything we should know?</label><textarea name="message" rows="3" placeholder="Specific lines, certifications, sample requirements&hellip;" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors resize-none" style="font-size: 15px;"></textarea></div>
+          <button type="submit" class="w-full bg-urmi-blue-deep text-paper px-7 py-3.5 rounded-full font-display font-semibold uppercase tracking-[0.18em] hover:bg-urmi-blue transition-colors inline-flex items-center justify-center gap-2 mt-2" style="font-size: 12px;">
+            Request Visit
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </button>
+        </form>
+        <div id="factory-success" class="hidden mt-6 text-center">
+          <svg class="w-12 h-12 text-tide-deep mx-auto" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M16 24 L 22 30 L 32 18"/></svg>
+          <h4 class="font-serif text-urmi-blue-deep mt-4" style="font-size: 22px; font-weight: 600;">We've got it.</h4>
+          <p class="text-slate-text mt-2" style="font-size: 14px; line-height: 1.6;">Our visits team will reach out within one working day to confirm the date and arrange logistics.</p>
+          <button type="button" data-factory-close class="mt-5 inline-flex items-center gap-2 font-display font-semibold uppercase tracking-[0.18em] text-urmi-blue-deep hover:text-tide-deep transition-colors" style="font-size: 11px;">Close &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        var modal = document.getElementById('factory-modal');
+        if (!modal) return;
+        var form = document.getElementById('factory-form');
+        var success = document.getElementById('factory-success');
+        function openModal(e){ if (e) e.preventDefault(); modal.classList.remove('hidden'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden'; }
+        function closeModal(){ modal.classList.add('hidden'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; if (form && success) { form.classList.remove('hidden'); success.classList.add('hidden'); try { form.reset(); } catch (_) {} } }
+        document.querySelectorAll('[data-factory-visit]').forEach(function(el){ el.addEventListener('click', openModal); });
+        document.querySelectorAll('[data-factory-close]').forEach(function(el){ el.addEventListener('click', closeModal); });
+        document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
+        if (form) { form.addEventListener('submit', function(e){ e.preventDefault(); form.classList.add('hidden'); if (success) success.classList.remove('hidden'); }); }
+      })();
+    </script>
+
+  </body>
+</html>
