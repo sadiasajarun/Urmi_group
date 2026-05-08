@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio — Urmi Group · Brands, Turag Active, and the categories we craft.</title>
+    <meta name="description" content="Urmi Group's portfolio: the global brands we manufacture for, our own label Turag Active, and five product categories woven across our floors." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urmi-blue':       '#1E5C9F',
+              'urmi-blue-deep':  '#143F73',
+              'wave-blue':       '#5BA0DE',
+              'wave-blue-bright':'#8FCBFF',
+              'wave-blue-soft':  '#C5DCEF',
+              'tide':            '#7FAA9C',
+              'tide-deep':       '#4A7864',
+              'tide-soft':       '#DCE9E3',
+              'tide-mist':       '#F0F5F2',
+              'mist':            '#F4F7FB',
+              'seafoam':         '#E8F0EC',
+              'paper':           '#FCFDFC',
+              'cloud':           '#E0E8E5',
+              'ink':             '#0F1E33',
+              'slate-text':      '#3F5468',
+              'cream':           '#F5EFE3',
+            },
+            fontFamily: {
+              serif: ["'Playfair Display'", 'Georgia', 'serif'],
+              sans: ["'Inter'", 'system-ui', 'sans-serif'],
+              mono: ["'IBM Plex Mono'", 'ui-monospace', 'monospace'],
+              display: ["'Manrope'", 'system-ui', 'sans-serif'],
+              bengali: ["'Hind Siliguri'", 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body { background: #F0F5F2; color: #3F5468; font-family: 'Inter', sans-serif; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: #0F1E33; }
+
+      /* Reveal-on-scroll */
+      .reveal { opacity: 0; transform: translateY(20px); transition: opacity 800ms cubic-bezier(0.22,1,0.36,1), transform 800ms cubic-bezier(0.22,1,0.36,1); }
+      .reveal.is-visible { opacity: 1; transform: translateY(0); }
+      .reveal[data-delay="80"]  { transition-delay: 80ms; }
+      .reveal[data-delay="160"] { transition-delay: 160ms; }
+      .reveal[data-delay="240"] { transition-delay: 240ms; }
+      .reveal[data-delay="320"] { transition-delay: 320ms; }
+      .reveal[data-delay="400"] { transition-delay: 400ms; }
+      .reveal[data-delay="480"] { transition-delay: 480ms; }
+      .reveal[data-delay="560"] { transition-delay: 560ms; }
+
+      /* Brand wordmark hover */
+      .brand-word { transition: opacity 250ms ease, transform 350ms ease; }
+      .brand-word:hover { opacity: 1 !important; transform: translateY(-2px); }
+
+      /* Category card — editorial monochrome → color on hover */
+      .cat-card img { transition: filter 700ms ease, transform 1100ms ease; }
+      .cat-card:hover img { filter: grayscale(0) !important; transform: scale(1.04); }
+      .cat-card .cat-label { transition: transform 350ms ease, opacity 250ms ease; }
+      .cat-card:hover .cat-label { transform: translateY(-4px); }
+      .cat-card .cat-overlay { transition: opacity 400ms ease; }
+      .cat-card:hover .cat-overlay { opacity: 0.35; }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        .reveal { opacity: 1 !important; transform: none !important; }
+        .cat-card:hover img { transform: none !important; }
+        .cat-card:hover .cat-label { transform: none !important; }
+      }
+    </style>
+  </head>
+
+  <body class="antialiased overflow-x-hidden">
+
+    <!-- ============================================================
+         NAVBAR — Logo standalone (top-left), pill nav centered
+         ============================================================ -->
+    <a href="index.html" class="fixed top-4 md:top-6 left-4 md:left-6 z-[60] inline-flex items-center bg-urmi-blue-deep/85 backdrop-blur-md rounded-full px-3 md:px-4 py-2 shadow-[0_12px_28px_rgba(6,21,40,0.35)] border border-paper/15 hover:bg-urmi-blue-deep transition-colors" aria-label="Urmi Group home">
+      <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
+    </a>
+
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-12rem)]" aria-label="Primary">
+      <div class="flex items-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-2 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
+        <div class="hidden lg:flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-display font-semibold text-paper/85">
+          <a href="index.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Home</a>
+          <a href="about.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">About</a>
+          <a href="index.html#craft" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Craft</a>
+          <a href="portfolio.html" aria-current="page" class="px-3 py-1.5 rounded-full bg-paper/15 text-paper transition-colors">Portfolio</a>
+          <a href="index.html#sustainability" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Sustain</a>
+          <a href="connect.html" class="ml-1 px-4 py-1.5 rounded-full bg-paper text-urmi-blue-deep hover:bg-wave-blue hover:text-paper transition-colors">Connect</a>
+        </div>
+        <button type="button" aria-label="Open menu" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Floating action chips (top-right) -->
+    <div class="fixed top-4 md:top-6 right-4 md:right-6 z-50 flex items-center gap-2" aria-label="Quick actions">
+      <a href="index.html#factories" data-factory-visit class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l5-3v3l5-3v3l5-3v15"/><path d="M3 21h18"/><path d="M9 21v-4M14 21v-4"/></svg>
+        <span class="hidden lg:inline">Visit Factory</span>
+      </a>
+      <a href="connect.html" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v5h5"/><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5z"/><path d="M9 13h6M9 17h4"/></svg>
+        <span class="hidden lg:inline">Request Quote</span>
+      </a>
+      <button type="button" aria-label="Search" class="inline-flex items-center justify-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full p-2.5 text-paper shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+
+    <!-- ============================================================
+         HEADER
+         ============================================================ -->
+    <section class="relative bg-tide-mist pt-32 md:pt-40 pb-12 md:pb-16 px-6 md:px-12">
+      <div class="max-w-[80rem] mx-auto text-center reveal">
+        <span class="font-display font-bold text-urmi-blue-deep uppercase block" style="font-size: clamp(18px, 2vw, 24px); letter-spacing: 0.32em;">Portfolio</span>
+        <h1 class="font-serif text-urmi-blue-deep mt-4 max-w-4xl mx-auto" style="font-size: clamp(34px, 5.5vw, 64px); line-height: 1.05; font-weight: 600;">
+          From the world's leading brands to <em class="italic" style="color:#1E5C9F">our own thread</em>.
+        </h1>
+        <p class="font-serif italic text-slate-text mt-5 max-w-xl mx-auto" style="font-size: clamp(16px, 1.6vw, 19px); line-height: 1.55;">
+          Three windows into Urmi's craft &mdash; the brands we manufacture for, the brand we built ourselves, and every category in between.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         01 — BRANDS WE MANUFACTURE FOR
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-16 md:py-24 px-6 md:px-12 overflow-hidden">
+      <div class="max-w-[88rem] mx-auto">
+
+        <!-- Section header -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12 md:mb-16">
+          <div class="lg:col-span-7 reveal">
+            <span class="font-mono text-[11px] uppercase tracking-[0.32em] text-tide-deep">// 01 &middot; THE BRANDS WE MAKE FOR</span>
+            <h2 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(30px, 4.4vw, 52px); line-height: 1.05;">
+              Trusted by the brands that <em class="italic" style="color:#1E5C9F">set the standard</em>.
+            </h2>
+          </div>
+          <div class="lg:col-span-5 lg:pl-10 border-t lg:border-t-0 lg:border-l border-tide/40 pt-6 lg:pt-0 reveal" data-delay="160">
+            <p class="font-serif italic text-slate-text leading-relaxed" style="font-size: 16px;">
+              Thirty&minus;plus global houses lean on Urmi's vertically integrated supply chain &mdash; from yarn to box. Europe takes 81%. Japan, 14%.
+            </p>
+          </div>
+        </div>
+
+        <!-- Brand wordmark grid — 12 brands, varied typography (matches the home trust band) -->
+        <div class="bg-urmi-blue-deep relative overflow-hidden rounded-[24px] reveal" data-delay="160">
+          <!-- Decorative sash -->
+          <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div class="absolute -left-1/4 top-1/2 -translate-y-1/2 w-[160%] h-32 -rotate-[8deg] bg-gradient-to-r from-wave-blue/15 via-wave-blue/5 to-transparent"></div>
+          </div>
+          <div class="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 divide-x divide-y divide-paper/10">
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif italic font-light text-paper/85 text-2xl md:text-3xl">ellos</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-extrabold uppercase text-paper text-lg md:text-xl tracking-[0.04em]">DECATHLON</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-black italic uppercase text-paper text-2xl md:text-3xl">PUMA</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif text-paper/90 text-xl md:text-2xl">Auchan</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-bold text-paper text-2xl md:text-3xl tracking-tight">H&amp;M</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif italic text-paper/85 text-base md:text-lg text-center leading-tight">Marks &amp;<br>Spencer</span>
+
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-bold uppercase text-paper text-lg md:text-xl tracking-[0.18em]">UNIQLO</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-medium uppercase text-paper/85 text-base md:text-lg tracking-[0.32em]">MUJI</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-black uppercase text-paper text-2xl md:text-3xl">GU</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif italic text-paper/90 text-xl md:text-2xl">La Redoute</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-light uppercase text-paper/85 text-base md:text-lg tracking-[0.32em]">EXPRESS</span>
+            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif italic text-paper text-xl md:text-2xl">N.Y. &amp; C.</span>
+          </div>
+          <!-- Footer line inside brand strip -->
+          <div class="relative flex flex-col md:flex-row items-center justify-between gap-3 px-6 md:px-10 py-6 border-t border-paper/15">
+            <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-paper/65">12 of 30+ &middot; Updated SS '26</span>
+            <a href="connect.html" class="inline-flex items-center gap-2 font-display font-semibold uppercase tracking-[0.18em] text-paper hover:text-wave-blue-bright transition-colors group" style="font-size: 11px;">
+              See the full client list
+              <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         02 — TURAG ACTIVE (own brand showcase)
+         ============================================================ -->
+    <section class="relative bg-urmi-blue-deep text-paper py-20 md:py-32 px-6 md:px-12 overflow-hidden">
+
+      <!-- Subtle wave SVG bg -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-[0.10]" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <pattern id="turag-waves" x="0" y="0" width="280" height="60" patternUnits="userSpaceOnUse">
+            <path d="M0,30 C35,8 70,52 105,30 C140,8 175,52 210,30 C245,8 280,52 280,30" fill="none" stroke="#5BA0DE" stroke-width="1.4"/>
+            <path d="M0,46 C35,24 70,68 105,46 C140,24 175,68 210,46 C245,24 280,68 280,46" fill="none" stroke="#7FAA9C" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#turag-waves)"/>
+      </svg>
+
+      <div class="relative z-10 max-w-[88rem] mx-auto">
+        <!-- Header -->
+        <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16 reveal">
+          <span class="font-mono text-[11px] uppercase tracking-[0.32em] text-wave-blue-bright">// 02 &middot; OUR OWN THREAD</span>
+          <h2 class="font-serif text-paper mt-4" style="font-size: clamp(34px, 5.5vw, 64px); line-height: 1.0;">
+            Turag <em class="italic" style="color:#5BA0DE">Active</em>.
+          </h2>
+          <p class="font-serif italic text-paper/80 mt-4 max-w-xl mx-auto" style="font-size: clamp(16px, 1.6vw, 19px); line-height: 1.55;">
+            Named for the river that runs alongside our floor &mdash; Urmi's first own&minus;label apparel range.
+          </p>
+        </div>
+
+        <!-- Hero feature: image + side detail -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-stretch">
+
+          <!-- LEFT: hero image -->
+          <article class="relative lg:col-span-7 aspect-[5/6] lg:aspect-auto lg:min-h-[640px] overflow-hidden rounded-[24px] bg-tide-deep reveal" data-delay="80">
+            <img src="assets/portfolio/active-wear.webp" alt="Turag Active — performance activewear" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(20,63,115,0.10) 0%, rgba(6,21,40,0.65) 100%);" aria-hidden="true"></div>
+
+            <!-- Top-left chip -->
+            <div class="absolute top-5 left-5 inline-flex items-center gap-2 bg-paper/15 backdrop-blur-md border border-paper/20 rounded-full px-3 py-1.5">
+              <span class="w-2 h-2 rounded-full bg-wave-blue-bright" aria-hidden="true"></span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95">EST. 2024 &middot; SREEPUR</span>
+            </div>
+
+            <!-- Bottom-left composition -->
+            <div class="absolute bottom-7 left-7 right-7">
+              <span class="font-mono text-[10px] uppercase tracking-[0.32em] text-wave-blue-bright">SS '26 collection</span>
+              <h3 class="font-serif italic text-paper mt-3" style="font-size: clamp(36px, 5vw, 60px); line-height: 1; font-weight: 600;">
+                Made for movement.
+              </h3>
+              <p class="font-serif text-paper/85 mt-3 max-w-md" style="font-size: 16px; line-height: 1.55;">
+                Performance activewear knit on Bangladesh's first seamless line &mdash; finished without a single seam to cut or waste.
+              </p>
+            </div>
+          </article>
+
+          <!-- RIGHT: detail panel -->
+          <aside class="lg:col-span-5 flex flex-col justify-between gap-6 md:gap-8 reveal" data-delay="240">
+            <!-- Quick facts -->
+            <div class="bg-paper/8 border border-paper/15 rounded-[24px] p-7 md:p-9 backdrop-blur-sm">
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue-bright">// THE PROMISE</span>
+              <p class="font-serif italic mt-4 text-paper" style="font-size: clamp(18px, 2vw, 24px); line-height: 1.4;">
+                "Every stitch on every Turag piece comes off our own loom &mdash; from yarn to garment, traceable to the line that made it."
+              </p>
+              <div class="grid grid-cols-2 gap-4 mt-7 pt-6 border-t border-paper/15">
+                <div>
+                  <div class="font-serif font-semibold text-paper leading-none" style="font-size: clamp(28px, 3.4vw, 40px);">14,500</div>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/65 mt-2 block">Pieces / day</span>
+                </div>
+                <div>
+                  <div class="font-serif font-semibold text-paper leading-none" style="font-size: clamp(28px, 3.4vw, 40px);">78</div>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/65 mt-2 block">SANTONI Top2V machines</span>
+                </div>
+                <div>
+                  <div class="font-serif font-semibold text-paper leading-none" style="font-size: clamp(28px, 3.4vw, 40px);">0%</div>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/65 mt-2 block">Cut-and-sew waste</span>
+                </div>
+                <div>
+                  <div class="font-serif font-semibold text-paper leading-none" style="font-size: clamp(28px, 3.4vw, 40px);">100%</div>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/65 mt-2 block">Yarn traceable</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Range pills -->
+            <div class="bg-paper/5 border border-paper/15 rounded-[24px] p-7 md:p-8">
+              <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-wave-blue-bright">// RANGE</span>
+              <ul class="mt-4 space-y-2">
+                <li class="flex items-baseline gap-3"><span class="font-mono text-[11px] text-paper/55">01</span><span class="font-serif italic text-paper text-lg">Seamless leggings</span></li>
+                <li class="flex items-baseline gap-3"><span class="font-mono text-[11px] text-paper/55">02</span><span class="font-serif italic text-paper text-lg">Performance tops</span></li>
+                <li class="flex items-baseline gap-3"><span class="font-mono text-[11px] text-paper/55">03</span><span class="font-serif italic text-paper text-lg">Compression baselayers</span></li>
+                <li class="flex items-baseline gap-3"><span class="font-mono text-[11px] text-paper/55">04</span><span class="font-serif italic text-paper text-lg">Recycled-blend hoodies</span></li>
+              </ul>
+              <a href="connect.html" class="mt-6 inline-flex items-center gap-2 font-display font-semibold uppercase tracking-[0.18em] text-paper hover:text-wave-blue-bright transition-colors group" style="font-size: 11px;">
+                Stock Turag in your store
+                <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         03 — CATEGORIES (Olivia-Grey-inspired editorial grid)
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12 overflow-hidden">
+      <div class="max-w-[88rem] mx-auto">
+
+        <!-- Section header -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-12 md:mb-16">
+          <div class="lg:col-span-7 reveal">
+            <span class="font-mono text-[11px] uppercase tracking-[0.32em] text-tide-deep">// 03 &middot; THE CATEGORIES</span>
+            <h2 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(30px, 4.4vw, 52px); line-height: 1.05;">
+              Five families. <em class="italic" style="color:#1E5C9F">One unbroken thread.</em>
+            </h2>
+          </div>
+          <div class="lg:col-span-5 lg:pl-10 border-t lg:border-t-0 lg:border-l border-tide/40 pt-6 lg:pt-0 reveal" data-delay="160">
+            <p class="font-serif italic text-slate-text leading-relaxed" style="font-size: 16px;">
+              Each category lives on its own line &mdash; same quality protocol, same audited supply chain. Hover any card to bring it back into colour.
+            </p>
+          </div>
+        </div>
+
+        <!-- Editorial 4-col grid: Active (col-span-2 row-span-2 — the hero), then 4 supporting cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-[260px] md:auto-rows-[300px] lg:auto-rows-[340px]">
+
+          <!-- ACTIVE WEAR — featured (large) -->
+          <a href="connect.html" class="cat-card relative col-span-1 sm:col-span-2 lg:col-span-2 row-span-2 overflow-hidden bg-cloud reveal group" data-delay="0">
+            <img src="assets/portfolio/active-wear.webp" alt="Active wear — performance with a conscience" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
+            <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
+            <div class="absolute top-5 left-5 right-5 flex items-start justify-between">
+              <span class="font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(01) FEATURED</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.32em] text-paper/65">SS '26</span>
+            </div>
+            <div class="cat-label absolute bottom-7 left-7 right-7">
+              <h3 class="font-serif text-paper" style="font-size: clamp(28px, 4vw, 56px); line-height: 1; font-weight: 600;">Active <em class="italic" style="color:#8FCBFF;">Wear</em></h3>
+              <div class="mt-4 flex items-center gap-3">
+                <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85">Performance with a conscience</span>
+                <span class="text-paper/50">&rarr;</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- EVENING WEAR -->
+          <a href="connect.html" class="cat-card relative overflow-hidden bg-cloud reveal group" data-delay="120">
+            <img src="assets/portfolio/evening-wear.webp" alt="Evening wear — silhouettes for the gala" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
+            <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
+            <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(02)</span>
+            <div class="cat-label absolute bottom-5 left-5 right-5">
+              <h3 class="font-serif text-paper" style="font-size: 22px; line-height: 1.05; font-weight: 600;">Evening <em class="italic" style="color:#8FCBFF;">Wear</em></h3>
+              <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 mt-2 block">Silhouettes for the gala &rarr;</span>
+            </div>
+          </a>
+
+          <!-- NIGHT WEAR -->
+          <a href="connect.html" class="cat-card relative overflow-hidden bg-cloud reveal group" data-delay="240">
+            <img src="assets/portfolio/night-wear.webp" alt="Night wear — soft hand, easy fit" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
+            <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
+            <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(03)</span>
+            <div class="cat-label absolute bottom-5 left-5 right-5">
+              <h3 class="font-serif text-paper" style="font-size: 22px; line-height: 1.05; font-weight: 600;">Night <em class="italic" style="color:#8FCBFF;">Wear</em></h3>
+              <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 mt-2 block">Soft hand, easy fit &rarr;</span>
+            </div>
+          </a>
+
+          <!-- KNITWEAR -->
+          <a href="connect.html" class="cat-card relative overflow-hidden bg-cloud reveal group" data-delay="360">
+            <img src="assets/portfolio/knitwear.webp" alt="Knitwear — yarn into fabric, fabric into form" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
+            <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
+            <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(04)</span>
+            <div class="cat-label absolute bottom-5 left-5 right-5">
+              <h3 class="font-serif text-paper" style="font-size: 22px; line-height: 1.05; font-weight: 600;">Knit<em class="italic" style="color:#8FCBFF;">wear</em></h3>
+              <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 mt-2 block">Fibre into form &rarr;</span>
+            </div>
+          </a>
+
+          <!-- KIDSWEAR -->
+          <a href="connect.html" class="cat-card relative overflow-hidden bg-cloud reveal group" data-delay="480">
+            <img src="assets/portfolio/kidswear.jpg" alt="Kidswear — built to grow with them" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
+            <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
+            <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(05)</span>
+            <div class="cat-label absolute bottom-5 left-5 right-5">
+              <h3 class="font-serif text-paper" style="font-size: 22px; line-height: 1.05; font-weight: 600;">Kids<em class="italic" style="color:#8FCBFF;">wear</em></h3>
+              <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 mt-2 block">Built to grow with them &rarr;</span>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Section closer -->
+        <div class="mt-16 md:mt-20 pt-8 border-t border-tide/30 flex flex-col md:flex-row items-center justify-between gap-6 reveal">
+          <p class="font-serif italic text-slate-text" style="font-size: 16px;">
+            Five families. Five fits. <em>All made on a single river.</em>
+          </p>
+          <a href="connect.html" class="inline-flex items-center gap-3 bg-urmi-blue-deep text-paper px-8 py-4 rounded-full font-display font-semibold uppercase tracking-[0.18em] hover:bg-urmi-blue transition-colors" style="font-size: 12px;">
+            Request a sample pack
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="bg-urmi-blue-deep text-paper">
+      <div class="border-t border-paper/10">
+        <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-paper/60 font-mono uppercase tracking-[0.18em]">
+          <p>&copy; 2026 Urmi Group. All rights reserved.</p>
+          <div class="flex items-center gap-5">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">LinkedIn</a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Instagram</a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Facebook</a>
+          </div>
+          <p class="italic font-serif normal-case tracking-normal">Crafted on the Padma.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Reveal-on-scroll
+      (function(){
+        var els = document.querySelectorAll('.reveal');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          els.forEach(function(el){ el.classList.add('is-visible'); });
+          return;
+        }
+        if (!('IntersectionObserver' in window)) {
+          els.forEach(function(el){ el.classList.add('is-visible'); });
+          return;
+        }
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){
+            if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12 });
+        els.forEach(function(el){ io.observe(el); });
+      })();
+    </script>
+
+    <!-- ============================================================
+         FACTORY VISIT MODAL (shared)
+         ============================================================ -->
+    <div id="factory-modal" class="hidden fixed inset-0 z-[100]" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="factory-modal-title">
+      <button type="button" data-factory-close aria-label="Close" class="absolute inset-0 bg-urmi-blue-deep/70 backdrop-blur-sm cursor-default"></button>
+      <div class="relative max-w-lg w-[calc(100%-2rem)] mx-auto mt-12 md:mt-20 bg-paper rounded-[20px] p-7 md:p-9 shadow-[0_30px_80px_rgba(6,21,40,0.45)] border border-cloud max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <button type="button" data-factory-close aria-label="Close" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-tide-mist hover:bg-cloud transition-colors flex items-center justify-center text-urmi-blue-deep">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+        </button>
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">// SCHEDULE A VISIT</span>
+        <h3 id="factory-modal-title" class="font-serif text-urmi-blue-deep mt-3" style="font-size: clamp(22px, 2.6vw, 30px); font-weight: 600; line-height: 1.15;">Visit one of our <em class="italic" style="color:#1E5C9F">three factories</em>.</h3>
+        <p class="text-slate-text mt-2" style="font-size: 14px; line-height: 1.6;">Tell us when, and we'll make sure the floor is ready &mdash; with the right colleagues, the right paperwork, and a guided tour of every craft.</p>
+        <form id="factory-form" class="mt-6 space-y-4" onsubmit="return false;">
+          <div>
+            <label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Factory</label>
+            <select name="factory" required class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;">
+              <option value="">Select a factory&hellip;</option>
+              <option>FTML &mdash; Fakhruddin Textile Mills, Sreepur</option>
+              <option>UGL &mdash; Urmi Garments Limited, Demra</option>
+              <option>UHM &mdash; Toray JV (LEED Platinum), Sreepur</option>
+              <option>All three sites</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Date</label><input type="date" name="date" required class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+            <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Group size</label><input type="number" name="group_size" min="1" max="50" placeholder="e.g. 4" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          </div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Full name</label><input type="text" name="name" required placeholder="Your name" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Work email</label><input type="email" name="email" required placeholder="you@brand.com" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors" style="font-size: 15px;" /></div>
+          <div><label class="font-mono text-[10px] uppercase tracking-[0.22em] text-tide-deep block mb-1.5">Anything we should know?</label><textarea name="message" rows="3" placeholder="Specific lines, certifications, sample requirements&hellip;" class="w-full bg-tide-mist border border-cloud rounded-md px-3 py-3 text-slate-text placeholder:text-slate-text/40 focus:outline-none focus:border-urmi-blue transition-colors resize-none" style="font-size: 15px;"></textarea></div>
+          <button type="submit" class="w-full bg-urmi-blue-deep text-paper px-7 py-3.5 rounded-full font-display font-semibold uppercase tracking-[0.18em] hover:bg-urmi-blue transition-colors inline-flex items-center justify-center gap-2 mt-2" style="font-size: 12px;">
+            Request Visit
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </button>
+        </form>
+        <div id="factory-success" class="hidden mt-6 text-center">
+          <svg class="w-12 h-12 text-tide-deep mx-auto" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M16 24 L 22 30 L 32 18"/></svg>
+          <h4 class="font-serif text-urmi-blue-deep mt-4" style="font-size: 22px; font-weight: 600;">We've got it.</h4>
+          <p class="text-slate-text mt-2" style="font-size: 14px; line-height: 1.6;">Our visits team will reach out within one working day to confirm the date and arrange logistics.</p>
+          <button type="button" data-factory-close class="mt-5 inline-flex items-center gap-2 font-display font-semibold uppercase tracking-[0.18em] text-urmi-blue-deep hover:text-tide-deep transition-colors" style="font-size: 11px;">Close &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        var modal = document.getElementById('factory-modal');
+        if (!modal) return;
+        var form = document.getElementById('factory-form');
+        var success = document.getElementById('factory-success');
+        function openModal(e){ if (e) e.preventDefault(); modal.classList.remove('hidden'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden'; }
+        function closeModal(){ modal.classList.add('hidden'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; if (form && success) { form.classList.remove('hidden'); success.classList.add('hidden'); try { form.reset(); } catch (_) {} } }
+        document.querySelectorAll('[data-factory-visit]').forEach(function(el){ el.addEventListener('click', openModal); });
+        document.querySelectorAll('[data-factory-close]').forEach(function(el){ el.addEventListener('click', closeModal); });
+        document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
+        if (form) { form.addEventListener('submit', function(e){ e.preventDefault(); form.classList.add('hidden'); if (success) success.classList.remove('hidden'); }); }
+      })();
+    </script>
+
+  </body>
+</html>
