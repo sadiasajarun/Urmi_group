@@ -74,6 +74,17 @@
       .ripple-ring[data-d="2"] { animation-delay: 2s; }
       .ripple-ring[data-d="3"] { animation-delay: 3s; }
 
+      /* Hero leaf — gentle sway */
+      @keyframes leaf-sway {
+        0%, 100% { transform: rotate(-1.5deg); }
+        50%      { transform: rotate(1.5deg); }
+      }
+      .hero-leaf { transform-origin: 50% 92%; animation: leaf-sway 7s ease-in-out infinite; filter: drop-shadow(0 30px 40px rgba(74,120,100,0.25)); }
+
+      /* Hero feature row — leaf icon + line */
+      .feature-row { transition: border-color 220ms ease; }
+      .feature-row:hover { border-color: rgba(74,120,100,0.6); }
+
       /* Cert chip hover */
       .cert-chip { transition: border-color 180ms ease, color 180ms ease; }
       .cert-chip:hover { border-color: #4A7864; color: #4A7864; }
@@ -94,6 +105,7 @@
         .reveal { opacity: 1 !important; transform: none !important; }
         .award-card:hover, .report-card:hover { transform: none !important; }
         .ripple-ring { animation: none !important; opacity: 0.15 !important; transform: scale(1) !important; }
+        .hero-leaf { animation: none !important; }
       }
     </style>
   </head>
@@ -114,7 +126,7 @@
           <a href="about.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">About</a>
           <a href="index.html#craft" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Craft</a>
           <a href="portfolio.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Portfolio</a>
-          <a href="sustainability.html" aria-current="page" class="px-3 py-1.5 rounded-full bg-paper/15 text-paper transition-colors">Sustain</a>
+          <a href="sustainability.html" aria-current="page" class="px-3 py-1.5 rounded-full bg-paper/15 text-paper transition-colors">Sustainability</a>
           <a href="connect.html" class="ml-1 px-4 py-1.5 rounded-full bg-paper text-urmi-blue-deep hover:bg-wave-blue hover:text-paper transition-colors">Connect</a>
         </div>
         <button type="button" aria-label="Open menu" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
@@ -139,46 +151,167 @@
     </div>
 
     <!-- ============================================================
-         01 — HERO (full vh, ripple bg, italic manifesto + 3 stat pills)
+         01 — HERO (green tone, centered leaf, editorial layout)
          ============================================================ -->
-    <section id="hero" class="relative min-h-screen bg-tide-mist overflow-hidden flex items-center justify-center px-6 md:px-12">
+    <section id="hero" class="relative min-h-screen overflow-hidden flex items-center px-6 md:px-12 pt-28 md:pt-32 pb-16 md:pb-24" style="background: linear-gradient(155deg, #E8F0EC 0%, #DCE9E3 55%, #C8DDD3 100%);">
 
-      <!-- Ripple SVG bg — single droplet expanding outward, 4 staggered rings, tide-deep at 15% opacity -->
+      <!-- Soft halo behind the leaf -->
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[640px] rounded-full pointer-events-none" aria-hidden="true" style="background: radial-gradient(circle, rgba(74,120,100,0.12) 0%, transparent 65%);"></div>
+
+      <!-- Ripple SVG bg — staggered rings on the green canvas -->
       <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 800" aria-hidden="true">
-        <g fill="none" stroke="#4A7864" stroke-width="1" stroke-opacity="0.18">
-          <circle class="ripple-ring" cx="400" cy="400" r="200" data-d="0"/>
-          <circle class="ripple-ring" cx="400" cy="400" r="200" data-d="1"/>
-          <circle class="ripple-ring" cx="400" cy="400" r="200" data-d="2"/>
-          <circle class="ripple-ring" cx="400" cy="400" r="200" data-d="3"/>
+        <g fill="none" stroke="#4A7864" stroke-width="1" stroke-opacity="0.14">
+          <circle class="ripple-ring" cx="400" cy="400" r="220" data-d="0"/>
+          <circle class="ripple-ring" cx="400" cy="400" r="220" data-d="1"/>
+          <circle class="ripple-ring" cx="400" cy="400" r="220" data-d="2"/>
+          <circle class="ripple-ring" cx="400" cy="400" r="220" data-d="3"/>
         </g>
-        <!-- Central drop -->
-        <circle cx="400" cy="400" r="6" fill="#4A7864" fill-opacity="0.45"/>
       </svg>
 
-      <div class="relative max-w-4xl mx-auto text-center">
-        <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block reveal" style="font-size: 11px;">SUSTAINABILITY &mdash; ০১</span>
-        <h1 class="font-serif italic text-urmi-blue-deep mt-5 reveal" data-delay="80" style="font-size: clamp(40px, 5.5vw, 72px); line-height: 1.05; font-weight: 600;">
-          We don't borrow the planet from our buyers.<br>
-          We borrow it from <em class="not-italic">our grandchildren.</em>
-        </h1>
-        <p class="text-slate-text max-w-xl mx-auto mt-6 reveal" data-delay="160" style="font-size: 17px; line-height: 1.7;">
-          Bangladesh's first complete green RMG group. A river that flows back cleaner than it came. A 2030 promise we're keeping early.
-        </p>
+      <!-- Faint dotted accents -->
+      <span class="absolute top-32 right-20 w-1.5 h-1.5 rounded-full bg-tide-deep/40 hidden md:block" aria-hidden="true"></span>
+      <span class="absolute bottom-32 left-16 w-1.5 h-1.5 rounded-full bg-tide-deep/40 hidden md:block" aria-hidden="true"></span>
+      <span class="absolute top-1/2 left-12 w-1 h-1 rounded-full bg-tide-deep/55 hidden md:block" aria-hidden="true"></span>
 
-        <!-- Three stat pills -->
-        <div class="mt-12 max-w-2xl mx-auto border-t border-b border-slate-text/20 grid grid-cols-1 md:grid-cols-3 md:divide-x md:divide-slate-text/20 reveal" data-delay="240">
-          <div class="text-center px-6 py-7">
-            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">4,000 m&sup3;<span class="text-slate-text/55"> / day</span></div>
-            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">Zero discharge</span>
+      <div class="relative max-w-[88rem] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 items-center gap-10 lg:gap-6">
+
+        <!-- LEFT — eyebrow + headline + body + CTA -->
+        <div class="lg:col-span-5 relative z-10">
+          <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block reveal" style="font-size: 11px;">SUSTAINABILITY &mdash; ০১</span>
+          <h1 class="font-serif text-ink mt-5 reveal" data-delay="80" style="font-size: clamp(40px, 5.8vw, 76px); line-height: 1.0; font-weight: 600; letter-spacing: -0.01em;">
+            Sustainability<br>
+            isn't our <em class="italic" style="color:#4A7864;">strategy</em>.<br>
+            It's our <em class="italic" style="color:#4A7864;">standard</em>.
+          </h1>
+          <p class="text-slate-text max-w-md mt-7 reveal" data-delay="160" style="font-size: 16px; line-height: 1.7;">
+            Bangladesh's first complete green RMG group &mdash; turning waste streams into clean water, sunlight into kilowatt-hours, and a 2030 carbon promise into a 2026 milestone.
+          </p>
+
+          <!-- Primary CTA + secondary -->
+          <div class="mt-9 flex items-center gap-5 flex-wrap reveal" data-delay="240">
+            <a href="#numbers" class="inline-flex items-center gap-2.5 bg-ink text-paper rounded-full pl-6 pr-2 py-2 hover:bg-tide-deep transition-colors group">
+              <span class="font-display font-semibold uppercase tracking-[0.18em]" style="font-size: 12px;">See the proof</span>
+              <span class="w-9 h-9 rounded-full bg-paper text-ink flex items-center justify-center group-hover:bg-tide group-hover:text-paper transition-colors">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </span>
+            </a>
+            <a href="#reports" class="font-display font-semibold uppercase tracking-[0.18em] text-tide-deep underline decoration-1 underline-offset-4 hover:text-ink transition-colors" style="font-size: 11px;">
+              Download the 2024 report
+            </a>
           </div>
-          <div class="text-center px-6 py-7 border-t md:border-t-0 border-slate-text/20">
-            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">LEED Platinum</div>
-            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">UHM Green Factory</span>
+        </div>
+
+        <!-- CENTER — leaf SVG (positioned so it overlaps the right column) -->
+        <div class="lg:col-span-3 lg:col-start-5 relative h-[360px] sm:h-[440px] lg:h-[640px] flex items-end justify-center reveal" data-delay="120">
+          <svg class="hero-leaf relative w-[280px] sm:w-[340px] lg:w-[440px] h-auto" viewBox="0 0 440 640" fill="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="leafA" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"  stop-color="#7FAA9C"/>
+                <stop offset="55%" stop-color="#4A7864"/>
+                <stop offset="100%" stop-color="#2F5042"/>
+              </linearGradient>
+              <linearGradient id="leafB" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"  stop-color="#9CC0B2"/>
+                <stop offset="60%" stop-color="#5C8B75"/>
+                <stop offset="100%" stop-color="#3A6453"/>
+              </linearGradient>
+              <linearGradient id="stemG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"  stop-color="#7FAA9C"/>
+                <stop offset="100%" stop-color="#4A7864"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Stem -->
+            <path d="M220 600 C 218 480, 224 380, 220 280 C 216 200, 222 140, 220 90" stroke="url(#stemG)" stroke-width="6" stroke-linecap="round" fill="none"/>
+
+            <!-- Big LEFT cotyledon -->
+            <path d="M220 280 C 150 245, 60 230, 25 175 C 18 165, 22 152, 36 150 C 110 138, 175 200, 218 270 Z" fill="url(#leafA)"/>
+            <!-- Left leaf vein -->
+            <path d="M218 270 C 175 260, 110 220, 50 175" stroke="#234D3D" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.55"/>
+            <path d="M170 250 L 145 215" stroke="#234D3D" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+            <path d="M140 240 L 110 212" stroke="#234D3D" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+
+            <!-- Big RIGHT cotyledon -->
+            <path d="M220 280 C 290 245, 380 230, 415 175 C 422 165, 418 152, 404 150 C 330 138, 265 200, 222 270 Z" fill="url(#leafB)"/>
+            <!-- Right leaf vein -->
+            <path d="M222 270 C 265 260, 330 220, 390 175" stroke="#234D3D" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.55"/>
+            <path d="M270 250 L 295 215" stroke="#234D3D" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+            <path d="M300 240 L 330 212" stroke="#234D3D" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+
+            <!-- Small upper-left emerging leaf -->
+            <path d="M220 130 C 195 115, 170 105, 158 88 C 154 82, 158 76, 166 78 C 192 84, 212 105, 220 128 Z" fill="url(#leafA)"/>
+            <path d="M220 128 C 205 120, 185 108, 168 92" stroke="#234D3D" stroke-width="1" stroke-linecap="round" opacity="0.5" fill="none"/>
+
+            <!-- Small upper-right emerging leaf -->
+            <path d="M220 100 C 244 88, 268 82, 282 68 C 286 62, 282 56, 274 58 C 250 64, 230 80, 220 98 Z" fill="url(#leafB)"/>
+            <path d="M220 98 C 236 90, 252 82, 270 70" stroke="#234D3D" stroke-width="1" stroke-linecap="round" opacity="0.5" fill="none"/>
+
+            <!-- Tiny seed dot at base -->
+            <circle cx="220" cy="608" r="4" fill="#3A6453"/>
+
+            <!-- Subtle ground hairline -->
+            <line x1="120" y1="616" x2="320" y2="616" stroke="#4A7864" stroke-width="1" stroke-opacity="0.25" stroke-dasharray="2 4"/>
+          </svg>
+        </div>
+
+        <!-- RIGHT — 3 feature rows with leaf icons -->
+        <div class="lg:col-span-4 relative z-10 reveal" data-delay="320">
+          <div class="space-y-0 border-t border-tide-deep/25">
+            <div class="feature-row flex items-center justify-between gap-5 py-5 border-b border-tide-deep/25">
+              <span class="font-serif text-ink" style="font-size: 18px; font-weight: 500;">Closed-loop water</span>
+              <span class="w-9 h-9 rounded-full bg-paper/70 border border-tide-deep/30 flex items-center justify-center text-tide-deep flex-shrink-0">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 C 9 7, 6 11, 6 14.5 A 6 6 0 0 0 18 14.5 C 18 11, 15 7, 12 3 Z"/></svg>
+              </span>
+            </div>
+            <div class="feature-row flex items-center justify-between gap-5 py-5 border-b border-tide-deep/25">
+              <span class="font-serif text-ink" style="font-size: 18px; font-weight: 500;">Solar-powered floors</span>
+              <span class="w-9 h-9 rounded-full bg-paper/70 border border-tide-deep/30 flex items-center justify-center text-tide-deep flex-shrink-0">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.5 4.5l2 2M17.5 17.5l2 2M4.5 19.5l2-2M17.5 6.5l2-2"/></svg>
+              </span>
+            </div>
+            <div class="feature-row flex items-center justify-between gap-5 py-5 border-b border-tide-deep/25">
+              <span class="font-serif text-ink" style="font-size: 18px; font-weight: 500;">Zero-waste dye lines</span>
+              <span class="w-9 h-9 rounded-full bg-paper/70 border border-tide-deep/30 flex items-center justify-center text-tide-deep flex-shrink-0">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 C 16 6, 20 10, 18 15 A 6 6 0 0 1 6 15 C 4 10, 8 6, 12 2 Z"/><path d="M9 14 C 10 16, 14 16, 15 14"/></svg>
+              </span>
+            </div>
           </div>
-          <div class="text-center px-6 py-7 border-t md:border-t-0 border-slate-text/20">
-            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">2030</div>
-            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">Decarbonisation target</span>
+
+          <!-- Mini "Learn More" footer cell — homage to the inspiration -->
+          <div class="mt-8 flex items-start justify-between gap-6">
+            <div class="max-w-[14rem]">
+              <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">Audited by Worldly·Higg, OEKO-TEX, GOTS, GRS &mdash; verified, not just claimed.</p>
+              <a href="#compliance" class="font-display font-semibold uppercase tracking-[0.18em] text-ink underline decoration-1 underline-offset-4 hover:text-tide-deep transition-colors mt-2 inline-block" style="font-size: 11px;">Learn more</a>
+            </div>
+            <!-- Rating chip -->
+            <div class="text-right flex-shrink-0">
+              <div class="font-display font-semibold text-ink leading-none flex items-baseline gap-1.5 justify-end">
+                <span style="font-size: 28px;">A</span>
+                <span class="text-slate-text/60" style="font-size: 18px;">/&nbsp;Higg FEM</span>
+              </div>
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-1.5 block">81% &middot; FTML, top decile</span>
+            </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         01b — HERO STAT BAND (kept from previous design — bridges hero into the numbers section)
+         ============================================================ -->
+    <section class="relative bg-tide-mist border-y border-tide-deep/15 px-6 md:px-12">
+      <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 md:divide-x divide-tide-deep/20">
+        <div class="text-center px-6 py-7 reveal">
+          <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">4,000 m&sup3;<span class="text-slate-text/55"> / day</span></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">Zero discharge</span>
+        </div>
+        <div class="text-center px-6 py-7 border-t md:border-t-0 border-tide-deep/20 reveal" data-delay="80">
+          <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">LEED Platinum</div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">UHM Green Factory</span>
+        </div>
+        <div class="text-center px-6 py-7 border-t md:border-t-0 border-tide-deep/20 reveal" data-delay="160">
+          <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 24px;">2030</div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/70 mt-2 block">Decarbonisation target</span>
         </div>
       </div>
     </section>
