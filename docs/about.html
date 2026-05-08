@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Urmi Group — Seventy years on the Buriganga</title>
+    <meta
+      name="description"
+      content="From a brickfield on the Buriganga to the looms of the world. Seventy years of craft at Urmi Group — Bangladesh's first Full-Green RMG group."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'urmi-blue':       '#1E5C9F',
+              'urmi-blue-deep':  '#143F73',
+              'wave-blue':       '#5BA0DE',
+              'wave-blue-bright':'#8FCBFF',
+              'wave-blue-soft':  '#C5DCEF',
+              'tide':            '#7FAA9C',
+              'tide-deep':       '#4A7864',
+              'tide-soft':       '#DCE9E3',
+              'tide-mist':       '#F0F5F2',
+              'mist':            '#F4F7FB',
+              'seafoam':         '#E8F0EC',
+              'paper':           '#FCFDFC',
+              'cloud':           '#E0E8E5',
+              'ink':             '#0F1E33',
+              'slate-text':      '#3F5468',
+              'cream':           '#F5EFE3',
+            },
+            fontFamily: {
+              serif: ["'Playfair Display'", 'Georgia', 'serif'],
+              sans: ["'Inter'", 'system-ui', 'sans-serif'],
+              mono: ["'IBM Plex Mono'", 'ui-monospace', 'monospace'],
+              display: ["'Manrope'", 'system-ui', 'sans-serif'],
+              bengali: ["'Hind Siliguri'", 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body { background: #F0F5F2; color: #3F5468; font-family: 'Inter', sans-serif; }
+      h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: #0F1E33; }
+
+      /* Subtle grain overlay across page (3% opacity) */
+      .grain::after {
+        content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+        background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        opacity: 0.03;
+      }
+
+      /* Reveal-on-scroll utility */
+      .reveal { opacity: 0; transform: translateY(20px); transition: opacity 700ms cubic-bezier(0.22,1,0.36,1), transform 700ms cubic-bezier(0.22,1,0.36,1); }
+      .reveal.is-visible { opacity: 1; transform: translateY(0); }
+      .reveal[data-delay="80"]   { transition-delay: 80ms; }
+      .reveal[data-delay="160"]  { transition-delay: 160ms; }
+      .reveal[data-delay="240"]  { transition-delay: 240ms; }
+      .reveal[data-delay="320"]  { transition-delay: 320ms; }
+      .reveal[data-delay="400"]  { transition-delay: 400ms; }
+      .reveal[data-delay="480"]  { transition-delay: 480ms; }
+
+      /* Hand-drawn wave underline (draws on once) */
+      .wave-draw path { stroke-dasharray: 280; stroke-dashoffset: 280; transition: stroke-dashoffset 1200ms ease-out 600ms; }
+      .wave-draw.is-visible path { stroke-dashoffset: 0; }
+
+      /* Drop cap for OriginStory */
+      .drop-cap {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 96px; line-height: 0.75; color: #143F73; font-weight: 600;
+        float: left; margin: 4px 10px 0 0; padding-top: 4px;
+      }
+
+      /* Leadership grayscale → color on hover */
+      .leader-portrait img { filter: grayscale(100%); transition: filter 600ms ease, transform 800ms ease; }
+      .leader-portrait:hover img { filter: grayscale(0%); transform: scale(1.02); }
+
+      /* Timeline horizontal scroll container (desktop) */
+      .timeline-track { will-change: transform; }
+      .timeline-node-card {
+        opacity: 0; transform: translateY(8px); pointer-events: none;
+        transition: opacity 200ms ease-out, transform 200ms ease-out;
+      }
+      .timeline-node:hover .timeline-node-card,
+      .timeline-node:focus-within .timeline-node-card { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+      /* Ripple bg for the closing CTA section */
+      @keyframes about-ripple {
+        0%   { transform: scale(0); opacity: 0.45; }
+        100% { transform: scale(2.4); opacity: 0; }
+      }
+      .about-ripple-ring {
+        animation: about-ripple 5s cubic-bezier(0.22,1,0.36,1) infinite;
+        transform-origin: center center;
+      }
+
+      /* Pulse for tide-deep accent dots */
+      @keyframes pulse-dot { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.5); opacity: 0.4; } }
+      .pulse-dot { animation: pulse-dot 2.4s ease-in-out infinite; }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        .reveal { opacity: 1 !important; transform: none !important; }
+        .wave-draw path { stroke-dashoffset: 0 !important; }
+        .leader-portrait img { filter: grayscale(0%) !important; }
+      }
+    </style>
+  </head>
+
+  <body class="antialiased overflow-x-hidden">
+
+    <!-- ============================================================
+         FLOATING PILL NAVBAR (matches /docs/index.html — About active)
+         ============================================================ -->
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)]" aria-label="Primary">
+      <div class="flex items-center gap-2 md:gap-3 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full pl-2 pr-2 md:pl-3 md:pr-4 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
+        <a href="index.html" class="flex items-center justify-center bg-paper/8 rounded-full px-2 py-1 hover:bg-paper/15 transition-colors" aria-label="Urmi Group home">
+          <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
+        </a>
+        <span class="w-px h-5 bg-paper/15 hidden md:inline-block" aria-hidden="true"></span>
+        <div class="hidden lg:flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-display font-semibold text-paper/85">
+          <a href="about.html" aria-current="page" class="px-3 py-1.5 rounded-full bg-paper/15 text-paper transition-colors">About</a>
+          <a href="index.html#craft" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Craft</a>
+          <a href="index.html#portfolio" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Portfolio</a>
+          <a href="index.html#sustainability" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Sustain</a>
+          <a href="index.html#certifications" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Credentials</a>
+          <a href="index.html#connect" class="ml-1 px-4 py-1.5 rounded-full bg-paper text-urmi-blue-deep hover:bg-wave-blue hover:text-paper transition-colors">Connect</a>
+        </div>
+        <button type="button" aria-label="Open menu" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Floating action chips (top-right) -->
+    <div class="fixed top-4 md:top-6 right-4 md:right-6 z-50 flex items-center gap-2" aria-label="Quick actions">
+      <a href="index.html#factories" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l5-3v3l5-3v3l5-3v15"/><path d="M3 21h18"/><path d="M9 21v-4M14 21v-4"/></svg>
+        <span class="hidden lg:inline">Visit Factory</span>
+      </a>
+      <a href="index.html#connect" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v5h5"/><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5z"/><path d="M9 13h6M9 17h4"/></svg>
+        <span class="hidden lg:inline">Request Quote</span>
+      </a>
+      <button type="button" aria-label="Search" class="inline-flex items-center justify-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full p-2.5 text-paper shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+
+    <!-- ============================================================
+         01 — HERO ABOUT
+         60vh, split 50/50, archival photo + editorial copy
+         ============================================================ -->
+    <section class="relative min-h-[60vh] md:min-h-[680px] grid grid-cols-1 md:grid-cols-2 bg-tide-mist overflow-hidden pt-20 md:pt-0">
+      <!-- LEFT — sepia archival photograph with hairline frame -->
+      <div class="relative aspect-[4/5] md:aspect-auto md:min-h-[680px] overflow-hidden bg-cloud grain reveal" data-delay="0">
+        <img src="assets/waves/pillar-01.jpg" alt="The Buriganga River, where Urmi Group began in 1955" loading="eager" class="absolute inset-0 w-full h-full object-cover" style="filter: sepia(0.35) contrast(1.05);" />
+        <!-- Sepia atmospheric overlay -->
+        <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(245,239,227,0.10) 0%, rgba(20,63,115,0.20) 100%);" aria-hidden="true"></div>
+        <!-- Hairline inset frame -->
+        <div class="absolute inset-6 border border-paper/55 pointer-events-none" aria-hidden="true"></div>
+      </div>
+
+      <!-- RIGHT — editorial column -->
+      <div class="relative bg-tide-mist flex flex-col justify-center px-8 md:px-16 py-16 md:py-0 reveal" data-delay="160">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">ABOUT URMI — ০১</span>
+        <span class="font-bengali text-[40px] md:text-[44px] text-urmi-blue-deep mt-4 leading-none font-medium" aria-label="Urmi (the wave)">ঊর্মি</span>
+        <span class="italic font-serif text-sm text-slate-text/75 mt-1 block">(The wave.)</span>
+        <h1 class="font-serif font-semibold leading-[1.05] text-urmi-blue-deep mt-6" style="font-size: clamp(42px, 5vw, 72px);">
+          From a brickfield on the Buriganga<br>
+          to the looms of <em class="italic" style="color:#1E5C9F">the world.</em>
+        </h1>
+        <p class="font-serif italic text-base md:text-lg text-slate-text leading-relaxed max-w-md mt-5">
+          Seventy years. Five rivers. One unbroken current of craft &mdash; still flowing, still rising.
+        </p>
+        <!-- Hand-drawn wave underline accent -->
+        <svg class="wave-draw mt-8" width="240" height="16" viewBox="0 0 240 16" fill="none" aria-hidden="true">
+          <path d="M2 8 C 30 0, 60 16, 90 8 S 150 0, 180 8 S 230 16, 238 8" stroke="#5BA0DE" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         02 — ORIGIN STORY (single column, drop cap)
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12 grain">
+      <div class="relative z-10 max-w-[720px] mx-auto">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">THE FIRST WAVE — ০২</span>
+        <h2 class="font-serif text-urmi-blue-deep mt-4 leading-[1.05] reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px);">
+          Every river begins as a stone in still water.
+        </h2>
+
+        <div class="mt-10 space-y-6 text-slate-text font-sans" style="font-size: 18px; line-height: 1.75;">
+          <p class="reveal" data-delay="160">
+            <span class="drop-cap">I</span>n 1955, on the slow brown bend of the Buriganga, a single brickfield began turning earth into shelter. From that one kiln came a navigation company, then a shipping line that carried petroleum up the Padma and the Meghna for half a century, and &mdash; in 1984 &mdash; a small garments unit named for a Bengali word that had quietly carried a family for three generations.
+          </p>
+
+          <p class="reveal" data-delay="240">
+            <span class="font-bengali text-2xl md:text-[26px] text-urmi-blue-deep block my-4 font-medium" style="letter-spacing: 0.05em;">ঊর্মি &mdash; the wave.</span>
+            Four decades later, that single garments unit has become one of Bangladesh's largest readymade garment groups. A hundred and fifty production lines. Three hundred and fifteen thousand garments leaving our floors every single day. Sixteen thousand eight hundred and ninety-three people &mdash; in Demra, in Tejgaon, in Sreepur, in Siddhirganj &mdash; turning cotton into the clothes worn in Europe, Japan, North America, and beyond.
+          </p>
+        </div>
+
+        <!-- Mid-paragraph archival image -->
+        <figure class="mt-12 mb-12 reveal" data-delay="320">
+          <div class="relative h-[260px] md:h-[320px] w-full overflow-hidden bg-cloud">
+            <img src="assets/waves/pillar-01.jpg" alt="Buriganga River, archival" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: sepia(0.4) contrast(1.05);" />
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, transparent 60%, rgba(20,63,115,0.30) 100%);" aria-hidden="true"></div>
+          </div>
+          <figcaption class="font-serif italic text-[13px] text-slate-text mt-3">Buriganga River, 1955.</figcaption>
+        </figure>
+
+        <div class="space-y-6 text-slate-text font-sans" style="font-size: 18px; line-height: 1.75;">
+          <p class="reveal" data-delay="80">
+            Three factories run on closed-loop water. The country's first full-green certification. Rooftop solar generating 3,145 MWh every year. Twenty-two new companies founded between 1955 and 2022, the last one bearing the name that says everything about who we are: <em class="italic font-medium text-urmi-blue-deep">Wave Riders Limited.</em>
+          </p>
+          <p class="font-serif italic text-urmi-blue-deep reveal" data-delay="160" style="font-size: 22px; line-height: 1.5;">
+            And every morning, the river rises, and the wave begins again.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         03 — VALUE ECOSYSTEM (Mission/Vision + 4 Currents + Pull quote)
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
+      <div class="relative z-10 mx-auto max-w-6xl">
+
+        <!-- ROW 1 — Mission / Vision split -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+          <div class="reveal">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">OUR MISSION</span>
+            <p class="text-slate-text mt-3 max-w-sm" style="font-size: 18px; line-height: 1.7;">
+              To turn every thread into a quiet promise &mdash; to the buyer who trusts us, to the colleague who weaves it, and to the river it returns to.
+            </p>
+          </div>
+          <div class="reveal" data-delay="160">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">OUR VISION</span>
+            <p class="text-slate-text mt-3 max-w-sm" style="font-size: 18px; line-height: 1.7;">
+              To be the world's most preferred supplier of conscious garments &mdash; the manufacturer global brands choose first when craft, scale, and sustainability all have to be true at once.
+            </p>
+          </div>
+        </div>
+
+        <!-- ROW 2 — Four Currents -->
+        <div class="mt-20 md:mt-24">
+          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">WHAT MOVES US — ০৩</span>
+          <h3 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.1;">
+            A current with <em class="italic" style="color:#4A7864">a conscience.</em>
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-10 md:mt-12">
+            <!-- CARD 1 — Human Rights -->
+            <article class="value-card group bg-paper border border-cloud p-6 md:p-7 hover:border-l-2 hover:border-l-wave-blue hover:-translate-y-1 transition-all duration-300 reveal" data-delay="0">
+              <div class="aspect-square w-full overflow-hidden bg-cloud mb-5">
+                <img src="assets/waves/pillar-02.jpg" alt="Hands on the factory floor — worker safety, wellbeing, inclusivity" loading="lazy" class="w-full h-full object-cover" style="filter: sepia(0.20) saturate(0.85);" />
+              </div>
+              <h4 class="font-sans font-bold text-urmi-blue-deep" style="font-size: 18px;">Human Rights</h4>
+              <p class="text-slate-text mt-2" style="font-size: 15px; line-height: 1.65;">
+                Urmi has an exceptional history of worker safety, wellbeing, and inclusivity &mdash; because excellence isn't sustainable if the people making it aren't safe, heard, and well. Every factory carries an on-site medical centre, a child care facility, clean water, and climate-controlled floors. 89 differently-abled colleagues are employed across our group. 48,124 hours of training delivered in 2023&ndash;24 alone.
+              </p>
+            </article>
+
+            <!-- CARD 2 — Design + Innovation -->
+            <article class="value-card group bg-paper border border-cloud p-6 md:p-7 hover:border-l-2 hover:border-l-wave-blue hover:-translate-y-1 transition-all duration-300 reveal" data-delay="120">
+              <div class="aspect-square w-full overflow-hidden bg-cloud mb-5">
+                <img src="assets/crafts/printing.png" alt="In-house design and printing studio" loading="lazy" class="w-full h-full object-cover" style="filter: sepia(0.18) saturate(0.85);" />
+              </div>
+              <h4 class="font-sans font-bold text-urmi-blue-deep" style="font-size: 18px;">Design + Innovation</h4>
+              <p class="text-slate-text mt-2" style="font-size: 15px; line-height: 1.65;">
+                A dedicated in-house studio contributes fresh ideas and assists buyers in optimising seasonal collections. When your brief arrives, a design team is already inside it.
+              </p>
+            </article>
+
+            <!-- CARD 3 — Eco Obsession -->
+            <article class="value-card group bg-paper border border-cloud p-6 md:p-7 hover:border-l-2 hover:border-l-wave-blue hover:-translate-y-1 transition-all duration-300 reveal" data-delay="240">
+              <div class="aspect-square w-full overflow-hidden bg-cloud mb-5">
+                <img src="assets/waves/pillar-03.jpg" alt="Bangladesh's first full Green Factory" loading="lazy" class="w-full h-full object-cover" style="filter: sepia(0.18) saturate(0.85);" />
+              </div>
+              <h4 class="font-sans font-bold text-urmi-blue-deep" style="font-size: 18px;">Eco Obsession</h4>
+              <p class="text-slate-text mt-2" style="font-size: 15px; line-height: 1.65;">
+                Sustainable factory planning and production processes built the country's first full Green Factory. An ETP processing 4,000 m&sup3; of wastewater daily. 64 tons of fabric waste recycled. A Decarbonisation roadmap running from 2008 to 2027. Not a policy document &mdash; a factory floor decision.
+              </p>
+            </article>
+
+            <!-- CARD 4 — Digital Transformation -->
+            <article class="value-card group bg-paper border border-cloud p-6 md:p-7 hover:border-l-2 hover:border-l-wave-blue hover:-translate-y-1 transition-all duration-300 reveal" data-delay="360">
+              <div class="aspect-square w-full overflow-hidden bg-cloud mb-5 relative">
+                <div class="absolute inset-0" style="background: linear-gradient(135deg, #143F73 0%, #1E5C9F 50%, #4A7864 100%);"></div>
+                <svg class="absolute inset-0 w-full h-full opacity-40" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <g fill="none" stroke="#FCFDFC" stroke-width="0.6" stroke-opacity="0.6">
+                    <line x1="20" y1="20" x2="80" y2="20"/><line x1="20" y1="40" x2="80" y2="40"/>
+                    <line x1="20" y1="60" x2="80" y2="60"/><line x1="20" y1="80" x2="80" y2="80"/>
+                    <circle cx="30" cy="40" r="2.2" fill="#FCFDFC" fill-opacity="0.85"/>
+                    <circle cx="50" cy="60" r="2.2" fill="#FCFDFC" fill-opacity="0.85"/>
+                    <circle cx="70" cy="20" r="2.2" fill="#FCFDFC" fill-opacity="0.85"/>
+                    <path d="M30 40 L 50 60 L 70 20" stroke="#5BA0DE" stroke-width="0.8"/>
+                  </g>
+                </svg>
+              </div>
+              <h4 class="font-sans font-bold text-urmi-blue-deep" style="font-size: 18px;">Digital Transformation</h4>
+              <p class="text-slate-text mt-2" style="font-size: 15px; line-height: 1.65;">
+                Urmi is reimagining ways of working more efficiently through automation and digital solutions &mdash; while consistently exceeding customer expectations. An RFID Journal Award in 2022 and a Digital Bangladesh Award in the same year confirm the direction we're moving.
+              </p>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- PULL QUOTE BAND (full-width band on tide-deep) -->
+      <div class="mt-20 md:mt-28 -mx-6 md:-mx-12 bg-tide-deep py-16 md:py-20 px-6 md:px-12 text-center">
+        <h2 class="font-serif italic text-paper max-w-4xl mx-auto leading-[1.2]" style="font-size: clamp(28px, 4vw, 48px); font-weight: 500;">
+          We don't make clothes for the season.<br>
+          We make them for <em class="not-italic font-semibold">the river that's still here next century.</em>
+        </h2>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         04 — IMPACT VALUES (six tiles spelling I-M-P-A-C-T)
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
+      <div class="relative z-10 max-w-5xl mx-auto">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">OUR IMPACT — ০৪</span>
+        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05;">
+          Six values. One acronym. <em class="italic" style="color:#1E5C9F">Every decision.</em>
+        </h2>
+        <p class="font-serif italic text-slate-text mt-4 max-w-md reveal" data-delay="160" style="font-size: 18px;">
+          We don't print values on posters. We measure them on the floor.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-12 md:mt-16">
+          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="0">
+            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">I</span>
+            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Integrity</h4>
+            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
+              What we promise the buyer is what we deliver to the floor &mdash; on time, on spec, on brief. Every time.
+            </p>
+          </article>
+          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="80">
+            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">M</span>
+            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Mutual Trust</h4>
+            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
+              Buyers, suppliers, and 16,893 colleagues on one page. The wave moves because every part of it moves together.
+            </p>
+          </article>
+          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="160">
+            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">P</span>
+            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Passion for Excellence</h4>
+            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
+              Continuous improvement is written into our DNA. From the 1,386 tons of CO&sub2; saved by our exhaust gas boiler in 2008 to the 967 kWp of rooftop solar commissioned in 2024 &mdash; we are always improving something.
+            </p>
+          </article>
+          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="240">
+            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">A</span>
+            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Agility</h4>
+            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
+              When fashion shifts, we are already cutting. 150 production lines and a vertically integrated supply chain mean we can move from brief to bulk faster than most.
+            </p>
+          </article>
+          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="320">
+            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">C</span>
+            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Customer Focus</h4>
+            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
+              Your design philosophy is our craft. Our in-house studio, our 188,000-piece-per-day printing capacity, and our seamless knitting line exist to support your vision, not ours.
+            </p>
+          </article>
+          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="400">
+            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">T</span>
+            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Teamwork &amp; Co-operation</h4>
+            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
+              Because no wave moves alone. 16,893 people &mdash; officers, staff, and workers &mdash; all pulling the same thread.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         05 — LEADERSHIP (3 portrait cards, grayscale → color)
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
+      <div class="relative z-10 max-w-6xl mx-auto">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">THE TIDE BEARERS — ০৫</span>
+        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05;">
+          Three generations. <em class="italic" style="color:#1E5C9F">One direction.</em>
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 md:mt-16">
+          <!-- CHAIRMAN -->
+          <article class="leader-portrait reveal" data-delay="0">
+            <div class="relative aspect-[4/5] w-full overflow-hidden bg-cloud">
+              <!-- Editorial silhouette placeholder -->
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #DCE9E3 0%, #7FAA9C 60%, #4A7864 100%);"></div>
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                  <linearGradient id="leader-1" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#143F73" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="#143F73" stop-opacity="0.55"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="100" cy="105" rx="40" ry="48" fill="url(#leader-1)"/>
+                <path d="M 30,250 C 30,180 50,150 100,150 C 150,150 170,180 170,250 Z" fill="url(#leader-1)"/>
+                <text x="100" y="240" font-family="Playfair Display" font-size="14" fill="#FCFDFC" fill-opacity="0.72" text-anchor="middle" font-style="italic">A.A.</text>
+              </svg>
+              <img src="" alt="Portrait of Mr. Ashfaque Ahmed, Chairman" class="hidden" />
+            </div>
+            <h3 class="font-serif text-urmi-blue-deep mt-5" style="font-size: 24px; font-weight: 600;">Mr. Ashfaque Ahmed</h3>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-1 block">CHAIRMAN</span>
+            <p class="text-slate-text mt-4" style="font-size: 15px; line-height: 1.65;">
+              Mr. Ashfaque Ahmed built the group from the ground up &mdash; from a brick field in Fatulla in 1955 to one of Bangladesh's most recognised garment manufacturers today. His belief that a business must be as responsible to the community it employs as to the buyers it serves has shaped every decision the group has made across seven decades.
+            </p>
+            <p class="font-serif italic text-urmi-blue-deep mt-4 border-l-2 border-wave-blue pl-4" style="font-size: 16px;">
+              "The river never repeats itself. Neither should we."
+            </p>
+          </article>
+
+          <!-- MD -->
+          <article class="leader-portrait reveal" data-delay="160">
+            <div class="relative aspect-[4/5] w-full overflow-hidden bg-cloud">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #C5DCEF 0%, #5BA0DE 55%, #1E5C9F 100%);"></div>
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                  <linearGradient id="leader-2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#143F73" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="#143F73" stop-opacity="0.55"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="100" cy="105" rx="40" ry="48" fill="url(#leader-2)"/>
+                <path d="M 30,250 C 30,180 50,150 100,150 C 150,150 170,180 170,250 Z" fill="url(#leader-2)"/>
+                <text x="100" y="240" font-family="Playfair Display" font-size="14" fill="#FCFDFC" fill-opacity="0.72" text-anchor="middle" font-style="italic">A.A.</text>
+              </svg>
+              <img src="" alt="Portrait of Mr. Asif Ashraf, Managing Director" class="hidden" />
+            </div>
+            <h3 class="font-serif text-urmi-blue-deep mt-5" style="font-size: 24px; font-weight: 600;">Mr. Asif Ashraf</h3>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-1 block">MANAGING DIRECTOR</span>
+            <p class="text-slate-text mt-4" style="font-size: 15px; line-height: 1.65;">
+              Asif has led Urmi's continuous-improvement programme through its most transformative decade &mdash; building the country's first complete green factory in joint venture with Toray Japan, commissioning Bangladesh's first and largest seamless knitting line, and growing the group's annual turnover from $105M in 2015 to $250M in 2024 with a $290M projection for 2025.
+            </p>
+            <p class="font-serif italic text-urmi-blue-deep mt-4 border-l-2 border-wave-blue pl-4" style="font-size: 16px;">
+              "Sustainability isn't a department here. It's the floor we walk on."
+            </p>
+          </article>
+
+          <!-- DIRECTOR -->
+          <article class="leader-portrait reveal" data-delay="320">
+            <div class="relative aspect-[4/5] w-full overflow-hidden bg-cloud">
+              <div class="absolute inset-0" style="background: linear-gradient(180deg, #DCE9E3 0%, #C5DCEF 50%, #1E5C9F 100%);"></div>
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                  <linearGradient id="leader-3" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#143F73" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="#143F73" stop-opacity="0.55"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="100" cy="105" rx="40" ry="48" fill="url(#leader-3)"/>
+                <path d="M 30,250 C 30,180 50,150 100,150 C 150,150 170,180 170,250 Z" fill="url(#leader-3)"/>
+                <text x="100" y="240" font-family="Playfair Display" font-size="14" fill="#FCFDFC" fill-opacity="0.72" text-anchor="middle" font-style="italic">F.R.</text>
+              </svg>
+              <img src="" alt="Portrait of Mr. Faiaz Rahman, Director" class="hidden" />
+            </div>
+            <h3 class="font-serif text-urmi-blue-deep mt-5" style="font-size: 24px; font-weight: 600;">Mr. Faiaz Rahman</h3>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep mt-1 block">DIRECTOR</span>
+            <p class="text-slate-text mt-4" style="font-size: 15px; line-height: 1.65;">
+              Faiaz oversees innovation, digital transformation, and the next chapter of Urmi's vertical integration &mdash; from the Wave Riders sewing facility currently under development to the 6,500 kWp solar installation planned for 2027. He was the driving force behind the RFID Journal Award and Digital Bangladesh Award wins in 2022.
+            </p>
+            <p class="font-serif italic text-urmi-blue-deep mt-4 border-l-2 border-wave-blue pl-4" style="font-size: 16px;">
+              "The next wave is always closer than it looks."
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         06 — MD MESSAGE (italic letter, wave-blue left border)
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
+      <div class="relative z-10 max-w-[680px] mx-auto">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">FROM THE HELM — ০৬</span>
+
+        <div class="mt-8 border-l-4 border-wave-blue pl-8 md:pl-10 reveal" data-delay="80">
+          <p class="font-serif italic text-slate-text" style="font-size: 20px; line-height: 1.8;">
+            Continuous improvement is in the DNA of our organisation.
+          </p>
+          <p class="font-serif italic text-slate-text mt-6" style="font-size: 20px; line-height: 1.8;">
+            We strive, every day, to do better than we did yesterday &mdash; not because the market demands it, but because the river does. From our very first efficiency project in 2008 &mdash; an exhaust gas boiler that saved 1,386 tons of CO&sub2; a year &mdash; to the rooftop solar systems generating over 3,000 MWh annually today, every decision has been the same decision: leave this place better than you found it.
+          </p>
+          <p class="font-serif italic text-slate-text mt-6" style="font-size: 20px; line-height: 1.8;">
+            Our vision is to be the number-one preferred supplier of the world's top global brands. Europe takes 81% of what we make. Japan, through relationships as significant as our joint venture with Toray, takes 14%. M&amp;S, Puma, GU, Decathlon, MUJI, United Colors of Benetton, La Redoute &mdash; these are not names we display for prestige. They are relationships we have earned, standard by standard, shipment by shipment.
+          </p>
+          <p class="font-serif italic text-slate-text mt-6" style="font-size: 20px; line-height: 1.8;">
+            We employ 16,893 people across five locations in Bangladesh. Every one of them works in a climate-controlled, safety-audited, BetterWork-verified facility. Every one of them has access to on-site healthcare and clean water. 6.6% of our management is female &mdash; too low, and we know it. 48,124 hours of training delivered last year is how we raise it.
+          </p>
+          <p class="font-serif italic text-urmi-blue-deep mt-6" style="font-size: 20px; line-height: 1.8;">
+            Urmi's success lies in the empowerment of our people. The wave that started in 1955 has not stopped. It will not stop with us.
+          </p>
+        </div>
+
+        <!-- Signature -->
+        <div class="mt-10 reveal" data-delay="160">
+          <!-- Inline signature SVG (placeholder script style) -->
+          <svg width="200" height="56" viewBox="0 0 200 56" fill="none" aria-label="Signature of Asif Ashraf">
+            <path d="M5 38 C 12 18, 24 50, 36 28 C 44 14, 56 36, 64 26 C 72 16, 80 32, 92 24 C 104 16, 112 38, 124 28 C 136 18, 152 36, 168 26 C 180 18, 192 30, 195 26"
+                  stroke="#143F73" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <path d="M16 46 L 188 46" stroke="#143F73" stroke-width="0.8" stroke-opacity="0.35"/>
+          </svg>
+          <p class="text-slate-text mt-3" style="font-size: 15px;">
+            <span class="font-serif font-semibold text-urmi-blue-deep">Asif Ashraf</span><br>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">Managing Director, Urmi Group</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         07 — TIMELINE (horizontal scroll on desktop, vertical on mobile)
+         ============================================================ -->
+    <section id="timeline-section" class="relative bg-tide-mist overflow-hidden">
+
+      <!-- Header (above the pinned scroll runway) -->
+      <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12 pt-20 md:pt-32 pb-10">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">SEVEN DECADES — ০৭</span>
+        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05;">
+          One unbroken <em class="italic" style="color:#1E5C9F">wave.</em>
+        </h2>
+        <p class="font-serif italic text-slate-text mt-3 reveal" data-delay="160" style="font-size: 16px;">
+          Hover over any year. The wave has been building since before you were born.
+        </p>
+      </div>
+
+      <!-- DESKTOP: pinned horizontal-scroll timeline -->
+      <div id="timeline-pin" class="hidden lg:block relative h-screen overflow-hidden">
+        <!-- Sticky decade indicator (top-right) -->
+        <div id="decade-indicator" class="absolute top-8 right-8 z-30 font-display font-semibold text-[13px] uppercase tracking-[0.32em] text-urmi-blue-deep">1950s</div>
+
+        <div class="absolute inset-0 flex items-center">
+          <div id="timeline-track" class="timeline-track relative h-full flex items-center pl-[8vw] pr-[8vw]" style="min-width: 4800px;">
+            <!-- Continuous wave SVG behind nodes -->
+            <svg id="wave-path-svg" class="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none" width="4800" height="320" viewBox="0 0 4800 320" fill="none" preserveAspectRatio="none" aria-hidden="true">
+              <path id="wave-path" d="M 80 160 C 240 60, 380 260, 560 160 C 740 60, 880 260, 1060 160 C 1240 60, 1380 260, 1560 160 C 1740 60, 1880 260, 2060 160 C 2240 60, 2380 260, 2560 160 C 2740 60, 2880 260, 3060 160 C 3240 60, 3380 260, 3560 160 C 3740 60, 3880 260, 4060 160 C 4240 60, 4380 260, 4720 160" stroke="#5BA0DE" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+
+            <!-- 15 milestone nodes positioned along the wave -->
+            <div role="list" aria-label="Company timeline from 1955 to 2022" class="relative w-full h-full">
+              <!-- Each node uses an absolute left % derived from 0..100% across 4800px -->
+              <!-- Helper macro: positions are 80, 392, 704, 1016, 1328, 1640, 1952, 2264, 2576, 2888, 3200, 3512, 3824, 4136, 4448 (15 evenly-ish spaced nodes) -->
+
+              <!-- 1955 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 80px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">1955</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist relative">
+                    <span class="absolute inset-0 rounded-full bg-wave-blue pulse-dot" aria-hidden="true"></span>
+                  </span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">Fatulla Brick Field</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full overflow-hidden bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #4A7864 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">The origin. A brickfield on the Buriganga River, turning clay into building material. The group that would one day dress the world began with earth and fire.</p>
+                </div>
+              </div>
+
+              <!-- 1958 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 392px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">1958</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">Stoneville Engineering</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #C5DCEF 0%, #1E5C9F 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">The second stone. Engineering capabilities built from the ground up alongside the brick trade.</p>
+                </div>
+              </div>
+
+              <!-- 1974 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 704px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">1974</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">URMI Navigation</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #5BA0DE 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">The river becomes a highway. Urmi begins chartering the waterways of Bangladesh &mdash; the Padma, the Meghna &mdash; decades before most competitors even knew them by name.</p>
+                </div>
+              </div>
+
+              <!-- 1979 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 1016px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">1979</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">URMI Shipping</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #C5DCEF 0%, #143F73 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">A formal shipping arm is established, carrying petroleum for Bangladesh Petroleum Corporation. The wave learns to move across water.</p>
+                </div>
+              </div>
+
+              <!-- 1984 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 1328px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">1984</span>
+                  <span class="w-4 h-4 rounded-full bg-tide-deep ring-4 ring-tide-mist relative">
+                    <span class="absolute inset-0 rounded-full bg-tide-deep pulse-dot"></span>
+                  </span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1 font-semibold" style="font-size: 13px;">URMI Garments</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[300px] bg-paper border border-tide-deep p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #4A7864 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">ঊর্মি is born. A small garments unit in Demra, Dhaka. The name means <em class="italic">wave</em>. It was, from the beginning, a promise of continuous motion.</p>
+                </div>
+              </div>
+
+              <!-- 1994 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 1640px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">1994</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">Attires Manufacturing</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #1E5C9F 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">Capacity grows. A second garments unit opens in Tejgaon, Dhaka, adding scale and specialisation.</p>
+                </div>
+              </div>
+
+              <!-- 2002 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 1952px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2002</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">FTML Textiles</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #C5DCEF 0%, #4A7864 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">Vertical integration begins. Fakhruddin Textile Mills opens in Sreepur, Gazipur &mdash; bringing knitting, dyeing, and finishing in-house for the first time.</p>
+                </div>
+              </div>
+
+              <!-- 2006 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 2264px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2006</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">FTML Stitching</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #7FAA9C 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">The textile and garments arms are joined. A vertically integrated supply chain now takes cotton from fibre to finished garment under one ownership.</p>
+                </div>
+              </div>
+
+              <!-- 2008 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 2576px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2008</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">Dots &amp; Marks</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #C5DCEF 0%, #5BA0DE 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">A dedicated printing facility opens. 188,000 pieces a day, from oval printing to PAD machines to heat transfer. Every colour, every technique, in-house.</p>
+                </div>
+              </div>
+
+              <!-- 2012 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 2888px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2012</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">Poly Corr Packaging</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #4A7864 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">The chain extends to the box. Packaging is brought in-house, completing the fibre-to-shipment story.</p>
+                </div>
+              </div>
+
+              <!-- 2015 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 3200px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2015</span>
+                  <span class="w-4 h-4 rounded-full bg-tide-deep ring-4 ring-tide-mist relative">
+                    <span class="absolute inset-0 rounded-full bg-tide-deep pulse-dot"></span>
+                  </span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1 font-semibold" style="font-size: 13px;">UHM &mdash; Full Green</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[300px] bg-paper border border-tide-deep p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #4A7864 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">Bangladesh's first complete green factory. A joint venture with Toray, Japan. LEED Platinum certified. The wave plants its flag on sustainable manufacturing.</p>
+                </div>
+              </div>
+
+              <!-- 2016 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 3512px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2016</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">Seamless Knitting</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #C5DCEF 0%, #143F73 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">Bangladesh's first and largest seamless knitting line. 78 SANTONI Top2V machines. 14,500 pieces per day of garments without a single seam to cut or waste.</p>
+                </div>
+              </div>
+
+              <!-- 2019 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 3824px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2019</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">AgroSAL Ltd</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #7FAA9C 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">Diversification into agriculture &mdash; a quiet nod to the land that feeds the cotton fields the group was founded on.</p>
+                </div>
+              </div>
+
+              <!-- 2021 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 4136px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2021</span>
+                  <span class="w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1" style="font-size: 13px;">UGL Expansion</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[280px] bg-paper border border-cloud p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #C5DCEF 0%, #1E5C9F 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">The flagship garments unit relocates and expands capacity &mdash; now 3,228 people, 150 production lines, 315,000 pieces a day.</p>
+                </div>
+              </div>
+
+              <!-- 2022 -->
+              <div role="listitem" class="timeline-node absolute group" style="left: 4448px; top: 50%; transform: translate(-50%, -50%);">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="font-serif text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">2022</span>
+                  <span class="w-4 h-4 rounded-full bg-tide-deep ring-4 ring-tide-mist relative">
+                    <span class="absolute inset-0 rounded-full bg-tide-deep pulse-dot"></span>
+                  </span>
+                  <span class="font-sans text-slate-text whitespace-nowrap mt-1 font-semibold" style="font-size: 13px;">Wave Riders Ltd</span>
+                </div>
+                <div class="timeline-node-card absolute left-1/2 -translate-x-1/2 -top-[260px] w-[300px] bg-paper border border-tide-deep p-5 shadow-sm z-20">
+                  <div class="aspect-video w-full bg-cloud mb-3" style="background: linear-gradient(135deg, #DCE9E3 0%, #4A7864 100%);"></div>
+                  <p class="text-slate-text" style="font-size: 13px; line-height: 1.55;">The newest company in the group. The name says everything. <em class="italic">The wave rides on.</em></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE / TABLET fallback: vertical timeline -->
+      <div class="lg:hidden relative max-w-2xl mx-auto px-6 py-12">
+        <div class="absolute left-8 top-12 bottom-12 w-px bg-tide" aria-hidden="true"></div>
+        <ol role="list" aria-label="Company timeline from 1955 to 2022" class="space-y-10">
+          <!-- A representative subset for mobile (all 15 are repeated in compact form) -->
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">1955</span><span class="font-sans font-semibold text-slate-text mt-1 block">Fatulla Brick Field</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">The origin. A brickfield on the Buriganga River, turning clay into building material.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">1958</span><span class="font-sans font-semibold text-slate-text mt-1 block">Stoneville Engineering Ltd</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">The second stone. Engineering capabilities built from the ground up alongside the brick trade.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">1974</span><span class="font-sans font-semibold text-slate-text mt-1 block">URMI Navigation Limited</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">The river becomes a highway. Urmi begins chartering the Padma and the Meghna decades before competitors knew them by name.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">1979</span><span class="font-sans font-semibold text-slate-text mt-1 block">URMI Shipping Company Limited</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">A formal shipping arm carrying petroleum for Bangladesh Petroleum Corporation.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-4 h-4 rounded-full bg-tide-deep ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">1984</span><span class="font-sans font-semibold text-slate-text mt-1 block">URMI Garments Limited</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">ঊর্মি is born. A small garments unit in Demra, Dhaka. The name means <em class="italic">wave</em>.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">1994</span><span class="font-sans font-semibold text-slate-text mt-1 block">Attires Manufacturing</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">A second garments unit opens in Tejgaon, Dhaka.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2002</span><span class="font-sans font-semibold text-slate-text mt-1 block">FTML &mdash; Textiles Unit</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">Knitting, dyeing, and finishing brought in-house in Sreepur.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2006</span><span class="font-sans font-semibold text-slate-text mt-1 block">FTML Stitching Unit</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">A vertically integrated supply chain from fibre to finished garment.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2008</span><span class="font-sans font-semibold text-slate-text mt-1 block">Dots &amp; Marks &mdash; Printing</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">188,000 pieces a day. Every colour, every technique, in-house.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2012</span><span class="font-sans font-semibold text-slate-text mt-1 block">Poly Corr Packaging</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">Packaging brought in-house, completing the fibre-to-shipment story.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-4 h-4 rounded-full bg-tide-deep ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2015</span><span class="font-sans font-semibold text-slate-text mt-1 block">UHM Ltd &mdash; Full Green Factory</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">Bangladesh's first complete green factory. JV with Toray. LEED Platinum certified.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2016</span><span class="font-sans font-semibold text-slate-text mt-1 block">Seamless Facility at FTML</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">Bangladesh's first and largest seamless line. 78 SANTONI Top2V machines.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2019</span><span class="font-sans font-semibold text-slate-text mt-1 block">AgroSAL Ltd</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">Diversification into agriculture &mdash; a quiet nod to the land.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2021</span><span class="font-sans font-semibold text-slate-text mt-1 block">URMI Garments &mdash; Expansion</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">3,228 people, 150 production lines, 315,000 pieces a day.</p></li>
+          <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-4 h-4 rounded-full bg-tide-deep ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">2022</span><span class="font-sans font-semibold text-slate-text mt-1 block">Wave Riders Limited</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">The newest company in the group. The name says everything. The wave rides on.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         08 — NUMBERS BAND (quiet ambient strip on urmi-blue-deep)
+         ============================================================ -->
+    <section class="bg-urmi-blue-deep py-14 md:py-16 px-6 md:px-12">
+      <div class="mx-auto max-w-6xl grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-y divide-paper/15 lg:divide-y-0 lg:divide-x lg:divide-paper/15">
+        <div class="text-center px-6 py-6"><div class="font-serif text-paper leading-none" style="font-size: clamp(36px, 4vw, 56px); font-weight: 600;">16,893</div><span class="font-mono text-paper/70 mt-2 block" style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">Colleagues</span></div>
+        <div class="text-center px-6 py-6"><div class="font-serif text-paper leading-none" style="font-size: clamp(36px, 4vw, 56px); font-weight: 600;">315,000</div><span class="font-mono text-paper/70 mt-2 block" style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">Garments daily</span></div>
+        <div class="text-center px-6 py-6"><div class="font-serif text-paper leading-none" style="font-size: clamp(36px, 4vw, 56px); font-weight: 600;">US$ 250M</div><span class="font-mono text-paper/70 mt-2 block" style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">Annual turnover 2024</span></div>
+        <div class="text-center px-6 py-6"><div class="font-serif text-paper leading-none" style="font-size: clamp(36px, 4vw, 56px); font-weight: 600;">81%</div><span class="font-mono text-paper/70 mt-2 block" style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">Exported to Europe</span></div>
+        <div class="text-center px-6 py-6"><div class="font-serif text-paper leading-none" style="font-size: clamp(36px, 4vw, 56px); font-weight: 600;">35%</div><span class="font-mono text-paper/70 mt-2 block" style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">Energy intensity reduction since 2017</span></div>
+        <div class="text-center px-6 py-6"><div class="font-serif text-paper leading-none" style="font-size: clamp(36px, 4vw, 56px); font-weight: 600;">2030</div><span class="font-mono text-paper/70 mt-2 block" style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;">Decarbonisation target</span></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         09 — CULTURE & PEOPLE (photo wall + paragraphs + testimonials)
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
+      <div class="relative z-10 max-w-6xl mx-auto">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">INSIDE THE WAVE — ০৯</span>
+        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05;">
+          A workplace built on <em class="italic" style="color:#4A7864">warmth.</em>
+        </h2>
+
+        <!-- ROW 1 — Editorial photo wall -->
+        <div class="grid grid-cols-3 grid-rows-2 gap-3 md:gap-4 mt-12 h-[420px] md:h-[560px]">
+          <div class="col-span-2 row-span-2 relative overflow-hidden bg-cloud grain reveal" data-delay="0">
+            <img src="assets/waves/pillar-02.jpg" alt="Inside Urmi's on-site child care centre" loading="lazy" class="w-full h-full object-cover" />
+            <div class="absolute bottom-3 left-3 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">Child Care Centre</div>
+          </div>
+          <div class="col-span-1 row-span-1 relative overflow-hidden bg-cloud grain reveal" data-delay="120">
+            <img src="assets/crafts/embroidery.png" alt="On-site medical centre at Urmi" loading="lazy" class="w-full h-full object-cover" />
+            <div class="absolute bottom-2 left-2 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2 py-0.5">Medical</div>
+          </div>
+          <div class="col-span-1 row-span-1 relative overflow-hidden bg-cloud grain reveal" data-delay="240">
+            <img src="assets/crafts/garments.png" alt="Climate-controlled factory floor" loading="lazy" class="w-full h-full object-cover" />
+            <div class="absolute bottom-2 left-2 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2 py-0.5">Floor</div>
+          </div>
+        </div>
+
+        <!-- ROW 2 — Culture paragraphs -->
+        <div class="mt-16 max-w-2xl reveal" data-delay="80">
+          <p class="text-slate-text" style="font-size: 17px; line-height: 1.75;">
+            Every factory floor at Urmi has four things that are non-negotiable: an on-site medical centre, a child care facility, clean water, and a climate-controlled working environment. These aren't CSR initiatives. They're operating standards. The logic is simple: <em class="italic font-medium text-urmi-blue-deep">the wave only moves as well as the people carrying it.</em>
+          </p>
+          <p class="text-slate-text mt-5" style="font-size: 17px; line-height: 1.75;">
+            In 2023&ndash;24, Urmi provided 48,124 hours of training across all units. 89 differently-abled colleagues work with us today. 6.6% of our management team are women &mdash; a number we are publicly committed to raising. Our factories are audited by BetterWork Bangladesh, Amfori BSCI, the Fair Wear Foundation, and the Social &amp; Labor Convergence Programme. The audits confirm what our workers already know.
+          </p>
+        </div>
+
+        <!-- ROW 3 — Testimonials -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-16 md:mt-20">
+          <article class="bg-paper p-7 md:p-8 reveal" data-delay="0">
+            <span class="font-serif block" style="font-size: 64px; line-height: 1; color: rgba(91,160,222,0.30);">&ldquo;</span>
+            <p class="font-serif italic text-urmi-blue-deep mt-2" style="font-size: 19px; line-height: 1.5;">
+              Before I joined the seamless line, I didn't know Bangladesh had this technology. Now I operate 78 SANTONI machines. I train new recruits. This factory gave me a skill that will stay with me everywhere I go.
+            </p>
+            <div class="my-6 w-12 h-px bg-slate-text/40" aria-hidden="true"></div>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">Floor Supervisor &mdash; FTML Seamless Unit, Sreepur</span>
+          </article>
+
+          <article class="bg-paper p-7 md:p-8 reveal" data-delay="160">
+            <span class="font-serif block" style="font-size: 64px; line-height: 1; color: rgba(91,160,222,0.30);">&ldquo;</span>
+            <p class="font-serif italic text-urmi-blue-deep mt-2" style="font-size: 19px; line-height: 1.5;">
+              The child care centre means I don't have to choose between my daughter and my work. She's three minutes from my sewing machine. That changes everything.
+            </p>
+            <div class="my-6 w-12 h-px bg-slate-text/40" aria-hidden="true"></div>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">Senior Operator &mdash; URMI Garments, Demra</span>
+          </article>
+
+          <article class="bg-paper p-7 md:p-8 reveal" data-delay="320">
+            <span class="font-serif block" style="font-size: 64px; line-height: 1; color: rgba(91,160,222,0.30);">&ldquo;</span>
+            <p class="font-serif italic text-urmi-blue-deep mt-2" style="font-size: 19px; line-height: 1.5;">
+              I came here as a trainee merchandiser. Within two years I was managing a buyer account. The work is real here &mdash; not assigned, not supervised. Owned.
+            </p>
+            <div class="my-6 w-12 h-px bg-slate-text/40" aria-hidden="true"></div>
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">Merchandising Executive &mdash; Corporate Office, Gulshan</span>
+          </article>
+        </div>
+
+        <div class="mt-10 reveal" data-delay="0">
+          <a href="#" class="inline-flex items-center gap-2 font-sans text-wave-blue hover:text-urmi-blue transition-colors group" style="font-size: 16px;">
+            See open roles
+            <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         10 — RECOGNITION (3 award columns + compliance + HIGG)
+         ============================================================ -->
+    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
+      <div class="relative z-10 max-w-5xl mx-auto">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">RECOGNITION — ১০</span>
+        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(28px, 3.5vw, 44px); line-height: 1.1;">
+          Acknowledged by the bodies that hold <em class="italic" style="color:#1E5C9F">the industry to its word.</em>
+        </h2>
+
+        <!-- 3 award columns -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 mt-12 md:mt-16">
+          <div class="reveal" data-delay="0">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block">INDUSTRY</span>
+            <ul class="mt-5 space-y-3 text-slate-text" style="font-size: 15px; line-height: 1.65;">
+              <li>HSBC Export Excellence Award, 2011 and 2018</li>
+              <li>LEED Platinum Certification, 2009</li>
+              <li>Bronze Award, BGAPMEA Export Trophy</li>
+              <li>Digital Bangladesh Award, 2022</li>
+              <li>RFID Journal Award, 2022</li>
+            </ul>
+          </div>
+
+          <div class="reveal" data-delay="160">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block">CUSTOMER</span>
+            <ul class="mt-5 space-y-3 text-slate-text" style="font-size: 15px; line-height: 1.65;">
+              <li>H&amp;M "Fast as a Bullet" Award, 2018</li>
+              <li>GU Partner Certification, 2019</li>
+              <li>Marks &amp; Spencer Certification Award, 2016</li>
+              <li>M&amp;S Rising Star Award, 2023</li>
+            </ul>
+          </div>
+
+          <div class="reveal" data-delay="320">
+            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block">ENVIRONMENTAL</span>
+            <ul class="mt-5 space-y-3 text-slate-text" style="font-size: 15px; line-height: 1.65;">
+              <li>Gold Winner, Social &amp; Environmental Excellence Award, 2014</li>
+              <li>Top Factory Award, Carbon Performance Improvement, 2014 &amp; 2015</li>
+              <li>Energy Efficiency, Sustainable Apparel Forum, 2017</li>
+              <li>GREEN BUTTON Qualification Certificate, 2024</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Thin divider -->
+        <div class="h-px bg-wave-blue/40 mt-12" aria-hidden="true"></div>
+
+        <!-- Compliance bar -->
+        <div class="mt-12 text-center">
+          <p class="text-slate-text/85 leading-loose" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">
+            Amfori BSCI &middot; Sedex &middot; ICS &middot; Social &amp; Labor Convergence &middot;
+            BetterWork Bangladesh &middot; UN Global Compact Network Bangladesh &middot;
+            RSC RMG Sustainability Council &middot; Fair Wear Foundation &middot; Fair Labor &middot;
+            LEED Platinum &middot; WRAP &middot; Fairtrade &middot; Worldly/Higg FEM Verified &middot;
+            OEKO-TEX &middot; OEKO-TEX Standard 100 &middot; GOTS &middot; Global Recycled Standard &middot;
+            OCS &middot; Recycled Claim Standard
+          </p>
+        </div>
+
+        <!-- HIGG SCORES -->
+        <div class="mt-14">
+          <div class="flex flex-wrap items-end justify-center gap-10 md:gap-16">
+            <!-- FTML 81% -->
+            <div class="text-center">
+              <svg width="80" height="80" viewBox="0 0 80 80" aria-hidden="true">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#3F5468" stroke-opacity="0.20" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#4A7864" stroke-width="6" stroke-linecap="round"
+                        stroke-dasharray="201" stroke-dashoffset="38" transform="rotate(-90 40 40)"/>
+                <text x="40" y="46" font-family="Playfair Display" font-size="20" font-weight="600" fill="#143F73" text-anchor="middle">81%</text>
+              </svg>
+              <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-text mt-2 block">FTML</span>
+            </div>
+            <!-- UGL 75% -->
+            <div class="text-center">
+              <svg width="80" height="80" viewBox="0 0 80 80" aria-hidden="true">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#3F5468" stroke-opacity="0.20" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#4A7864" stroke-width="6" stroke-linecap="round"
+                        stroke-dasharray="201" stroke-dashoffset="50" transform="rotate(-90 40 40)"/>
+                <text x="40" y="46" font-family="Playfair Display" font-size="20" font-weight="600" fill="#143F73" text-anchor="middle">75%</text>
+              </svg>
+              <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-text mt-2 block">UGL</span>
+            </div>
+            <!-- UHM 64% -->
+            <div class="text-center">
+              <svg width="80" height="80" viewBox="0 0 80 80" aria-hidden="true">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#3F5468" stroke-opacity="0.20" stroke-width="6"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="#4A7864" stroke-width="6" stroke-linecap="round"
+                        stroke-dasharray="201" stroke-dashoffset="72" transform="rotate(-90 40 40)"/>
+                <text x="40" y="46" font-family="Playfair Display" font-size="20" font-weight="600" fill="#143F73" text-anchor="middle">64%</text>
+              </svg>
+              <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-text mt-2 block">UHM</span>
+            </div>
+          </div>
+          <p class="font-serif italic text-slate-text text-center mt-6" style="font-size: 13px;">
+            HIGG FEM Verified Scores &mdash; 2023&ndash;24
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         11 — ABOUT CTA (full-bleed urmi-blue-deep + ripple bg)
+         ============================================================ -->
+    <section class="relative bg-urmi-blue-deep py-20 md:py-32 px-6 md:px-12 overflow-hidden text-paper text-center">
+      <!-- Concentric ripple SVG bg (3 rings, staggered) -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="xMidYMid slice" viewBox="0 0 800 600" aria-hidden="true">
+        <g fill="none" stroke="#FCFDFC" stroke-width="1" stroke-opacity="0.20">
+          <circle class="about-ripple-ring" cx="400" cy="300" r="60" style="animation-delay: 0s;"/>
+          <circle class="about-ripple-ring" cx="400" cy="300" r="60" style="animation-delay: 1.6s;"/>
+          <circle class="about-ripple-ring" cx="400" cy="300" r="60" style="animation-delay: 3.2s;"/>
+        </g>
+      </svg>
+
+      <div class="relative z-10 max-w-4xl mx-auto">
+        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-paper/85 block">CARRY THE WAVE FORWARD &mdash; ১১</span>
+        <h2 class="font-serif text-paper mt-4" style="font-size: clamp(36px, 5vw, 64px); line-height: 1.1; font-weight: 600;">
+          Where will the next <em class="italic" style="color:#5BA0DE">wave</em> take you?
+        </h2>
+        <p class="text-paper/80 mt-5 max-w-lg mx-auto" style="font-size: 18px; line-height: 1.65;">
+          Whether you want to source from us, work with us, or visit the factories where every thread begins &mdash; we're here.
+        </p>
+
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-0 sm:divide-x sm:divide-paper/20">
+          <a href="index.html#connect" class="cta-link group inline-flex items-center gap-2 font-sans text-paper px-6" style="font-size: 16px; letter-spacing: 0.05em;">
+            Become a Buyer
+            <span class="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+          </a>
+          <a href="#" class="cta-link group inline-flex items-center gap-2 font-sans text-paper px-6" style="font-size: 16px; letter-spacing: 0.05em;">
+            Join the Team
+            <span class="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+          </a>
+          <a href="index.html#factories" class="cta-link group inline-flex items-center gap-2 font-sans text-paper px-6" style="font-size: 16px; letter-spacing: 0.05em;">
+            Visit a Factory
+            <span class="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FOOTER (compact, matches index.html voice)
+         ============================================================ -->
+    <footer class="bg-urmi-blue-deep text-paper">
+      <div class="border-t border-paper/10">
+        <div class="mx-auto max-w-[90rem] px-6 md:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-paper/60 font-mono uppercase tracking-[0.18em]">
+          <p>&copy; 2026 Urmi Group. All rights reserved.</p>
+          <div class="flex items-center gap-5">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" class="hover:text-wave-blue transition-colors normal-case tracking-normal">LinkedIn</a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Instagram</a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" class="hover:text-wave-blue transition-colors normal-case tracking-normal">Facebook</a>
+          </div>
+          <p class="italic font-serif normal-case tracking-normal">Crafted on the Padma.</p>
+        </div>
+        <div class="mx-auto max-w-[90rem] px-6 md:px-12 pb-6 flex justify-center">
+          <a href="index.html" class="font-display font-semibold text-[10px] uppercase tracking-[0.22em] text-paper/55 hover:text-wave-blue transition-colors inline-flex items-center gap-2">
+            <span>&larr; Back to home</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================================================
+         GSAP for the timeline horizontal pinned scroll (desktop only)
+         ============================================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+      // ====== Reveal-on-scroll IntersectionObserver ======
+      (function () {
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var els = document.querySelectorAll('.reveal, .wave-draw');
+        if (prefersReduced) {
+          els.forEach(function (el) { el.classList.add('is-visible'); });
+          return;
+        }
+        if (!('IntersectionObserver' in window)) {
+          els.forEach(function (el) { el.classList.add('is-visible'); });
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.15 });
+        els.forEach(function (el) { io.observe(el); });
+      })();
+
+      // ====== GSAP horizontal-scroll timeline (desktop ≥ 1024px only) ======
+      (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.innerWidth < 1024) return;
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+        gsap.registerPlugin(ScrollTrigger);
+
+        var pin = document.getElementById('timeline-pin');
+        var track = document.getElementById('timeline-track');
+        var path = document.getElementById('wave-path');
+        var indicator = document.getElementById('decade-indicator');
+        if (!pin || !track) return;
+
+        var totalWidth = track.scrollWidth - window.innerWidth;
+        if (totalWidth <= 0) return;
+
+        // Wave-path stroke-dash draw-on as the user scrolls
+        if (path) {
+          var len = path.getTotalLength();
+          path.style.strokeDasharray = len;
+          path.style.strokeDashoffset = len;
+        }
+
+        // Decade lookup based on horizontal scroll progress
+        var decades = ['1950s','1950s','1970s','1970s','1980s','1990s','2000s','2000s','2000s','2010s','2010s','2010s','2010s','2020s','2020s'];
+        var stepCount = decades.length;
+
+        gsap.to(track, {
+          x: -totalWidth,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: pin,
+            start: 'top top',
+            end: '+=' + totalWidth,
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+            onUpdate: function (self) {
+              if (path) path.style.strokeDashoffset = (1 - self.progress) * len;
+              if (indicator) {
+                var idx = Math.min(stepCount - 1, Math.floor(self.progress * stepCount));
+                indicator.textContent = decades[idx] || '1950s';
+              }
+            },
+          },
+        });
+
+        // Recalculate on resize so the pin distance stays accurate
+        window.addEventListener('resize', function () {
+          ScrollTrigger.refresh();
+        });
+      })();
+    </script>
+
+  </body>
+</html>
