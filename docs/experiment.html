@@ -123,19 +123,15 @@
     </style>
   </head>
   <body class="antialiased overflow-x-hidden">
-    <!-- ====== EXPERIMENTAL FLOATING PILL NAVBAR — minimalistic, glass-blurred, centered ====== -->
-    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)]" aria-label="Primary">
-      <div class="flex items-center gap-2 md:gap-3 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full pl-2 pr-2 md:pl-3 md:pr-4 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
-        <!-- Logo mark -->
-        <a href="index.html" class="flex items-center justify-center bg-paper/8 rounded-full px-2 py-1 hover:bg-paper/15 transition-colors" aria-label="Urmi Group home">
-          <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
-        </a>
+    <!-- ====== NAVBAR — Logo standalone (top-left corner), pill nav centered ====== -->
+    <a href="index.html" class="fixed top-4 md:top-6 left-4 md:left-6 z-[60] inline-flex items-center bg-urmi-blue-deep/85 backdrop-blur-md rounded-full px-3 md:px-4 py-2 shadow-[0_12px_28px_rgba(6,21,40,0.35)] border border-paper/15 hover:bg-urmi-blue-deep transition-colors" aria-label="Urmi Group home">
+      <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
+    </a>
 
-        <!-- Hairline divider -->
-        <span class="w-px h-5 bg-paper/15 hidden md:inline-block" aria-hidden="true"></span>
-
-        <!-- Desktop nav links -->
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-12rem)]" aria-label="Primary">
+      <div class="flex items-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-2 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
         <div class="hidden lg:flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-display font-semibold text-paper/85">
+          <a href="index.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Home</a>
           <a href="about.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">About</a>
           <a href="#craft" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Craft</a>
           <a href="#portfolio" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Portfolio</a>
@@ -143,8 +139,6 @@
           <a href="#certifications" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Credentials</a>
           <a href="#connect" class="ml-1 px-4 py-1.5 rounded-full bg-paper text-urmi-blue-deep hover:bg-wave-blue hover:text-paper transition-colors">Connect</a>
         </div>
-
-        <!-- Mobile hamburger (collapses on <lg) -->
         <button type="button" aria-label="Open menu" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>

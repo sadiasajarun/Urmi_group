@@ -107,6 +107,41 @@
       @keyframes pulse-dot { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.5); opacity: 0.4; } }
       .pulse-dot { animation: pulse-dot 2.4s ease-in-out infinite; }
 
+      /* Hero stat-card float (Tifty-style overlay tiles) */
+      @keyframes hero-card-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+      .hero-stat-card { animation: hero-card-float 4.5s ease-in-out infinite; }
+      .hero-stat-card[data-delay="0"]   { animation-delay: 0s; }
+      .hero-stat-card[data-delay="1.5"] { animation-delay: 1.5s; }
+
+      /* IMPACT flowy single-line — letters bob on a sine, label morphs in on hover */
+      @keyframes impact-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+      .impact-letter { animation: impact-bob 3.2s ease-in-out infinite; display: inline-block; }
+      .impact-letter[data-i="0"] { animation-delay: 0s; }
+      .impact-letter[data-i="1"] { animation-delay: 0.25s; }
+      .impact-letter[data-i="2"] { animation-delay: 0.5s; }
+      .impact-letter[data-i="3"] { animation-delay: 0.75s; }
+      .impact-letter[data-i="4"] { animation-delay: 1.0s; }
+      .impact-letter[data-i="5"] { animation-delay: 1.25s; }
+      .impact-block .impact-detail { opacity: 0; transform: translateY(8px); transition: opacity 350ms ease-out, transform 350ms ease-out; pointer-events: none; }
+      .impact-block:hover .impact-detail,
+      .impact-block:focus-within .impact-detail { opacity: 1; transform: translateY(0); pointer-events: auto; }
+      .impact-block { transition: transform 350ms ease-out; }
+      .impact-block:hover { transform: translateY(-4px); }
+      /* Underlying flowing wave behind the IMPACT letters */
+      .impact-wave-svg path { stroke-dasharray: 1200; animation: impact-wave-flow 6s linear infinite; }
+      @keyframes impact-wave-flow { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1200; } }
+
+      /* Mission / Vision card hover */
+      .mv-card { transition: transform 400ms cubic-bezier(0.22,1,0.36,1), box-shadow 400ms ease; }
+      .mv-card:hover { transform: translateY(-6px); }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hero-stat-card, .impact-letter { animation: none !important; }
+        .impact-wave-svg path { animation: none !important; }
+        .impact-block:hover { transform: none !important; }
+        .impact-block .impact-detail { opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         .reveal { opacity: 1 !important; transform: none !important; }
@@ -119,15 +154,16 @@
   <body class="antialiased overflow-x-hidden">
 
     <!-- ============================================================
-         FLOATING PILL NAVBAR (matches /docs/index.html — About active)
+         NAVBAR — Logo standalone (top-left corner), pill nav centered
          ============================================================ -->
-    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)]" aria-label="Primary">
-      <div class="flex items-center gap-2 md:gap-3 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full pl-2 pr-2 md:pl-3 md:pr-4 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
-        <a href="index.html" class="flex items-center justify-center bg-paper/8 rounded-full px-2 py-1 hover:bg-paper/15 transition-colors" aria-label="Urmi Group home">
-          <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
-        </a>
-        <span class="w-px h-5 bg-paper/15 hidden md:inline-block" aria-hidden="true"></span>
+    <a href="index.html" class="fixed top-4 md:top-6 left-4 md:left-6 z-[60] inline-flex items-center bg-urmi-blue-deep/85 backdrop-blur-md rounded-full px-3 md:px-4 py-2 shadow-[0_12px_28px_rgba(6,21,40,0.35)] border border-paper/15 hover:bg-urmi-blue-deep transition-colors" aria-label="Urmi Group home">
+      <img src="assets/urmi-logo.png" alt="Urmi Group" class="h-7 md:h-8 w-auto object-contain" />
+    </a>
+
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-12rem)]" aria-label="Primary">
+      <div class="flex items-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-2 py-2 shadow-[0_12px_32px_rgba(6,21,40,0.35)] border border-paper/15">
         <div class="hidden lg:flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-display font-semibold text-paper/85">
+          <a href="index.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Home</a>
           <a href="about.html" aria-current="page" class="px-3 py-1.5 rounded-full bg-paper/15 text-paper transition-colors">About</a>
           <a href="index.html#craft" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Craft</a>
           <a href="index.html#portfolio" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Portfolio</a>
@@ -157,35 +193,64 @@
     </div>
 
     <!-- ============================================================
-         01 — HERO ABOUT
-         60vh, split 50/50, archival photo + editorial copy
+         01 — HERO (Tifty-inspired: H1 + side description/CTAs +
+                    full-width factory image with floating stat tiles)
          ============================================================ -->
-    <section class="relative min-h-[60vh] md:min-h-[680px] grid grid-cols-1 md:grid-cols-2 bg-tide-mist overflow-hidden pt-20 md:pt-0">
-      <!-- LEFT — sepia archival photograph with hairline frame -->
-      <div class="relative aspect-[4/5] md:aspect-auto md:min-h-[680px] overflow-hidden bg-cloud grain reveal" data-delay="0">
-        <img src="assets/waves/pillar-01.jpg" alt="The Buriganga River, where Urmi Group began in 1955" loading="eager" class="absolute inset-0 w-full h-full object-cover" style="filter: sepia(0.35) contrast(1.05);" />
-        <!-- Sepia atmospheric overlay -->
-        <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(245,239,227,0.10) 0%, rgba(20,63,115,0.20) 100%);" aria-hidden="true"></div>
-        <!-- Hairline inset frame -->
-        <div class="absolute inset-6 border border-paper/55 pointer-events-none" aria-hidden="true"></div>
-      </div>
+    <section class="relative bg-tide-mist overflow-hidden pt-32 md:pt-36 pb-16 md:pb-20 px-6 md:px-12">
+      <div class="max-w-[88rem] mx-auto">
 
-      <!-- RIGHT — editorial column -->
-      <div class="relative bg-tide-mist flex flex-col justify-center px-8 md:px-16 py-16 md:py-0 reveal" data-delay="160">
-        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">ABOUT URMI — ০১</span>
-        <span class="font-bengali text-[40px] md:text-[44px] text-urmi-blue-deep mt-4 leading-none font-medium" aria-label="Urmi (the wave)">ঊর্মি</span>
-        <span class="italic font-serif text-sm text-slate-text/75 mt-1 block">(The wave.)</span>
-        <h1 class="font-serif font-semibold leading-[1.05] text-urmi-blue-deep mt-6" style="font-size: clamp(42px, 5vw, 72px);">
-          From a brickfield on the Buriganga<br>
-          to the looms of <em class="italic" style="color:#1E5C9F">the world.</em>
-        </h1>
-        <p class="font-serif italic text-base md:text-lg text-slate-text leading-relaxed max-w-md mt-5">
-          Seventy years. Five rivers. One unbroken current of craft &mdash; still flowing, still rising.
-        </p>
-        <!-- Hand-drawn wave underline accent -->
-        <svg class="wave-draw mt-8" width="240" height="16" viewBox="0 0 240 16" fill="none" aria-hidden="true">
-          <path d="M2 8 C 30 0, 60 16, 90 8 S 150 0, 180 8 S 230 16, 238 8" stroke="#5BA0DE" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        </svg>
+        <!-- Top row: H1 left | description + CTAs right -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+          <h1 class="lg:col-span-7 font-serif font-semibold leading-[1.02] text-urmi-blue-deep reveal" style="font-size: clamp(42px, 6vw, 76px);">
+            From a brickfield on the Buriganga<br>
+            to the looms of <em class="italic" style="color:#1E5C9F">the world.</em>
+          </h1>
+          <div class="lg:col-span-5 flex flex-col gap-5 reveal" data-delay="160">
+            <p class="text-slate-text max-w-md" style="font-size: 16px; line-height: 1.7;">
+              Seventy years. Five rivers. One unbroken current of craft &mdash; still flowing, still rising. A fully integrated garment manufacturing group, built on the Buriganga since 1955.
+            </p>
+            <div class="flex flex-wrap items-center gap-3">
+              <a href="index.html#connect" class="inline-flex items-center gap-2 bg-urmi-blue-deep text-paper px-7 py-3.5 rounded-full font-display font-semibold uppercase tracking-[0.16em] hover:bg-urmi-blue transition-colors" style="font-size: 12px;">
+                Become a Buyer
+                <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+              <a href="index.html#factories" class="inline-flex items-center gap-2 border border-urmi-blue-deep text-urmi-blue-deep px-7 py-3.5 rounded-full font-display font-semibold uppercase tracking-[0.16em] hover:bg-urmi-blue-deep hover:text-paper transition-colors" style="font-size: 12px;">
+                Visit a Factory
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero image with floating stat-tile overlays -->
+        <div class="relative mt-10 md:mt-14">
+          <!-- Hand-drawn wave (decorative) draws on as the user scrolls in. -->
+          <svg class="wave-draw absolute -top-6 left-0 w-[40%] max-w-[320px] hidden md:block" width="320" height="22" viewBox="0 0 320 22" fill="none" aria-hidden="true">
+            <path d="M2 11 C 40 0, 80 22, 120 11 S 200 0, 240 11 S 310 22, 318 11" stroke="#5BA0DE" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          </svg>
+
+          <div class="relative aspect-[16/8] md:aspect-[16/7] w-full overflow-hidden bg-urmi-blue-deep grain reveal" data-delay="240">
+            <img src="assets/about/factory-floor-hero.jpg" alt="Inside an Urmi production floor — 150 lines, 16,893 colleagues" loading="eager" class="absolute inset-0 w-full h-full object-cover" />
+            <!-- Soft bottom gradient for stat-card legibility -->
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(20,63,115,0.05) 0%, rgba(20,63,115,0.25) 100%);" aria-hidden="true"></div>
+          </div>
+
+          <!-- LEFT floating stat-tile (wave-blue / paper) — overlaps top-left of image -->
+          <div class="hero-stat-card absolute -top-6 left-4 md:-top-10 md:left-10 max-w-[14rem] md:max-w-[16rem] bg-wave-blue-soft text-urmi-blue-deep p-5 md:p-6 shadow-[0_18px_40px_rgba(20,63,115,0.18)] reveal" data-delay="320" data-delay-anim="0">
+            <div class="font-serif font-semibold leading-none" style="font-size: clamp(28px, 3.5vw, 44px);">16,893</div>
+            <p class="font-mono uppercase tracking-[0.18em] mt-3 text-urmi-blue-deep/80" style="font-size: 11px; line-height: 1.6;">
+              Colleagues across<br>5 locations in Bangladesh
+            </p>
+          </div>
+
+          <!-- RIGHT floating stat-tile (urmi-blue-deep / paper) — overlaps bottom-right -->
+          <div class="hero-stat-card absolute -bottom-6 right-4 md:-bottom-10 md:right-10 max-w-[14rem] md:max-w-[16rem] bg-urmi-blue-deep text-paper p-5 md:p-6 shadow-[0_18px_40px_rgba(6,21,40,0.32)] reveal" data-delay="400" data-delay-anim="1.5">
+            <div class="font-serif font-semibold leading-none" style="font-size: clamp(28px, 3.5vw, 44px);">315,000</div>
+            <p class="font-mono uppercase tracking-[0.18em] mt-3 text-paper/85" style="font-size: 11px; line-height: 1.6;">
+              Garments leaving<br>our floors every day
+            </p>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -236,26 +301,49 @@
     <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
       <div class="relative z-10 mx-auto max-w-6xl">
 
-        <!-- ROW 1 — Mission / Vision split -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
-          <div class="reveal">
-            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">OUR MISSION</span>
-            <p class="text-slate-text mt-3 max-w-sm" style="font-size: 18px; line-height: 1.7;">
-              To turn every thread into a quiet promise &mdash; to the buyer who trusts us, to the colleague who weaves it, and to the river it returns to.
-            </p>
-          </div>
-          <div class="reveal" data-delay="160">
-            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">OUR VISION</span>
-            <p class="text-slate-text mt-3 max-w-sm" style="font-size: 18px; line-height: 1.7;">
+        <!-- ROW 1 — Mission / Vision (large heading + two side-by-side cards: Vision outlined, Mission filled) -->
+        <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+          <h2 class="font-serif text-urmi-blue-deep reveal" style="font-size: clamp(32px, 4.4vw, 52px); line-height: 1.1; font-weight: 600;">
+            Building the future of <em class="italic" style="color:#1E5C9F">Conscious Manufacturing.</em>
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
+          <!-- VISION card — outlined -->
+          <article class="mv-card relative bg-paper border border-cloud rounded-[28px] p-8 md:p-10 reveal" data-delay="0">
+            <!-- Eye icon -->
+            <svg class="w-10 h-10 text-tide-deep" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 24 C 12 14, 36 14, 44 24 C 36 34, 12 34, 4 24 z"/>
+              <circle cx="24" cy="24" r="6"/>
+              <circle cx="24" cy="24" r="1.5" fill="currentColor"/>
+              <path d="M24 12 L 24 8 M 12 16 L 9 13 M 36 16 L 39 13" stroke-opacity="0.7"/>
+            </svg>
+            <h3 class="font-serif text-urmi-blue-deep mt-6" style="font-size: clamp(22px, 2.4vw, 30px); font-weight: 600;">Our Vision</h3>
+            <p class="text-slate-text mt-4" style="font-size: 16px; line-height: 1.7;">
               To be the world's most preferred supplier of conscious garments &mdash; the manufacturer global brands choose first when craft, scale, and sustainability all have to be true at once.
             </p>
-          </div>
+          </article>
+
+          <!-- MISSION card — filled urmi-blue-deep -->
+          <article class="mv-card relative bg-urmi-blue-deep text-paper rounded-[28px] p-8 md:p-10 shadow-[0_24px_48px_rgba(20,63,115,0.22)] reveal" data-delay="160">
+            <!-- Target icon -->
+            <svg class="w-10 h-10 text-paper" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="24" cy="24" r="20"/>
+              <circle cx="24" cy="24" r="13"/>
+              <circle cx="24" cy="24" r="6"/>
+              <circle cx="24" cy="24" r="1.5" fill="currentColor"/>
+              <path d="M30 18 L 38 10 M38 10 L 38 6 L 42 6 M38 10 L 42 10 L 42 14"/>
+            </svg>
+            <h3 class="font-serif text-paper mt-6" style="font-size: clamp(22px, 2.4vw, 30px); font-weight: 600;">Our Mission</h3>
+            <p class="text-paper/85 mt-4" style="font-size: 16px; line-height: 1.7;">
+              To turn every thread into a quiet promise &mdash; to the buyer who trusts us, to the colleague who weaves it, and to the river it returns to.
+            </p>
+          </article>
         </div>
 
         <!-- ROW 2 — Four Currents -->
         <div class="mt-20 md:mt-24">
-          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">WHAT MOVES US — ০৩</span>
-          <h3 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.1;">
+          <h3 class="font-serif text-urmi-blue-deep reveal" style="font-size: clamp(28px, 3.2vw, 40px); line-height: 1.1; font-weight: 600;">
             A current with <em class="italic" style="color:#4A7864">a conscience.</em>
           </h3>
 
@@ -317,71 +405,145 @@
         </div>
       </div>
 
-      <!-- PULL QUOTE BAND (full-width band on tide-deep) -->
-      <div class="mt-20 md:mt-28 -mx-6 md:-mx-12 bg-tide-deep py-16 md:py-20 px-6 md:px-12 text-center">
-        <h2 class="font-serif italic text-paper max-w-4xl mx-auto leading-[1.2]" style="font-size: clamp(28px, 4vw, 48px); font-weight: 500;">
+      <!-- PULL QUOTE BAND + THREE GENERATIONS -->
+      <div class="mt-20 md:mt-28 -mx-6 md:-mx-12 bg-tide-deep py-20 md:py-24 px-6 md:px-12 text-center relative overflow-hidden">
+        <!-- Decorative dot pattern at top -->
+        <div class="absolute top-0 left-0 right-0 h-24 pointer-events-none opacity-30" style="background-image: radial-gradient(circle, #FCFDFC 1px, transparent 1px); background-size: 14px 14px;" aria-hidden="true"></div>
+
+        <h2 class="font-serif italic text-paper max-w-4xl mx-auto leading-[1.2] relative reveal" style="font-size: clamp(28px, 4vw, 48px); font-weight: 500;">
           We don't make clothes for the season.<br>
           We make them for <em class="not-italic font-semibold">the river that's still here next century.</em>
         </h2>
+
+        <!-- Three Generations — chairman → MD → director -->
+        <div class="mt-14 md:mt-20 max-w-4xl mx-auto reveal" data-delay="160">
+          <span class="font-mono text-[11px] uppercase tracking-[0.32em] text-paper/70 block">Three generations &middot; one direction</span>
+          <div class="mt-8 grid grid-cols-3 gap-5 md:gap-8">
+            <!-- Gen 1 -->
+            <article class="text-center">
+              <div class="relative aspect-[4/5] w-full overflow-hidden bg-tide-deep border border-paper/20">
+                <div class="absolute inset-0" style="background: linear-gradient(180deg, #DCE9E3 0%, #7FAA9C 60%, #4A7864 100%);"></div>
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <ellipse cx="100" cy="100" rx="34" ry="42" fill="#143F73" fill-opacity="0.78"/>
+                  <path d="M 35,250 C 35,180 55,148 100,148 C 145,148 165,180 165,250 Z" fill="#143F73" fill-opacity="0.78"/>
+                </svg>
+                <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2 py-1">1955</span>
+              </div>
+              <p class="font-serif text-paper mt-4" style="font-size: clamp(15px, 1.4vw, 18px); font-weight: 600;">Mr. Ashfaque Ahmed</p>
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/75 mt-1 block">Founder &middot; Chairman</span>
+            </article>
+            <!-- Gen 2 -->
+            <article class="text-center">
+              <div class="relative aspect-[4/5] w-full overflow-hidden bg-tide-deep border border-paper/20">
+                <div class="absolute inset-0" style="background: linear-gradient(180deg, #C5DCEF 0%, #5BA0DE 55%, #1E5C9F 100%);"></div>
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <ellipse cx="100" cy="100" rx="34" ry="42" fill="#143F73" fill-opacity="0.78"/>
+                  <path d="M 35,250 C 35,180 55,148 100,148 C 145,148 165,180 165,250 Z" fill="#143F73" fill-opacity="0.78"/>
+                </svg>
+                <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2 py-1">1984</span>
+              </div>
+              <p class="font-serif text-paper mt-4" style="font-size: clamp(15px, 1.4vw, 18px); font-weight: 600;">Mr. Asif Ashraf</p>
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/75 mt-1 block">Managing Director</span>
+            </article>
+            <!-- Gen 3 -->
+            <article class="text-center">
+              <div class="relative aspect-[4/5] w-full overflow-hidden bg-tide-deep border border-paper/20">
+                <div class="absolute inset-0" style="background: linear-gradient(180deg, #DCE9E3 0%, #C5DCEF 50%, #1E5C9F 100%);"></div>
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 200 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <ellipse cx="100" cy="100" rx="34" ry="42" fill="#143F73" fill-opacity="0.78"/>
+                  <path d="M 35,250 C 35,180 55,148 100,148 C 145,148 165,180 165,250 Z" fill="#143F73" fill-opacity="0.78"/>
+                </svg>
+                <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2 py-1">2022</span>
+              </div>
+              <p class="font-serif text-paper mt-4" style="font-size: clamp(15px, 1.4vw, 18px); font-weight: 600;">Mr. Faiaz Rahman</p>
+              <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/75 mt-1 block">Director &middot; Next wave</span>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ============================================================
-         04 — IMPACT VALUES (six tiles spelling I-M-P-A-C-T)
+         04 — IMPACT (single-line, six letters bobbing on a flowing
+                      wave; descriptions reveal on hover/focus)
          ============================================================ -->
-    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
-      <div class="relative z-10 max-w-5xl mx-auto">
-        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">OUR IMPACT — ০৪</span>
-        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05;">
+    <section class="relative bg-tide-mist py-20 md:py-28 px-6 md:px-12 overflow-hidden">
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <h2 class="font-serif text-urmi-blue-deep text-center reveal" style="font-size: clamp(28px, 3.6vw, 44px); line-height: 1.1; font-weight: 600;">
           Six values. One acronym. <em class="italic" style="color:#1E5C9F">Every decision.</em>
         </h2>
-        <p class="font-serif italic text-slate-text mt-4 max-w-md reveal" data-delay="160" style="font-size: 18px;">
+        <p class="font-serif italic text-slate-text text-center mt-3 max-w-md mx-auto reveal" data-delay="160" style="font-size: 17px;">
           We don't print values on posters. We measure them on the floor.
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-12 md:mt-16">
-          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="0">
-            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">I</span>
-            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Integrity</h4>
-            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
-              What we promise the buyer is what we deliver to the floor &mdash; on time, on spec, on brief. Every time.
-            </p>
-          </article>
-          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="80">
-            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">M</span>
-            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Mutual Trust</h4>
-            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
-              Buyers, suppliers, and 16,893 colleagues on one page. The wave moves because every part of it moves together.
-            </p>
-          </article>
-          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="160">
-            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">P</span>
-            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Passion for Excellence</h4>
-            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
-              Continuous improvement is written into our DNA. From the 1,386 tons of CO&sub2; saved by our exhaust gas boiler in 2008 to the 967 kWp of rooftop solar commissioned in 2024 &mdash; we are always improving something.
-            </p>
-          </article>
-          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="240">
-            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">A</span>
-            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Agility</h4>
-            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
-              When fashion shifts, we are already cutting. 150 production lines and a vertically integrated supply chain mean we can move from brief to bulk faster than most.
-            </p>
-          </article>
-          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="320">
-            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">C</span>
-            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Customer Focus</h4>
-            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
-              Your design philosophy is our craft. Our in-house studio, our 188,000-piece-per-day printing capacity, and our seamless knitting line exist to support your vision, not ours.
-            </p>
-          </article>
-          <article class="impact-tile bg-tide-mist border border-cloud p-7 md:p-8 hover:border-wave-blue transition-colors duration-200 reveal" data-delay="400">
-            <span class="font-serif font-semibold text-wave-blue block leading-none" style="font-size: 96px;">T</span>
-            <h4 class="font-serif text-urmi-blue-deep mt-2" style="font-size: 24px; font-weight: 600;">Teamwork &amp; Co-operation</h4>
-            <p class="text-slate-text mt-3" style="font-size: 14px; line-height: 1.65;">
-              Because no wave moves alone. 16,893 people &mdash; officers, staff, and workers &mdash; all pulling the same thread.
-            </p>
-          </article>
+        <!-- Single-line flowy IMPACT row -->
+        <div class="impact-row relative mt-14 md:mt-20" role="list" aria-label="IMPACT — six core values">
+          <!-- Continuously flowing wave behind the letters -->
+          <svg class="impact-wave-svg absolute left-0 right-0 top-1/2 -translate-y-1/2 w-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 1200 160" aria-hidden="true" style="height: 140px;">
+            <defs>
+              <linearGradient id="impact-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#5BA0DE" stop-opacity="0"/>
+                <stop offset="20%"  stop-color="#5BA0DE" stop-opacity="0.55"/>
+                <stop offset="80%"  stop-color="#4A7864" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#4A7864" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M 0 80 C 100 30, 200 130, 300 80 C 400 30, 500 130, 600 80 C 700 30, 800 130, 900 80 C 1000 30, 1100 130, 1200 80" stroke="url(#impact-grad)" stroke-width="2" fill="none" stroke-dasharray="6 6" stroke-linecap="round"/>
+            <path d="M 0 80 C 100 50, 200 110, 300 80 C 400 50, 500 110, 600 80 C 700 50, 800 110, 900 80 C 1000 50, 1100 110, 1200 80" stroke="#7FAA9C" stroke-width="1" stroke-opacity="0.30" fill="none"/>
+          </svg>
+
+          <!-- 6 letter blocks in a single horizontal row -->
+          <div class="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-y-8 md:gap-y-10 gap-x-2 md:gap-x-4">
+
+            <button type="button" role="listitem" class="impact-block group relative flex flex-col items-center text-center px-2" data-i="0">
+              <span class="impact-letter font-serif font-semibold text-wave-blue leading-none" data-i="0" style="font-size: clamp(72px, 9vw, 132px);">I</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-3" style="font-size: 18px; font-weight: 600;">Integrity</h4>
+              <p class="impact-detail text-slate-text mt-2 max-w-[180px]" style="font-size: 12px; line-height: 1.55;">
+                What we promise the buyer is what we deliver to the floor &mdash; on time, on spec, on brief. Every time.
+              </p>
+            </button>
+
+            <button type="button" role="listitem" class="impact-block group relative flex flex-col items-center text-center px-2" data-i="1">
+              <span class="impact-letter font-serif font-semibold text-wave-blue leading-none" data-i="1" style="font-size: clamp(72px, 9vw, 132px);">M</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-3" style="font-size: 18px; font-weight: 600;">Mutual Trust</h4>
+              <p class="impact-detail text-slate-text mt-2 max-w-[180px]" style="font-size: 12px; line-height: 1.55;">
+                Buyers, suppliers, and 16,893 colleagues on one page. The wave moves because every part of it moves together.
+              </p>
+            </button>
+
+            <button type="button" role="listitem" class="impact-block group relative flex flex-col items-center text-center px-2" data-i="2">
+              <span class="impact-letter font-serif font-semibold text-wave-blue leading-none" data-i="2" style="font-size: clamp(72px, 9vw, 132px);">P</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-3" style="font-size: 18px; font-weight: 600;">Passion</h4>
+              <p class="impact-detail text-slate-text mt-2 max-w-[180px]" style="font-size: 12px; line-height: 1.55;">
+                Continuous improvement is written into our DNA &mdash; from a 1,386-ton CO&sub2; boiler in 2008 to 967 kWp of rooftop solar in 2024.
+              </p>
+            </button>
+
+            <button type="button" role="listitem" class="impact-block group relative flex flex-col items-center text-center px-2" data-i="3">
+              <span class="impact-letter font-serif font-semibold text-wave-blue leading-none" data-i="3" style="font-size: clamp(72px, 9vw, 132px);">A</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-3" style="font-size: 18px; font-weight: 600;">Agility</h4>
+              <p class="impact-detail text-slate-text mt-2 max-w-[180px]" style="font-size: 12px; line-height: 1.55;">
+                When fashion shifts, we are already cutting. 150 lines and a vertically integrated supply chain take us from brief to bulk faster than most.
+              </p>
+            </button>
+
+            <button type="button" role="listitem" class="impact-block group relative flex flex-col items-center text-center px-2" data-i="4">
+              <span class="impact-letter font-serif font-semibold text-wave-blue leading-none" data-i="4" style="font-size: clamp(72px, 9vw, 132px);">C</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-3" style="font-size: 18px; font-weight: 600;">Customer Focus</h4>
+              <p class="impact-detail text-slate-text mt-2 max-w-[180px]" style="font-size: 12px; line-height: 1.55;">
+                Your design philosophy is our craft. In-house studio, 188,000 prints/day, seamless knitting &mdash; all to support your vision.
+              </p>
+            </button>
+
+            <button type="button" role="listitem" class="impact-block group relative flex flex-col items-center text-center px-2" data-i="5">
+              <span class="impact-letter font-serif font-semibold text-wave-blue leading-none" data-i="5" style="font-size: clamp(72px, 9vw, 132px);">T</span>
+              <h4 class="font-serif text-urmi-blue-deep mt-3" style="font-size: 18px; font-weight: 600;">Teamwork</h4>
+              <p class="impact-detail text-slate-text mt-2 max-w-[180px]" style="font-size: 12px; line-height: 1.55;">
+                Because no wave moves alone. 16,893 people &mdash; officers, staff, and workers &mdash; all pulling the same thread.
+              </p>
+            </button>
+
+          </div>
         </div>
       </div>
     </section>
@@ -391,8 +553,7 @@
          ============================================================ -->
     <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
       <div class="relative z-10 max-w-6xl mx-auto">
-        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">THE TIDE BEARERS — ০৫</span>
-        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05;">
+        <h2 class="font-serif text-urmi-blue-deep reveal" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05; font-weight: 600;">
           Three generations. <em class="italic" style="color:#1E5C9F">One direction.</em>
         </h2>
 
@@ -483,55 +644,13 @@
     </section>
 
     <!-- ============================================================
-         06 — MD MESSAGE (italic letter, wave-blue left border)
-         ============================================================ -->
-    <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
-      <div class="relative z-10 max-w-[680px] mx-auto">
-        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">FROM THE HELM — ০৬</span>
-
-        <div class="mt-8 border-l-4 border-wave-blue pl-8 md:pl-10 reveal" data-delay="80">
-          <p class="font-serif italic text-slate-text" style="font-size: 20px; line-height: 1.8;">
-            Continuous improvement is in the DNA of our organisation.
-          </p>
-          <p class="font-serif italic text-slate-text mt-6" style="font-size: 20px; line-height: 1.8;">
-            We strive, every day, to do better than we did yesterday &mdash; not because the market demands it, but because the river does. From our very first efficiency project in 2008 &mdash; an exhaust gas boiler that saved 1,386 tons of CO&sub2; a year &mdash; to the rooftop solar systems generating over 3,000 MWh annually today, every decision has been the same decision: leave this place better than you found it.
-          </p>
-          <p class="font-serif italic text-slate-text mt-6" style="font-size: 20px; line-height: 1.8;">
-            Our vision is to be the number-one preferred supplier of the world's top global brands. Europe takes 81% of what we make. Japan, through relationships as significant as our joint venture with Toray, takes 14%. M&amp;S, Puma, GU, Decathlon, MUJI, United Colors of Benetton, La Redoute &mdash; these are not names we display for prestige. They are relationships we have earned, standard by standard, shipment by shipment.
-          </p>
-          <p class="font-serif italic text-slate-text mt-6" style="font-size: 20px; line-height: 1.8;">
-            We employ 16,893 people across five locations in Bangladesh. Every one of them works in a climate-controlled, safety-audited, BetterWork-verified facility. Every one of them has access to on-site healthcare and clean water. 6.6% of our management is female &mdash; too low, and we know it. 48,124 hours of training delivered last year is how we raise it.
-          </p>
-          <p class="font-serif italic text-urmi-blue-deep mt-6" style="font-size: 20px; line-height: 1.8;">
-            Urmi's success lies in the empowerment of our people. The wave that started in 1955 has not stopped. It will not stop with us.
-          </p>
-        </div>
-
-        <!-- Signature -->
-        <div class="mt-10 reveal" data-delay="160">
-          <!-- Inline signature SVG (placeholder script style) -->
-          <svg width="200" height="56" viewBox="0 0 200 56" fill="none" aria-label="Signature of Asif Ashraf">
-            <path d="M5 38 C 12 18, 24 50, 36 28 C 44 14, 56 36, 64 26 C 72 16, 80 32, 92 24 C 104 16, 112 38, 124 28 C 136 18, 152 36, 168 26 C 180 18, 192 30, 195 26"
-                  stroke="#143F73" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-            <path d="M16 46 L 188 46" stroke="#143F73" stroke-width="0.8" stroke-opacity="0.35"/>
-          </svg>
-          <p class="text-slate-text mt-3" style="font-size: 15px;">
-            <span class="font-serif font-semibold text-urmi-blue-deep">Asif Ashraf</span><br>
-            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep">Managing Director, Urmi Group</span>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
          07 — TIMELINE (horizontal scroll on desktop, vertical on mobile)
          ============================================================ -->
     <section id="timeline-section" class="relative bg-tide-mist overflow-hidden">
 
-      <!-- Header (above the pinned scroll runway) -->
-      <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12 pt-20 md:pt-32 pb-10">
-        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">SEVEN DECADES — ০৭</span>
-        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05;">
+      <!-- Header — tightened padding before/after for the longitudinal pinned wave -->
+      <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12 pt-12 md:pt-16 pb-6 md:pb-8">
+        <h2 class="font-serif text-urmi-blue-deep reveal" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05; font-weight: 600;">
           One unbroken <em class="italic" style="color:#1E5C9F">wave.</em>
         </h2>
         <p class="font-serif italic text-slate-text mt-3 reveal" data-delay="160" style="font-size: 16px;">
@@ -763,9 +882,9 @@
         </div>
       </div>
 
-      <!-- MOBILE / TABLET fallback: vertical timeline -->
-      <div class="lg:hidden relative max-w-2xl mx-auto px-6 py-12">
-        <div class="absolute left-8 top-12 bottom-12 w-px bg-tide" aria-hidden="true"></div>
+      <!-- MOBILE / TABLET fallback: vertical timeline (tightened padding) -->
+      <div class="lg:hidden relative max-w-2xl mx-auto px-6 pt-2 pb-10">
+        <div class="absolute left-8 top-2 bottom-10 w-px bg-tide" aria-hidden="true"></div>
         <ol role="list" aria-label="Company timeline from 1955 to 2022" class="space-y-10">
           <!-- A representative subset for mobile (all 15 are repeated in compact form) -->
           <li class="relative pl-16"><span class="absolute left-[26px] top-2 w-3 h-3 rounded-full bg-wave-blue ring-4 ring-tide-mist"></span><span class="font-serif text-urmi-blue-deep block" style="font-size: 20px; font-weight: 600;">1955</span><span class="font-sans font-semibold text-slate-text mt-1 block">Fatulla Brick Field</span><p class="text-slate-text/85 mt-2" style="font-size: 14px; line-height: 1.6;">The origin. A brickfield on the Buriganga River, turning clay into building material.</p></li>
@@ -806,24 +925,20 @@
          ============================================================ -->
     <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
       <div class="relative z-10 max-w-6xl mx-auto">
-        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">INSIDE THE WAVE — ০৯</span>
-        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05;">
+        <h2 class="font-serif text-urmi-blue-deep reveal" style="font-size: clamp(32px, 4vw, 48px); line-height: 1.05; font-weight: 600;">
           A workplace built on <em class="italic" style="color:#4A7864">warmth.</em>
         </h2>
 
-        <!-- ROW 1 — Editorial photo wall -->
+        <!-- ROW 1 — Editorial photo wall (no badge labels) -->
         <div class="grid grid-cols-3 grid-rows-2 gap-3 md:gap-4 mt-12 h-[420px] md:h-[560px]">
           <div class="col-span-2 row-span-2 relative overflow-hidden bg-cloud grain reveal" data-delay="0">
-            <img src="assets/waves/pillar-02.jpg" alt="Inside Urmi's on-site child care centre" loading="lazy" class="w-full h-full object-cover" />
-            <div class="absolute bottom-3 left-3 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-urmi-blue-deep/55 backdrop-blur-sm px-2.5 py-1">Child Care Centre</div>
+            <img src="assets/about/inside-wave-1.jpg" alt="Inside an Urmi production unit" loading="lazy" class="w-full h-full object-cover" />
           </div>
           <div class="col-span-1 row-span-1 relative overflow-hidden bg-cloud grain reveal" data-delay="120">
-            <img src="assets/crafts/embroidery.png" alt="On-site medical centre at Urmi" loading="lazy" class="w-full h-full object-cover" />
-            <div class="absolute bottom-2 left-2 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2 py-0.5">Medical</div>
+            <img src="assets/about/inside-wave-2.webp" alt="Urmi colleagues on the floor" loading="lazy" class="w-full h-full object-cover" />
           </div>
           <div class="col-span-1 row-span-1 relative overflow-hidden bg-cloud grain reveal" data-delay="240">
-            <img src="assets/crafts/garments.png" alt="Climate-controlled factory floor" loading="lazy" class="w-full h-full object-cover" />
-            <div class="absolute bottom-2 left-2 font-mono text-[10px] uppercase tracking-[0.22em] text-paper/95 bg-tide-deep/55 backdrop-blur-sm px-2 py-0.5">Floor</div>
+            <img src="assets/about/inside-wave-3.jpg" alt="Inside Urmi — a workplace built on warmth" loading="lazy" class="w-full h-full object-cover" />
           </div>
         </div>
 
@@ -877,46 +992,48 @@
     </section>
 
     <!-- ============================================================
-         10 — RECOGNITION (3 award columns + compliance + HIGG)
+         10 — RECOGNITION (logo-led: medal grid + compliance + HIGG)
          ============================================================ -->
     <section class="relative bg-tide-mist py-20 md:py-32 px-6 md:px-12">
-      <div class="relative z-10 max-w-5xl mx-auto">
-        <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block reveal">RECOGNITION — ১০</span>
-        <h2 class="font-serif text-urmi-blue-deep mt-4 reveal" data-delay="80" style="font-size: clamp(28px, 3.5vw, 44px); line-height: 1.1;">
-          Acknowledged by the bodies that hold <em class="italic" style="color:#1E5C9F">the industry to its word.</em>
-        </h2>
+      <div class="relative z-10 max-w-6xl mx-auto">
 
-        <!-- 3 award columns -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 mt-12 md:mt-16">
-          <div class="reveal" data-delay="0">
-            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block">INDUSTRY</span>
-            <ul class="mt-5 space-y-3 text-slate-text" style="font-size: 15px; line-height: 1.65;">
-              <li>HSBC Export Excellence Award, 2011 and 2018</li>
-              <li>LEED Platinum Certification, 2009</li>
-              <li>Bronze Award, BGAPMEA Export Trophy</li>
-              <li>Digital Bangladesh Award, 2022</li>
-              <li>RFID Journal Award, 2022</li>
-            </ul>
+        <!-- 12 award medals as the focal element (logo-driven, not text-led) -->
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 md:gap-6">
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="0">
+            <img src="assets/awards/1-3-300x300.jpg" alt="National Export Trophy — Gold, 2024" loading="lazy" class="w-full h-full object-contain" />
           </div>
-
-          <div class="reveal" data-delay="160">
-            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block">CUSTOMER</span>
-            <ul class="mt-5 space-y-3 text-slate-text" style="font-size: 15px; line-height: 1.65;">
-              <li>H&amp;M "Fast as a Bullet" Award, 2018</li>
-              <li>GU Partner Certification, 2019</li>
-              <li>Marks &amp; Spencer Certification Award, 2016</li>
-              <li>M&amp;S Rising Star Award, 2023</li>
-            </ul>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="80">
+            <img src="assets/awards/2-3-300x300.jpg" alt="BGMEA Excellence Award" loading="lazy" class="w-full h-full object-contain" />
           </div>
-
-          <div class="reveal" data-delay="320">
-            <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-tide-deep block">ENVIRONMENTAL</span>
-            <ul class="mt-5 space-y-3 text-slate-text" style="font-size: 15px; line-height: 1.65;">
-              <li>Gold Winner, Social &amp; Environmental Excellence Award, 2014</li>
-              <li>Top Factory Award, Carbon Performance Improvement, 2014 &amp; 2015</li>
-              <li>Energy Efficiency, Sustainable Apparel Forum, 2017</li>
-              <li>GREEN BUTTON Qualification Certificate, 2024</li>
-            </ul>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="160">
+            <img src="assets/awards/3-3-300x300.jpg" alt="HSBC Export Excellence" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="240">
+            <img src="assets/awards/RFID-2022-1-300x300.png" alt="RFID Journal Award, 2022" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="320">
+            <img src="assets/awards/4-3-300x300.jpg" alt="Best Green Factory Award" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="400">
+            <img src="assets/awards/5-3-300x300.jpg" alt="Sustainability Leadership" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="0">
+            <img src="assets/awards/6-3-300x300.jpg" alt="Innovation in Manufacturing" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="80">
+            <img src="assets/awards/8-3-300x300.jpg" alt="Worker Welfare Recognition" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="160">
+            <img src="assets/awards/11-3-300x300.jpg" alt="LEED Platinum Certification" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="240">
+            <img src="assets/awards/12-2-300x300.jpg" alt="Industry Pioneer Award" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="320">
+            <img src="assets/awards/13-2-300x300.jpg" alt="Made in Bangladesh Recognition" loading="lazy" class="w-full h-full object-contain" />
+          </div>
+          <div class="reveal aspect-square overflow-hidden bg-paper border border-cloud flex items-center justify-center p-5 hover:border-tide-deep hover:shadow-md transition-all" data-delay="400">
+            <img src="assets/awards/IMG_4105-300x254.png" alt="Brand Partner of the Year" loading="lazy" class="w-full h-full object-contain" />
           </div>
         </div>
 
