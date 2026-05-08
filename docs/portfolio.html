@@ -64,19 +64,67 @@
       .brand-word { transition: opacity 250ms ease, transform 350ms ease; }
       .brand-word:hover { opacity: 1 !important; transform: translateY(-2px); }
 
+      /* Brand marquee — two rows scrolling opposite directions */
+      .marquee { overflow: hidden; }
+      .marquee-track { display: flex; width: max-content; will-change: transform; }
+      .marquee-track-left  { animation: marquee-left  42s linear infinite; }
+      .marquee-track-right { animation: marquee-right 48s linear infinite; }
+      .marquee:hover .marquee-track { animation-play-state: paused; }
+      @keyframes marquee-left  { from { transform: translateX(0); }      to { transform: translateX(-50%); } }
+      @keyframes marquee-right { from { transform: translateX(-50%); }   to { transform: translateX(0); } }
+
+      /* Hero fashion strip — arched portrait cards */
+      .arch-card { border-radius: 50% 50% 12px 12px / 38% 38% 12px 12px; overflow: hidden; }
+      .arch-card img { transition: transform 900ms cubic-bezier(0.22,1,0.36,1); }
+      .arch-card:hover img { transform: scale(1.05); }
+
       /* Category card — editorial monochrome → color on hover */
+      .cat-card { cursor: pointer; }
       .cat-card img { transition: filter 700ms ease, transform 1100ms ease; }
       .cat-card:hover img { filter: grayscale(0) !important; transform: scale(1.04); }
+      .cat-card.is-active img { filter: grayscale(0) !important; }
       .cat-card .cat-label { transition: transform 350ms ease, opacity 250ms ease; }
       .cat-card:hover .cat-label { transform: translateY(-4px); }
       .cat-card .cat-overlay { transition: opacity 400ms ease; }
       .cat-card:hover .cat-overlay { opacity: 0.35; }
+      .cat-card.is-active .cat-overlay { opacity: 0.30; }
+      .cat-card.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: #5BA0DE; box-shadow: 0 -8px 24px rgba(91,160,222,0.5); }
+
+      /* Category drawer — slides open when a category is selected */
+      .cat-drawer { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 700ms cubic-bezier(0.22,1,0.36,1), opacity 500ms ease, margin-top 600ms ease; }
+      .cat-drawer.is-open { max-height: 720px; opacity: 1; margin-top: 2rem; }
+      .cat-strip { overflow: hidden; }
+      .cat-strip-track { display: flex; gap: 1rem; width: max-content; animation: cat-marquee 38s linear infinite; }
+      .cat-strip:hover .cat-strip-track { animation-play-state: paused; }
+      @keyframes cat-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+      /* Strip tile entrance — photos arrive from the right with a stagger when drawer opens */
+      .cat-tile { opacity: 0; transform: translateX(60px); transition: opacity 700ms ease, transform 700ms cubic-bezier(0.22,1,0.36,1); }
+      .cat-drawer.is-open .cat-tile { opacity: 1; transform: translateX(0); }
+      .cat-drawer.is-open .cat-tile:nth-child(1)  { transition-delay:  60ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(2)  { transition-delay: 120ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(3)  { transition-delay: 180ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(4)  { transition-delay: 240ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(5)  { transition-delay: 300ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(6)  { transition-delay: 360ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(7)  { transition-delay: 420ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(8)  { transition-delay: 480ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(9)  { transition-delay: 540ms; }
+      .cat-drawer.is-open .cat-tile:nth-child(10) { transition-delay: 600ms; }
+
+      .cat-tile-photo { width: 220px; height: 300px; border-radius: 16px; overflow: hidden; flex-shrink: 0; position: relative; }
+      .cat-tile-photo img { width: 100%; height: 100%; object-fit: cover; }
+      .cat-tile-placeholder { width: 220px; height: 300px; border-radius: 16px; flex-shrink: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 1.25rem; color: #FCFDFC; }
+      .cat-tile-placeholder::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18) 0%, transparent 60%); pointer-events: none; }
 
       @media (prefers-reduced-motion: reduce) {
         *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         .reveal { opacity: 1 !important; transform: none !important; }
         .cat-card:hover img { transform: none !important; }
         .cat-card:hover .cat-label { transform: none !important; }
+        .marquee-track { animation: none !important; }
+        .cat-strip-track { animation: none !important; }
+        .cat-tile { opacity: 1 !important; transform: none !important; }
       }
     </style>
   </head>
@@ -122,9 +170,14 @@
     </div>
 
     <!-- ============================================================
-         HEADER
+         HEADER + HERO FASHION STRIP
          ============================================================ -->
-    <section class="relative bg-tide-mist pt-32 md:pt-40 pb-12 md:pb-16 px-6 md:px-12">
+    <section class="relative bg-tide-mist pt-32 md:pt-40 pb-16 md:pb-24 px-6 md:px-12 overflow-hidden">
+
+      <!-- Soft accent dots -->
+      <div class="absolute top-32 left-10 w-2 h-2 rounded-full bg-tide-deep/30 hidden md:block" aria-hidden="true"></div>
+      <div class="absolute top-44 right-16 w-2 h-2 rounded-full bg-wave-blue/40 hidden md:block" aria-hidden="true"></div>
+
       <div class="max-w-[80rem] mx-auto text-center reveal">
         <span class="font-display font-bold text-urmi-blue-deep uppercase block" style="font-size: clamp(18px, 2vw, 24px); letter-spacing: 0.32em;">Portfolio</span>
         <h1 class="font-serif text-urmi-blue-deep mt-4 max-w-4xl mx-auto" style="font-size: clamp(34px, 5.5vw, 64px); line-height: 1.05; font-weight: 600;">
@@ -133,6 +186,62 @@
         <p class="font-serif italic text-slate-text mt-5 max-w-xl mx-auto" style="font-size: clamp(16px, 1.6vw, 19px); line-height: 1.55;">
           Three windows into Urmi's craft &mdash; the brands we manufacture for, the brand we built ourselves, and every category in between.
         </p>
+      </div>
+
+      <!-- Arched fashion strip — 6 portrait cards, alternating tints (beSpoke style) -->
+      <div class="relative max-w-[80rem] mx-auto mt-12 md:mt-16 reveal" data-delay="240">
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
+          <!-- 1 — Active, wave-blue tint -->
+          <div class="arch-card relative aspect-[3/4] bg-wave-blue/30">
+            <div class="absolute inset-0 bg-gradient-to-b from-wave-blue/20 to-wave-blue-soft/40 mix-blend-multiply" aria-hidden="true"></div>
+            <img src="assets/portfolio/active-wear.webp" alt="Active wear silhouette" loading="lazy" class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-95" />
+          </div>
+          <!-- 2 — Evening, urmi-blue-deep tint -->
+          <div class="arch-card relative aspect-[3/4] bg-urmi-blue-deep mt-4 md:mt-8">
+            <div class="absolute inset-0 bg-gradient-to-b from-urmi-blue/20 to-urmi-blue-deep/40 mix-blend-multiply" aria-hidden="true"></div>
+            <img src="assets/portfolio/evening-wear.webp" alt="Evening wear silhouette" loading="lazy" class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-95" />
+          </div>
+          <!-- 3 — Night, tide-deep tint -->
+          <div class="arch-card relative aspect-[3/4] bg-tide-deep">
+            <div class="absolute inset-0 bg-gradient-to-b from-tide/20 to-tide-deep/45 mix-blend-multiply" aria-hidden="true"></div>
+            <img src="assets/portfolio/night-wear.webp" alt="Night wear silhouette" loading="lazy" class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-95" />
+          </div>
+          <!-- 4 — Knitwear, cream tint -->
+          <div class="arch-card relative aspect-[3/4] bg-cream mt-4 md:mt-12">
+            <div class="absolute inset-0 bg-gradient-to-b from-cream/0 to-cream/30 mix-blend-multiply" aria-hidden="true"></div>
+            <img src="assets/portfolio/knitwear.webp" alt="Knitwear silhouette" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+          </div>
+          <!-- 5 — Kidswear, wave-blue-bright tint -->
+          <div class="arch-card relative aspect-[3/4] bg-wave-blue-bright/40">
+            <div class="absolute inset-0 bg-gradient-to-b from-wave-blue-bright/15 to-wave-blue-soft/35 mix-blend-multiply" aria-hidden="true"></div>
+            <img src="assets/portfolio/kidswear.jpg" alt="Kidswear silhouette" loading="lazy" class="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-95" />
+          </div>
+          <!-- 6 — Turag, tide-soft tint, with crown accent (homage to beSpoke) -->
+          <div class="relative">
+            <svg class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-8 text-cream" viewBox="0 0 48 32" fill="currentColor" aria-hidden="true">
+              <path d="M2 30 L8 8 L14 22 L20 4 L26 22 L32 4 L38 22 L44 8 L46 30 Z"/>
+            </svg>
+            <div class="arch-card relative aspect-[3/4] bg-tide-soft mt-4 md:mt-8">
+              <div class="absolute inset-0 bg-gradient-to-b from-tide-soft/0 to-tide/30 mix-blend-multiply" aria-hidden="true"></div>
+              <img src="assets/portfolio/turag.webp" alt="Turag Active model" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Caption strip below the cards -->
+        <div class="mt-8 flex items-center justify-center gap-4 md:gap-6 font-mono text-[10px] uppercase tracking-[0.32em] text-slate-text/70">
+          <span>Active</span>
+          <span class="w-1 h-1 rounded-full bg-tide-deep/40"></span>
+          <span>Evening</span>
+          <span class="w-1 h-1 rounded-full bg-tide-deep/40"></span>
+          <span>Night</span>
+          <span class="w-1 h-1 rounded-full bg-tide-deep/40"></span>
+          <span>Knit</span>
+          <span class="w-1 h-1 rounded-full bg-tide-deep/40"></span>
+          <span>Kids</span>
+          <span class="w-1 h-1 rounded-full bg-tide-deep/40"></span>
+          <span class="text-urmi-blue-deep font-semibold">Turag</span>
+        </div>
       </div>
     </section>
 
@@ -157,27 +266,57 @@
           </div>
         </div>
 
-        <!-- Brand wordmark grid — 12 brands, varied typography (matches the home trust band) -->
+        <!-- Brand wordmark MARQUEE — two rows scrolling opposite directions, infinite loop -->
         <div class="bg-urmi-blue-deep relative overflow-hidden rounded-[24px] reveal" data-delay="160">
           <!-- Decorative sash -->
           <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
             <div class="absolute -left-1/4 top-1/2 -translate-y-1/2 w-[160%] h-32 -rotate-[8deg] bg-gradient-to-r from-wave-blue/15 via-wave-blue/5 to-transparent"></div>
           </div>
-          <div class="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 divide-x divide-y divide-paper/10">
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif italic font-light text-paper/85 text-2xl md:text-3xl">ellos</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-extrabold uppercase text-paper text-lg md:text-xl tracking-[0.04em]">DECATHLON</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-black italic uppercase text-paper text-2xl md:text-3xl">PUMA</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif text-paper/90 text-xl md:text-2xl">Auchan</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-bold text-paper text-2xl md:text-3xl tracking-tight">H&amp;M</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif italic text-paper/85 text-base md:text-lg text-center leading-tight">Marks &amp;<br>Spencer</span>
 
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-bold uppercase text-paper text-lg md:text-xl tracking-[0.18em]">UNIQLO</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-medium uppercase text-paper/85 text-base md:text-lg tracking-[0.32em]">MUJI</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-black uppercase text-paper text-2xl md:text-3xl">GU</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif italic text-paper/90 text-xl md:text-2xl">La Redoute</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-display font-light uppercase text-paper/85 text-base md:text-lg tracking-[0.32em]">EXPRESS</span>
-            <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-4 font-serif italic text-paper text-xl md:text-2xl">N.Y. &amp; C.</span>
+          <!-- Row 1 — scrolls LEFT -->
+          <div class="marquee relative border-b border-paper/10">
+            <div class="marquee-track marquee-track-left">
+              <!-- Set A -->
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif italic font-light text-paper/85 text-2xl md:text-3xl whitespace-nowrap border-r border-paper/10">ellos</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-extrabold uppercase text-paper text-lg md:text-xl tracking-[0.04em] whitespace-nowrap border-r border-paper/10">DECATHLON</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-black italic uppercase text-paper text-2xl md:text-3xl whitespace-nowrap border-r border-paper/10">PUMA</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif text-paper/90 text-xl md:text-2xl whitespace-nowrap border-r border-paper/10">Auchan</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-bold text-paper text-2xl md:text-3xl tracking-tight whitespace-nowrap border-r border-paper/10">H&amp;M</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif italic text-paper/85 text-base md:text-lg text-center leading-tight whitespace-nowrap border-r border-paper/10">Marks &amp; Spencer</span>
+              <!-- Set A duplicated for seamless loop -->
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif italic font-light text-paper/85 text-2xl md:text-3xl whitespace-nowrap border-r border-paper/10" aria-hidden="true">ellos</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-extrabold uppercase text-paper text-lg md:text-xl tracking-[0.04em] whitespace-nowrap border-r border-paper/10" aria-hidden="true">DECATHLON</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-black italic uppercase text-paper text-2xl md:text-3xl whitespace-nowrap border-r border-paper/10" aria-hidden="true">PUMA</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif text-paper/90 text-xl md:text-2xl whitespace-nowrap border-r border-paper/10" aria-hidden="true">Auchan</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-bold text-paper text-2xl md:text-3xl tracking-tight whitespace-nowrap border-r border-paper/10" aria-hidden="true">H&amp;M</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif italic text-paper/85 text-base md:text-lg text-center leading-tight whitespace-nowrap border-r border-paper/10" aria-hidden="true">Marks &amp; Spencer</span>
+            </div>
           </div>
+
+          <!-- Row 2 — scrolls RIGHT -->
+          <div class="marquee relative">
+            <div class="marquee-track marquee-track-right">
+              <!-- Set B -->
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-bold uppercase text-paper text-lg md:text-xl tracking-[0.18em] whitespace-nowrap border-r border-paper/10">UNIQLO</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-medium uppercase text-paper/85 text-base md:text-lg tracking-[0.32em] whitespace-nowrap border-r border-paper/10">MUJI</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-black uppercase text-paper text-2xl md:text-3xl whitespace-nowrap border-r border-paper/10">GU</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif italic text-paper/90 text-xl md:text-2xl whitespace-nowrap border-r border-paper/10">La Redoute</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-light uppercase text-paper/85 text-base md:text-lg tracking-[0.32em] whitespace-nowrap border-r border-paper/10">EXPRESS</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif italic text-paper text-xl md:text-2xl whitespace-nowrap border-r border-paper/10">N.Y. &amp; C.</span>
+              <!-- Set B duplicated for seamless loop -->
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-bold uppercase text-paper text-lg md:text-xl tracking-[0.18em] whitespace-nowrap border-r border-paper/10" aria-hidden="true">UNIQLO</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-medium uppercase text-paper/85 text-base md:text-lg tracking-[0.32em] whitespace-nowrap border-r border-paper/10" aria-hidden="true">MUJI</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-black uppercase text-paper text-2xl md:text-3xl whitespace-nowrap border-r border-paper/10" aria-hidden="true">GU</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif italic text-paper/90 text-xl md:text-2xl whitespace-nowrap border-r border-paper/10" aria-hidden="true">La Redoute</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-display font-light uppercase text-paper/85 text-base md:text-lg tracking-[0.32em] whitespace-nowrap border-r border-paper/10" aria-hidden="true">EXPRESS</span>
+              <span class="brand-word inline-flex items-center justify-center py-10 md:py-14 px-10 md:px-14 font-serif italic text-paper text-xl md:text-2xl whitespace-nowrap border-r border-paper/10" aria-hidden="true">N.Y. &amp; C.</span>
+            </div>
+          </div>
+
+          <!-- Edge fades for the marquee -->
+          <div class="absolute top-0 bottom-0 left-0 w-16 md:w-24 bg-gradient-to-r from-urmi-blue-deep to-transparent pointer-events-none" aria-hidden="true"></div>
+          <div class="absolute top-0 bottom-0 right-0 w-16 md:w-24 bg-gradient-to-l from-urmi-blue-deep to-transparent pointer-events-none" aria-hidden="true"></div>
+
           <!-- Footer line inside brand strip -->
           <div class="relative flex flex-col md:flex-row items-center justify-between gap-3 px-6 md:px-10 py-6 border-t border-paper/15">
             <span class="font-mono text-[10px] uppercase tracking-[0.28em] text-paper/65">12 of 30+ &middot; Updated SS '26</span>
@@ -223,7 +362,7 @@
 
           <!-- LEFT: hero image -->
           <article class="relative lg:col-span-7 aspect-[5/6] lg:aspect-auto lg:min-h-[640px] overflow-hidden rounded-[24px] bg-tide-deep reveal" data-delay="80">
-            <img src="assets/portfolio/active-wear.webp" alt="Turag Active — performance activewear" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+            <img src="assets/portfolio/turag.webp" alt="Turag Active — performance activewear" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
             <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(20,63,115,0.10) 0%, rgba(6,21,40,0.65) 100%);" aria-hidden="true"></div>
 
             <!-- Top-left chip -->
@@ -316,7 +455,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-[260px] md:auto-rows-[300px] lg:auto-rows-[340px]">
 
           <!-- ACTIVE WEAR — featured (large) -->
-          <a href="connect.html" class="cat-card relative col-span-1 sm:col-span-2 lg:col-span-2 row-span-2 overflow-hidden bg-cloud reveal group" data-delay="0">
+          <button type="button" data-cat="active" class="cat-card relative col-span-1 sm:col-span-2 lg:col-span-2 row-span-2 overflow-hidden bg-cloud reveal group text-left" data-delay="0">
             <img src="assets/portfolio/active-wear.webp" alt="Active wear — performance with a conscience" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
             <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
             <div class="absolute top-5 left-5 right-5 flex items-start justify-between">
@@ -326,14 +465,14 @@
             <div class="cat-label absolute bottom-7 left-7 right-7">
               <h3 class="font-serif text-paper" style="font-size: clamp(28px, 4vw, 56px); line-height: 1; font-weight: 600;">Active <em class="italic" style="color:#8FCBFF;">Wear</em></h3>
               <div class="mt-4 flex items-center gap-3">
-                <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85">Performance with a conscience</span>
+                <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/85">Tap to explore the line</span>
                 <span class="text-paper/50">&rarr;</span>
               </div>
             </div>
-          </a>
+          </button>
 
           <!-- EVENING WEAR -->
-          <a href="connect.html" class="cat-card relative overflow-hidden bg-cloud reveal group" data-delay="120">
+          <button type="button" data-cat="evening" class="cat-card relative overflow-hidden bg-cloud reveal group text-left" data-delay="120">
             <img src="assets/portfolio/evening-wear.webp" alt="Evening wear — silhouettes for the gala" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
             <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
             <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(02)</span>
@@ -341,10 +480,10 @@
               <h3 class="font-serif text-paper" style="font-size: 22px; line-height: 1.05; font-weight: 600;">Evening <em class="italic" style="color:#8FCBFF;">Wear</em></h3>
               <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 mt-2 block">Silhouettes for the gala &rarr;</span>
             </div>
-          </a>
+          </button>
 
           <!-- NIGHT WEAR -->
-          <a href="connect.html" class="cat-card relative overflow-hidden bg-cloud reveal group" data-delay="240">
+          <button type="button" data-cat="night" class="cat-card relative overflow-hidden bg-cloud reveal group text-left" data-delay="240">
             <img src="assets/portfolio/night-wear.webp" alt="Night wear — soft hand, easy fit" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
             <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
             <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(03)</span>
@@ -352,10 +491,10 @@
               <h3 class="font-serif text-paper" style="font-size: 22px; line-height: 1.05; font-weight: 600;">Night <em class="italic" style="color:#8FCBFF;">Wear</em></h3>
               <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 mt-2 block">Soft hand, easy fit &rarr;</span>
             </div>
-          </a>
+          </button>
 
           <!-- KNITWEAR -->
-          <a href="connect.html" class="cat-card relative overflow-hidden bg-cloud reveal group" data-delay="360">
+          <button type="button" data-cat="knit" class="cat-card relative overflow-hidden bg-cloud reveal group text-left" data-delay="360">
             <img src="assets/portfolio/knitwear.webp" alt="Knitwear — yarn into fabric, fabric into form" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
             <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
             <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(04)</span>
@@ -363,10 +502,10 @@
               <h3 class="font-serif text-paper" style="font-size: 22px; line-height: 1.05; font-weight: 600;">Knit<em class="italic" style="color:#8FCBFF;">wear</em></h3>
               <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 mt-2 block">Fibre into form &rarr;</span>
             </div>
-          </a>
+          </button>
 
           <!-- KIDSWEAR -->
-          <a href="connect.html" class="cat-card relative overflow-hidden bg-cloud reveal group" data-delay="480">
+          <button type="button" data-cat="kids" class="cat-card relative overflow-hidden bg-cloud reveal group text-left" data-delay="480">
             <img src="assets/portfolio/kidswear.jpg" alt="Kidswear — built to grow with them" loading="lazy" class="absolute inset-0 w-full h-full object-cover" style="filter: grayscale(0.85);" />
             <div class="cat-overlay absolute inset-0 bg-urmi-blue-deep/70" aria-hidden="true"></div>
             <span class="absolute top-3 left-3 font-mono text-[10px] uppercase tracking-[0.32em] text-paper/95">(05)</span>
@@ -374,8 +513,46 @@
               <h3 class="font-serif text-paper" style="font-size: 22px; line-height: 1.05; font-weight: 600;">Kids<em class="italic" style="color:#8FCBFF;">wear</em></h3>
               <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-paper/75 mt-2 block">Built to grow with them &rarr;</span>
             </div>
-          </a>
+          </button>
 
+        </div>
+
+        <!-- ============================================================
+             CATEGORY DRAWER — slides open when a category card is clicked.
+             Renders that category's photo strip moving start → finish.
+             ============================================================ -->
+        <div id="cat-drawer" class="cat-drawer" aria-live="polite">
+          <div class="bg-urmi-blue-deep relative rounded-[24px] overflow-hidden">
+            <!-- Drawer header -->
+            <div class="relative flex items-center justify-between gap-4 px-6 md:px-10 py-5 border-b border-paper/15">
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-[0.32em] text-wave-blue-bright">// NOW SHOWING</span>
+                <h3 id="cat-drawer-title" class="font-serif text-paper mt-1" style="font-size: clamp(22px, 2.6vw, 32px); font-weight: 600; line-height: 1.05;">The Active line</h3>
+              </div>
+              <button type="button" id="cat-drawer-close" aria-label="Close category strip" class="w-10 h-10 rounded-full bg-paper/10 hover:bg-paper/20 transition-colors flex items-center justify-center text-paper border border-paper/20">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Photo strip — populated by JS on open -->
+            <div class="cat-strip relative py-8 md:py-10 px-6 md:px-10">
+              <div id="cat-strip-track" class="cat-strip-track">
+                <!-- tiles injected here -->
+              </div>
+              <!-- Edge fades -->
+              <div class="absolute top-0 bottom-0 left-0 w-12 md:w-20 bg-gradient-to-r from-urmi-blue-deep to-transparent pointer-events-none" aria-hidden="true"></div>
+              <div class="absolute top-0 bottom-0 right-0 w-12 md:w-20 bg-gradient-to-l from-urmi-blue-deep to-transparent pointer-events-none" aria-hidden="true"></div>
+            </div>
+
+            <!-- Drawer footer -->
+            <div class="flex flex-col md:flex-row items-center justify-between gap-3 px-6 md:px-10 py-5 border-t border-paper/15">
+              <span id="cat-drawer-count" class="font-mono text-[10px] uppercase tracking-[0.28em] text-paper/65">10 looks &middot; SS '26 capsule</span>
+              <a href="connect.html" class="inline-flex items-center gap-2 font-display font-semibold uppercase tracking-[0.18em] text-paper hover:text-wave-blue-bright transition-colors group" style="font-size: 11px;">
+                Request a sample pack
+                <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- Section closer -->
@@ -426,6 +603,158 @@
           });
         }, { threshold: 0.12 });
         els.forEach(function(el){ io.observe(el); });
+      })();
+
+      // Category drawer — opens a horizontally-scrolling photo strip per category
+      (function(){
+        var DATA = {
+          active: {
+            title: 'The Active line',
+            subtitle: '10 looks · SS \'26 capsule',
+            hero: 'assets/portfolio/active-wear.webp',
+            placeholders: ['Seamless Legging','Compression Tee','Performance Tank','Track Hoodie','Run Short','Yoga Bra','Mid-Layer Zip','Recycled Tee','Wind Shell'],
+            tint: '#1E5C9F'
+          },
+          evening: {
+            title: 'The Evening line',
+            subtitle: '8 looks · FW \'25 capsule',
+            hero: 'assets/portfolio/evening-wear.webp',
+            placeholders: ['Silk Slip','Crepe Gown','Tailored Tux','Beaded Top','Velvet Wrap','Satin Cami','Pleated Trouser','Sequin Dress'],
+            tint: '#143F73'
+          },
+          night: {
+            title: 'The Night line',
+            subtitle: '7 looks · year-round',
+            hero: 'assets/portfolio/night-wear.webp',
+            placeholders: ['Cotton Pajama','Modal Camisole','Sleep Short','Robe','Lounge Tee','Henley Set','Jersey Brief'],
+            tint: '#4A7864'
+          },
+          knit: {
+            title: 'The Knitwear line',
+            subtitle: '9 looks · year-round',
+            hero: 'assets/portfolio/knitwear.webp',
+            placeholders: ['Crew Sweater','Cable Cardigan','Merino Polo','Roll Neck','Fine Gauge Tee','Chunky Pullover','V-Neck','Knit Vest','Ribbed Tank'],
+            tint: '#7FAA9C'
+          },
+          kids: {
+            title: 'The Kidswear line',
+            subtitle: '8 looks · all sizes',
+            hero: 'assets/portfolio/kidswear.jpg',
+            placeholders: ['Logo Tee','Stripe Romper','Joggers','Hoodie','Pinafore','Twill Short','Knit Set','Rain Jacket'],
+            tint: '#5BA0DE'
+          }
+        };
+
+        var drawer = document.getElementById('cat-drawer');
+        var drawerTitle = document.getElementById('cat-drawer-title');
+        var drawerCount = document.getElementById('cat-drawer-count');
+        var stripTrack = document.getElementById('cat-strip-track');
+        var closeBtn = document.getElementById('cat-drawer-close');
+        var triggers = document.querySelectorAll('[data-cat]');
+        var current = null;
+
+        function buildTile(item){
+          var node = document.createElement('div');
+          if (item.type === 'photo') {
+            node.className = 'cat-tile cat-tile-photo';
+            var img = document.createElement('img');
+            img.src = item.src;
+            img.alt = item.label || '';
+            img.loading = 'lazy';
+            node.appendChild(img);
+            var overlay = document.createElement('div');
+            overlay.className = 'absolute bottom-0 left-0 right-0 px-4 py-3 bg-gradient-to-t from-urmi-blue-deep/80 to-transparent';
+            overlay.innerHTML = '<span class="font-mono text-[9px] uppercase tracking-[0.28em] text-paper">' + (item.label || '') + '</span>';
+            node.appendChild(overlay);
+          } else {
+            node.className = 'cat-tile cat-tile-placeholder';
+            node.style.background = 'linear-gradient(155deg, ' + item.tint + ' 0%, #0F1E33 100%)';
+            var top = document.createElement('div');
+            top.className = 'relative z-10 flex items-center justify-between';
+            top.innerHTML =
+              '<span class="font-mono text-[9px] uppercase tracking-[0.28em] text-paper/85">№ ' + (item.index < 10 ? '0' + item.index : item.index) + '</span>' +
+              '<svg class="w-4 h-4 text-paper/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>';
+            node.appendChild(top);
+            var bot = document.createElement('div');
+            bot.className = 'relative z-10';
+            bot.innerHTML =
+              '<span class="font-mono text-[9px] uppercase tracking-[0.32em] text-paper/55 block mb-2">Placeholder</span>' +
+              '<span class="font-serif italic text-paper block" style="font-size: 18px; line-height: 1.15; font-weight: 600;">' + item.label + '</span>';
+            node.appendChild(bot);
+            // hairline base
+            var line = document.createElement('div');
+            line.className = 'absolute bottom-0 left-4 right-4 h-px bg-paper/20';
+            node.appendChild(line);
+          }
+          return node;
+        }
+
+        function buildStrip(key){
+          var data = DATA[key];
+          if (!data) return;
+
+          // Build the source list: hero photo first, then placeholders
+          var items = [];
+          items.push({ type: 'photo', src: data.hero, label: data.title.replace('The ','').replace(' line','') + ' · 01' });
+          data.placeholders.forEach(function(label, i){
+            items.push({ type: 'placeholder', label: label, index: i + 2, tint: data.tint });
+          });
+
+          // Clear track + duplicate items for seamless marquee loop
+          stripTrack.innerHTML = '';
+          items.forEach(function(it){ stripTrack.appendChild(buildTile(it)); });
+          items.forEach(function(it){
+            var clone = buildTile(it);
+            clone.setAttribute('aria-hidden','true');
+            // clones don't need the staggered entrance — make them visible immediately
+            clone.classList.remove('cat-tile');
+            clone.style.flexShrink = '0';
+            stripTrack.appendChild(clone);
+          });
+
+          drawerTitle.textContent = data.title;
+          drawerCount.textContent = data.subtitle;
+        }
+
+        function openDrawer(key, trigger){
+          // Toggle off if same category clicked again
+          if (current === key) {
+            closeDrawer();
+            return;
+          }
+          current = key;
+          // Visual selection state
+          triggers.forEach(function(t){ t.classList.remove('is-active'); t.setAttribute('aria-pressed','false'); });
+          if (trigger) { trigger.classList.add('is-active'); trigger.setAttribute('aria-pressed','true'); }
+
+          buildStrip(key);
+
+          // Force reflow so transition runs cleanly when re-opening
+          drawer.classList.remove('is-open');
+          // eslint-disable-next-line no-unused-expressions
+          drawer.offsetHeight;
+          drawer.classList.add('is-open');
+
+          // Smooth-scroll the drawer into view
+          setTimeout(function(){
+            drawer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 80);
+        }
+
+        function closeDrawer(){
+          drawer.classList.remove('is-open');
+          triggers.forEach(function(t){ t.classList.remove('is-active'); t.setAttribute('aria-pressed','false'); });
+          current = null;
+        }
+
+        triggers.forEach(function(t){
+          t.setAttribute('aria-pressed','false');
+          t.addEventListener('click', function(){ openDrawer(t.getAttribute('data-cat'), t); });
+        });
+        closeBtn.addEventListener('click', closeDrawer);
+        document.addEventListener('keydown', function(e){
+          if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
+        });
       })();
     </script>
 
