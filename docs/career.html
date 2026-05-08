@@ -69,20 +69,65 @@
       .hero-fade[data-d="320"] { animation-delay: 520ms; }
       @keyframes hero-rise { to { opacity: 1; transform: translateY(0); } }
 
-      /* Benefit tile hover */
-      .benefit-tile { transition: border-color 250ms ease, transform 250ms ease; }
-      .benefit-tile:hover { border-color: #4A7864; transform: translateY(-4px); }
+      /* Hero U-shape photos — 6 portrait tiles framing the centered headline.
+         Order traces a U: TL → ML → BL → BR → MR → TR. Each photo enters
+         from its outer edge with an 220ms cascade so the U is "drawn" in. */
+      .u-photo {
+        position: absolute;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 24px 48px rgba(15,30,51,0.30), 0 0 0 1px rgba(252,253,252,0.10);
+        opacity: 0;
+        will-change: transform, opacity;
+        animation: u-enter 900ms cubic-bezier(0.22,1,0.36,1) forwards;
+      }
+      .u-photo img { width: 100%; height: 100%; object-fit: cover; }
+      .u-photo.from-left  { transform: translateX(-60px) translateY(20px); }
+      .u-photo.from-right { transform: translateX(60px)  translateY(20px); }
+      .u-photo.from-bottom-left  { transform: translateX(-30px) translateY(60px); }
+      .u-photo.from-bottom-right { transform: translateX(30px)  translateY(60px); }
+      @keyframes u-enter { to { opacity: 1; transform: translateX(0) translateY(0); } }
+      .u-photo[data-step="1"] { animation-delay:  300ms; }
+      .u-photo[data-step="2"] { animation-delay:  520ms; }
+      .u-photo[data-step="3"] { animation-delay:  740ms; }
+      .u-photo[data-step="4"] { animation-delay:  960ms; }
+      .u-photo[data-step="5"] { animation-delay: 1180ms; }
+      .u-photo[data-step="6"] { animation-delay: 1400ms; }
 
-      /* Filter pill */
+      /* Wavy connector — vertical SVG path drawing in as the section enters */
+      .wavy-connector path { stroke-dasharray: 1400; stroke-dashoffset: 1400; transition: stroke-dashoffset 1800ms cubic-bezier(0.22,1,0.36,1); }
+      .wavy-connector.is-drawn path { stroke-dashoffset: 0; }
+      .wavy-connector .wavy-node { opacity: 0; transition: opacity 350ms ease; }
+      .wavy-connector.is-drawn .wavy-node { opacity: 1; }
+      .wavy-connector.is-drawn .wavy-node:nth-of-type(1) { transition-delay:  300ms; }
+      .wavy-connector.is-drawn .wavy-node:nth-of-type(2) { transition-delay:  700ms; }
+      .wavy-connector.is-drawn .wavy-node:nth-of-type(3) { transition-delay: 1100ms; }
+      .wavy-connector.is-drawn .wavy-node:nth-of-type(4) { transition-delay: 1500ms; }
+
+      /* Benefit tile hover (now light bg, soft lavender-feel via tide-mist) */
+      .benefit-tile { transition: border-color 250ms ease, transform 250ms ease, box-shadow 250ms ease; }
+      .benefit-tile:hover { border-color: #4A7864; transform: translateY(-4px); box-shadow: 0 18px 40px rgba(74,120,100,0.10); }
+
+      /* Filter pill (light bg flavour) */
       .filter-pill { transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease; }
-      .filter-pill:hover { border-color: rgba(252,253,252,0.5); color: rgba(252,253,252,0.9); }
-      .filter-pill.is-active { background: #FCFDFC; color: #143F73; border-color: #FCFDFC; }
+      .filter-pill:hover { border-color: rgba(20,63,115,0.45); color: rgba(20,63,115,0.95); }
+      .filter-pill.is-active { background: #143F73; color: #FCFDFC; border-color: #143F73; }
 
-      /* Job row hover */
+      /* Job row hover (light theme) */
       .job-row { transition: background-color 150ms ease, padding 150ms ease, margin 150ms ease; }
-      .job-row:hover { background: rgba(252,253,252,0.05); padding-left: 1rem; padding-right: 1rem; margin-left: -1rem; margin-right: -1rem; }
+      .job-row:hover { background: rgba(20,63,115,0.04); padding-left: 1rem; padding-right: 1rem; margin-left: -1rem; margin-right: -1rem; }
       .job-row:hover .job-arrow { transform: translateX(4px); }
       .job-arrow { transition: transform 200ms cubic-bezier(0.22,1,0.36,1); }
+
+      /* Testimonial photo strip + cycle */
+      .quote-photo { transition: transform 350ms cubic-bezier(0.22,1,0.36,1), opacity 280ms ease, box-shadow 280ms ease; opacity: 0.45; transform: scale(0.88); cursor: pointer; }
+      .quote-photo.is-active { opacity: 1; transform: scale(1); box-shadow: 0 18px 40px rgba(20,63,115,0.18); }
+      .quote-photo:hover { opacity: 0.85; }
+      .quote-photo img { width: 100%; height: 100%; object-fit: cover; }
+      .quote-content { transition: opacity 280ms ease, transform 320ms cubic-bezier(0.22,1,0.36,1); }
+      .quote-content.is-leaving { opacity: 0; transform: translateY(8px); }
+      .quote-arrow { transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease; }
+      .quote-arrow:hover { border-color: #143F73; color: #143F73; background: rgba(20,63,115,0.05); }
 
       /* Ripple — same vocabulary as the sustainability hero */
       @keyframes ripple-out {
@@ -105,8 +150,11 @@
         *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         .reveal { opacity: 1 !important; transform: none !important; }
         .hero-fade { opacity: 1 !important; transform: none !important; animation: none !important; }
+        .u-photo { opacity: 1 !important; transform: none !important; animation: none !important; }
         .ripple-ring { animation: none !important; opacity: 0.18 !important; transform: scale(1) !important; }
         .benefit-tile:hover { transform: none !important; }
+        .wavy-connector path { stroke-dashoffset: 0 !important; }
+        .wavy-connector .wavy-node { opacity: 1 !important; }
       }
     </style>
   </head>
@@ -153,289 +201,393 @@
     </div>
 
     <!-- ============================================================
-         01 — HERO (full-bleed factory floor photo + manifesto)
+         01 — HERO (centered manifesto, 6 photos arranged in a U)
          ============================================================ -->
-    <section id="hero" class="relative min-h-screen overflow-hidden">
+    <section id="hero" class="relative min-h-screen overflow-hidden flex items-center justify-center px-6 md:px-12 pt-32 pb-16" style="background: linear-gradient(180deg, #F0F5F2 0%, #DCE9E3 100%);">
 
-      <!-- Background photo -->
-      <img src="assets/about/factory-floor-hero.jpg" alt="Inside an Urmi production floor — colleagues at work" class="absolute inset-0 w-full h-full object-cover" />
-      <!-- Gradient overlay — tonal navy to transparent (dark from the bottom) -->
-      <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background: linear-gradient(to top, rgba(20,42,68,0.82) 0%, rgba(20,42,68,0.55) 35%, rgba(20,42,68,0.10) 65%, transparent 100%);"></div>
-      <!-- Side fade for legibility on right-hand stat column -->
-      <div class="absolute inset-y-0 right-0 w-1/3 pointer-events-none hidden md:block" aria-hidden="true" style="background: linear-gradient(to left, rgba(20,42,68,0.45) 0%, transparent 100%);"></div>
+      <!-- Soft halo behind the headline -->
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[640px] rounded-full pointer-events-none hidden md:block" aria-hidden="true" style="background: radial-gradient(circle, rgba(74,120,100,0.10) 0%, transparent 65%);"></div>
 
-      <!-- Three stat pills (top-right column on desktop) -->
-      <div class="hidden md:flex absolute top-32 md:top-36 right-8 md:right-16 flex-col gap-6 z-10 text-right">
-        <div class="hero-fade" data-d="240">
-          <div class="font-display font-semibold text-paper" style="font-size: 28px; line-height: 1;">16,893</div>
-          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-paper/55 mt-1.5 block">Colleagues</span>
-        </div>
-        <div class="hero-fade" data-d="320">
-          <div class="font-display font-semibold text-paper" style="font-size: 28px; line-height: 1;">48,124 <span class="text-paper/60" style="font-size: 18px;">hrs</span></div>
-          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-paper/55 mt-1.5 block">Training in 2023&ndash;24</span>
-        </div>
-        <div class="hero-fade" data-d="320">
-          <div class="font-display font-semibold text-paper" style="font-size: 28px; line-height: 1;">3</div>
-          <span class="font-mono text-[11px] uppercase tracking-[0.22em] text-paper/55 mt-1.5 block">On-site childcare centres</span>
-        </div>
+      <!-- ============================================================
+           U-shape photo arrangement (desktop only)
+           Order traces a U: TL→ML→BL→BR→MR→TR
+           ============================================================ -->
+
+      <!-- 1: top-left -->
+      <div class="u-photo from-left hidden md:block" data-step="1" style="top: 14%; left: 4%; width: 168px; height: 220px;">
+        <img src="assets/career/team-portrait-2.jpg" alt="Designers in the Urmi studio" loading="eager" />
+      </div>
+      <!-- 2: middle-left -->
+      <div class="u-photo from-left hidden md:block" data-step="2" style="top: 40%; left: 1%; width: 170px; height: 230px;">
+        <img src="assets/career/team-meeting.jpg" alt="Urmi colleagues celebrating a project milestone" loading="eager" />
+      </div>
+      <!-- 3: bottom-left (curving inward) -->
+      <div class="u-photo from-bottom-left hidden md:block" data-step="3" style="bottom: 8%; left: 9%; width: 200px; height: 175px;">
+        <img src="assets/career/nursery.webp" alt="On-site cafeteria full of Urmi colleagues" loading="eager" />
       </div>
 
-      <!-- Hero content (bottom-left) -->
-      <div class="absolute bottom-0 left-0 right-0 z-10 px-6 md:px-16 pb-16 md:pb-24">
-        <span class="hero-fade font-mono uppercase tracking-[0.32em] text-paper/70 block" style="font-size: 11px;">CAREERS &mdash; ০১</span>
-        <h1 class="hero-fade font-display font-semibold text-paper mt-4 md:mt-5" data-d="80" style="font-size: clamp(40px, 6.4vw, 80px); line-height: 1.0; max-width: 56rem; letter-spacing: -0.01em;">
-          Our people are not our greatest asset.<br>
-          They are <em class="not-italic" style="color:#8FCBFF;">the reason we exist</em>.
+      <!-- 4: bottom-right (curving inward) -->
+      <div class="u-photo from-bottom-right hidden md:block" data-step="4" style="bottom: 8%; right: 9%; width: 200px; height: 175px;">
+        <img src="assets/career/innovation-award.jpg" alt="Urmi team receiving the 2023 Innovation Award" loading="eager" />
+      </div>
+      <!-- 5: middle-right -->
+      <div class="u-photo from-right hidden md:block" data-step="5" style="top: 40%; right: 1%; width: 170px; height: 230px;">
+        <img src="assets/career/team-floor.jpg" alt="Urmi management team at an agreement signing" loading="eager" />
+      </div>
+      <!-- 6: top-right -->
+      <div class="u-photo from-right hidden md:block" data-step="6" style="top: 14%; right: 4%; width: 168px; height: 220px;">
+        <img src="assets/career/team-portrait-1.jpg" alt="Urmi corporate gathering" loading="eager" />
+      </div>
+
+      <!-- ============================================================
+           Centered hero content
+           ============================================================ -->
+      <div class="relative z-10 max-w-3xl mx-auto text-center">
+        <span class="hero-fade font-mono uppercase tracking-[0.32em] text-tide-deep block" style="font-size: 11px;">CAREERS &mdash; ০১</span>
+        <h1 class="hero-fade font-serif text-urmi-blue-deep mt-5" data-d="80" style="font-size: clamp(38px, 5.4vw, 72px); line-height: 1.0; font-weight: 600; letter-spacing: -0.01em;">
+          Our people are not our<br>greatest asset.<br>
+          They are <em class="italic" style="color:#4A7864;">the reason we exist</em>.
         </h1>
-        <p class="hero-fade text-paper/80 mt-5 max-w-xl" data-d="160" style="font-size: 18px; line-height: 1.7;">
+        <p class="hero-fade text-slate-text mt-6 max-w-xl mx-auto" data-d="160" style="font-size: 17px; line-height: 1.7;">
           16,893 colleagues across five locations. Every one of them in a climate-controlled, BetterWork-verified, childcare-equipped facility. Come build something that lasts.
         </p>
-        <div class="hero-fade mt-8 flex flex-wrap gap-4 md:gap-6" data-d="240">
-          <a href="#roles" class="inline-flex items-center gap-2 bg-paper text-urmi-blue-deep px-7 md:px-8 py-3.5 md:py-4 font-display font-semibold uppercase tracking-[0.18em] hover:bg-wave-blue hover:text-paper transition-colors group" style="font-size: 12px;">
+        <div class="hero-fade mt-8 flex flex-wrap justify-center gap-4 md:gap-5" data-d="240">
+          <a href="#roles" class="inline-flex items-center gap-2 bg-urmi-blue-deep text-paper px-7 md:px-8 py-3.5 md:py-4 font-display font-semibold uppercase tracking-[0.18em] hover:bg-urmi-blue transition-colors group" style="font-size: 12px;">
             See Open Roles
             <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>
-          <a href="#life" class="inline-flex items-center gap-2 border border-paper text-paper px-7 md:px-8 py-3.5 md:py-4 font-display font-semibold uppercase tracking-[0.18em] hover:bg-paper hover:text-urmi-blue-deep transition-colors" style="font-size: 12px;">
+          <a href="#life" class="inline-flex items-center gap-2 border border-urmi-blue-deep text-urmi-blue-deep px-7 md:px-8 py-3.5 md:py-4 font-display font-semibold uppercase tracking-[0.18em] hover:bg-urmi-blue-deep hover:text-paper transition-colors" style="font-size: 12px;">
             Learn About Life at Urmi
           </a>
         </div>
+
+        <!-- Three stat pills bar — tucked under the CTAs, centered -->
+        <div class="hero-fade mt-12 max-w-2xl mx-auto border-t border-b border-slate-text/15 grid grid-cols-3 divide-x divide-slate-text/15" data-d="320">
+          <div class="text-center px-4 py-5">
+            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 22px; line-height: 1;">16,893</div>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/65 mt-1.5 block">Colleagues</span>
+          </div>
+          <div class="text-center px-4 py-5">
+            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 22px; line-height: 1;">48,124 <span class="text-slate-text/55" style="font-size: 14px;">hrs</span></div>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/65 mt-1.5 block">Training '23&ndash;24</span>
+          </div>
+          <div class="text-center px-4 py-5">
+            <div class="font-display font-semibold text-urmi-blue-deep" style="font-size: 22px; line-height: 1;">3</div>
+            <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-slate-text/65 mt-1.5 block">Childcare centres</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile: photo strip below the content (since absolute U is desktop-only) -->
+      <div class="md:hidden absolute left-0 right-0 bottom-0 overflow-x-auto py-4 px-6 flex gap-3 z-0" aria-hidden="true">
+        <img src="assets/career/team-portrait-2.jpg" alt="" class="h-24 w-auto rounded-2xl shadow-lg object-cover flex-shrink-0" />
+        <img src="assets/career/team-meeting.jpg" alt="" class="h-24 w-auto rounded-2xl shadow-lg object-cover flex-shrink-0" />
+        <img src="assets/career/nursery.webp" alt="" class="h-24 w-auto rounded-2xl shadow-lg object-cover flex-shrink-0" />
+        <img src="assets/career/innovation-award.jpg" alt="" class="h-24 w-auto rounded-2xl shadow-lg object-cover flex-shrink-0" />
+        <img src="assets/career/team-floor.jpg" alt="" class="h-24 w-auto rounded-2xl shadow-lg object-cover flex-shrink-0" />
+        <img src="assets/career/team-portrait-1.jpg" alt="" class="h-24 w-auto rounded-2xl shadow-lg object-cover flex-shrink-0" />
       </div>
     </section>
 
     <!-- ============================================================
-         02 — LIFE AT URMI (4 benefit tiles + 3 testimonials)
+         02 — LIFE AT URMI (heading left, 4 cards right w/ wavy connector)
          ============================================================ -->
     <section id="life" class="bg-paper py-24 md:py-32 px-6 md:px-12">
       <div class="max-w-[88rem] mx-auto">
 
-        <!-- Section header -->
-        <div class="max-w-3xl reveal">
-          <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block" style="font-size: 11px;">LIFE AT URMI &mdash; ০২</span>
-          <h2 class="font-serif text-urmi-blue-deep mt-5" style="font-size: clamp(34px, 4.6vw, 52px); line-height: 1.05; font-weight: 600;">
-            A workplace built on <em class="italic" style="color:#4A7864;">warmth</em>, not policy.
-          </h2>
-          <p class="text-slate-text mt-4" style="font-size: 17px; line-height: 1.7;">
-            Excellence isn't sustainable if the people making it aren't safe, heard, and well. At Urmi, these aren't CSR initiatives. They're operating standards &mdash; present in every factory, every shift, every day.
-          </p>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+
+          <!-- LEFT — heading, body, small chip -->
+          <div class="lg:col-span-5 lg:sticky lg:top-32 reveal">
+            <span class="inline-flex items-center gap-1.5 border border-tide-deep/45 px-3 py-1 rounded-full font-display font-medium text-tide-deep" style="font-size: 11px;">Our story</span>
+            <h2 class="font-serif text-ink mt-6" style="font-size: clamp(36px, 5vw, 60px); line-height: 1.0; font-weight: 600; letter-spacing: -0.02em;">
+              A workplace<br>
+              built on <em class="italic" style="color:#4A7864; font-family: 'Playfair Display', serif; font-weight: 600;">warmth,</em><br>
+              not policy.
+            </h2>
+            <p class="text-slate-text mt-7 max-w-md" style="font-size: 17px; line-height: 1.7;">
+              Excellence isn't sustainable if the people making it aren't safe, heard, and well. At Urmi, these aren't CSR initiatives. They're operating standards &mdash; present in every factory, every shift, every day.
+            </p>
+          </div>
+
+          <!-- RIGHT — 4 cards stacked, with a wavy SVG connector running down the left edge -->
+          <div class="lg:col-span-7 relative">
+
+            <!-- Wavy connector — vertical SVG path along the left edge of the cards.
+                 4 nodes appear at each card's vertical centre. -->
+            <svg class="wavy-connector absolute -left-3 md:-left-6 top-0 hidden md:block pointer-events-none" width="60" height="100%" viewBox="0 0 60 800" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M30 0 C 50 80, 10 160, 30 220 C 50 280, 10 360, 30 420 C 50 480, 10 560, 30 620 C 50 680, 10 760, 30 800" fill="none" stroke="#4A7864" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.55"/>
+              <circle class="wavy-node" cx="30" cy="80"  r="6" fill="#4A7864"/>
+              <circle class="wavy-node" cx="30" cy="280" r="6" fill="#4A7864"/>
+              <circle class="wavy-node" cx="30" cy="480" r="6" fill="#4A7864"/>
+              <circle class="wavy-node" cx="30" cy="680" r="6" fill="#4A7864"/>
+            </svg>
+
+            <div class="space-y-5 md:space-y-6 lg:pl-12">
+
+              <article class="benefit-tile border border-slate-text/15 p-7 md:p-9 rounded-3xl bg-tide-mist/60 reveal" data-delay="0">
+                <div class="flex items-start justify-between gap-6">
+                  <div class="flex-1">
+                    <span class="font-display font-semibold text-tide-deep block leading-none" style="font-size: 56px;">3</span>
+                    <h3 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(22px, 2vw, 26px); font-weight: 600; line-height: 1.15;">On-site Childcare Centres</h3>
+                    <p class="text-slate-text mt-3" style="font-size: 15px; line-height: 1.6;">
+                      You shouldn't have to choose between your child and your work. Our factories have dedicated childcare facilities &mdash; because a parent who isn't worried is a colleague who can give their best.
+                    </p>
+                  </div>
+                  <span class="hidden md:flex w-12 h-12 rounded-full bg-paper border border-tide-deep/30 items-center justify-center text-tide-deep flex-shrink-0">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V11"/><path d="M5 13a7 7 0 1 1 14 0"/><circle cx="12" cy="6" r="3"/></svg>
+                  </span>
+                </div>
+              </article>
+
+              <article class="benefit-tile border border-slate-text/15 p-7 md:p-9 rounded-3xl bg-seafoam/70 reveal" data-delay="80">
+                <div class="flex items-start justify-between gap-6">
+                  <div class="flex-1">
+                    <span class="font-display font-semibold text-tide-deep block leading-none" style="font-size: 56px;">3</span>
+                    <h3 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(22px, 2vw, 26px); font-weight: 600; line-height: 1.15;">On-site Medical Centres</h3>
+                    <p class="text-slate-text mt-3" style="font-size: 15px; line-height: 1.6;">
+                      Healthcare on the factory floor. Not a policy, not a benefit &mdash; a standard. Every Urmi facility has a medical centre staffed and open every shift.
+                    </p>
+                  </div>
+                  <span class="hidden md:flex w-12 h-12 rounded-full bg-paper border border-tide-deep/30 items-center justify-center text-tide-deep flex-shrink-0">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  </span>
+                </div>
+              </article>
+
+              <article class="benefit-tile border border-slate-text/15 p-7 md:p-9 rounded-3xl bg-tide-soft/60 reveal" data-delay="160">
+                <div class="flex items-start justify-between gap-6">
+                  <div class="flex-1">
+                    <span class="font-display font-semibold text-tide-deep block leading-none" style="font-size: 56px;">100%</span>
+                    <h3 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(22px, 2vw, 26px); font-weight: 600; line-height: 1.15;">Climate-Controlled Floors</h3>
+                    <p class="text-slate-text mt-3" style="font-size: 15px; line-height: 1.6;">
+                      Every production floor is climate-controlled, well-lit, and safety-audited. BetterWork Bangladesh verified. A place you're proud to work in.
+                    </p>
+                  </div>
+                  <span class="hidden md:flex w-12 h-12 rounded-full bg-paper border border-tide-deep/30 items-center justify-center text-tide-deep flex-shrink-0">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.5 4.5l2 2M17.5 17.5l2 2M4.5 19.5l2-2M17.5 6.5l2-2"/></svg>
+                  </span>
+                </div>
+              </article>
+
+              <article class="benefit-tile border border-slate-text/15 p-7 md:p-9 rounded-3xl bg-mist/80 reveal" data-delay="240">
+                <div class="flex items-start justify-between gap-6">
+                  <div class="flex-1">
+                    <span class="font-display font-semibold text-tide-deep block leading-none" style="font-size: 56px;">48,124</span>
+                    <h3 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(22px, 2vw, 26px); font-weight: 600; line-height: 1.15;">Hours of Training in 2023&ndash;24</h3>
+                    <p class="text-slate-text mt-3" style="font-size: 15px; line-height: 1.6;">
+                      We invest in your growth because your growth is ours. From floor training to management programmes &mdash; the next chapter of your career starts here.
+                    </p>
+                  </div>
+                  <span class="hidden md:flex w-12 h-12 rounded-full bg-paper border border-tide-deep/30 items-center justify-center text-tide-deep flex-shrink-0">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l2 0 3-7 4 14 3-7 2 0"/><path d="M19 12h2"/></svg>
+                  </span>
+                </div>
+              </article>
+            </div>
+          </div>
         </div>
 
-        <!-- Four benefit tiles — 2x2 desktop, 1-col mobile -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 md:mt-16">
+        <!-- ============================================================
+             TESTIMONIALS — vertical photo strip on the left, single quote
+             on the right, with up/down arrows to cycle.
+             ============================================================ -->
+        <div class="mt-24 md:mt-32 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
 
-          <article class="benefit-tile border border-slate-text/15 p-8 md:p-10 reveal" data-delay="0">
-            <span class="font-display font-semibold text-tide-deep block leading-none" style="font-size: 48px;">3</span>
-            <h3 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(20px, 2vw, 24px); font-weight: 600; line-height: 1.15;">On-site Childcare Centres</h3>
-            <p class="text-slate-text mt-3" style="font-size: 15px; line-height: 1.6;">
-              You shouldn't have to choose between your child and your work. Our factories have dedicated childcare facilities &mdash; because a parent who isn't worried is a colleague who can give their best.
-            </p>
-          </article>
+          <!-- LEFT — vertical strip of three photos -->
+          <div class="lg:col-span-3 reveal">
+            <div class="flex flex-col gap-5 max-w-[170px] mx-auto">
+              <button type="button" class="quote-photo rounded-2xl overflow-hidden aspect-[3/4] block" data-quote-index="0" aria-label="Show testimonial 1">
+                <img src="assets/career/team-meeting.jpg" alt="Floor supervisor at FTML" loading="lazy" />
+              </button>
+              <button type="button" class="quote-photo is-active rounded-2xl overflow-hidden aspect-[3/4] block" data-quote-index="1" aria-label="Show testimonial 2">
+                <img src="assets/career/nursery.webp" alt="Senior operator with childcare" loading="lazy" />
+              </button>
+              <button type="button" class="quote-photo rounded-2xl overflow-hidden aspect-[3/4] block" data-quote-index="2" aria-label="Show testimonial 3">
+                <img src="assets/career/team-portrait-2.jpg" alt="Merchandising executive" loading="lazy" />
+              </button>
+            </div>
+          </div>
 
-          <article class="benefit-tile border border-slate-text/15 p-8 md:p-10 reveal" data-delay="80">
-            <span class="font-display font-semibold text-tide-deep block leading-none" style="font-size: 48px;">3</span>
-            <h3 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(20px, 2vw, 24px); font-weight: 600; line-height: 1.15;">On-site Medical Centres</h3>
-            <p class="text-slate-text mt-3" style="font-size: 15px; line-height: 1.6;">
-              Healthcare on the factory floor. Not a policy, not a benefit &mdash; a standard. Every Urmi facility has a medical centre staffed and open every shift.
-            </p>
-          </article>
+          <!-- CENTER — quote with quote-mark icon, divider, attribution -->
+          <div class="lg:col-span-7 reveal" data-delay="120">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-tide-deep text-paper">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M9 7H4v6h3c0 2-1 3-3 3v2c4 0 6-2 6-6V7zm11 0h-5v6h3c0 2-1 3-3 3v2c4 0 6-2 6-6V7z"/></svg>
+            </span>
 
-          <article class="benefit-tile border border-slate-text/15 p-8 md:p-10 reveal" data-delay="160">
-            <span class="font-display font-semibold text-tide-deep block leading-none" style="font-size: 48px;">100%</span>
-            <h3 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(20px, 2vw, 24px); font-weight: 600; line-height: 1.15;">Climate-Controlled Floors</h3>
-            <p class="text-slate-text mt-3" style="font-size: 15px; line-height: 1.6;">
-              Every production floor is climate-controlled, well-lit, and safety-audited. BetterWork Bangladesh verified. A place you're proud to work in.
-            </p>
-          </article>
-
-          <article class="benefit-tile border border-slate-text/15 p-8 md:p-10 reveal" data-delay="240">
-            <span class="font-display font-semibold text-tide-deep block leading-none" style="font-size: 48px;">48,124</span>
-            <h3 class="font-serif text-urmi-blue-deep mt-4" style="font-size: clamp(20px, 2vw, 24px); font-weight: 600; line-height: 1.15;">Hours of Training in 2023&ndash;24</h3>
-            <p class="text-slate-text mt-3" style="font-size: 15px; line-height: 1.6;">
-              We invest in your growth because your growth is ours. From floor training to management programmes &mdash; the next chapter of your career starts here.
-            </p>
-          </article>
-        </div>
-
-        <!-- Testimonials — 3-col desktop, 1-col mobile -->
-        <div class="mt-20 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-
-          <figure class="bg-cream p-8 reveal" data-delay="0">
-            <span class="font-serif text-wave-blue/30 block leading-none" style="font-size: 64px;">&ldquo;</span>
-            <blockquote class="font-serif italic text-urmi-blue-deep mt-2" style="font-size: 20px; line-height: 1.5;">
-              Before I joined the seamless line, I didn't know Bangladesh had this technology. Now I train new recruits. This factory gave me a skill that will stay with me everywhere I go.
-            </blockquote>
-            <hr class="border-0 border-t border-slate-text/20 my-5 w-10 m-0" />
-            <figcaption class="font-display text-slate-text/70 uppercase" style="font-size: 12px; letter-spacing: 0.1em;">Floor Supervisor &mdash; FTML Seamless Unit, Sreepur</figcaption>
-          </figure>
-
-          <figure class="bg-cream p-8 reveal" data-delay="120">
-            <span class="font-serif text-wave-blue/30 block leading-none" style="font-size: 64px;">&ldquo;</span>
-            <blockquote class="font-serif italic text-urmi-blue-deep mt-2" style="font-size: 20px; line-height: 1.5;">
+            <blockquote id="quote-text" class="quote-content font-serif text-ink mt-6" style="font-size: clamp(22px, 2.4vw, 30px); line-height: 1.45; font-weight: 500;">
               The childcare centre means I don't have to choose between my daughter and my work. She's three minutes from my sewing machine. That changes everything.
             </blockquote>
-            <hr class="border-0 border-t border-slate-text/20 my-5 w-10 m-0" />
-            <figcaption class="font-display text-slate-text/70 uppercase" style="font-size: 12px; letter-spacing: 0.1em;">Senior Operator &mdash; URMI Garments, Demra</figcaption>
-          </figure>
 
-          <figure class="bg-cream p-8 reveal" data-delay="240">
-            <span class="font-serif text-wave-blue/30 block leading-none" style="font-size: 64px;">&ldquo;</span>
-            <blockquote class="font-serif italic text-urmi-blue-deep mt-2" style="font-size: 20px; line-height: 1.5;">
-              I came as a trainee merchandiser. Within two years I was managing a buyer account. The work is real here &mdash; not assigned, not supervised. Owned.
-            </blockquote>
-            <hr class="border-0 border-t border-slate-text/20 my-5 w-10 m-0" />
-            <figcaption class="font-display text-slate-text/70 uppercase" style="font-size: 12px; letter-spacing: 0.1em;">Merchandising Executive &mdash; Corporate Office, Gulshan</figcaption>
-          </figure>
+            <hr class="border-0 border-t border-slate-text/20 my-7 w-12 m-0" />
+
+            <div class="quote-content">
+              <span id="quote-author" class="font-display font-semibold text-urmi-blue-deep block" style="font-size: 17px;">Senior Operator</span>
+              <span id="quote-role" class="font-sans text-slate-text/70 mt-1 block" style="font-size: 14px;">URMI Garments, Demra</span>
+            </div>
+          </div>
+
+          <!-- RIGHT — up/down arrow buttons -->
+          <div class="lg:col-span-2 flex lg:flex-col items-center justify-center lg:justify-end gap-4 reveal" data-delay="240">
+            <button type="button" id="quote-prev" aria-label="Previous testimonial" class="quote-arrow w-12 h-12 rounded-full border border-slate-text/30 text-slate-text flex items-center justify-center">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </button>
+            <button type="button" id="quote-next" aria-label="Next testimonial" class="quote-arrow w-12 h-12 rounded-full border border-slate-text/30 text-slate-text flex items-center justify-center">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ============================================================
-         03 — JOB BOARD (filter pills + listings + modal)
+         03 — JOB BOARD (filter pills + listings + modal) — light theme
          ============================================================ -->
-    <section id="roles" class="bg-urmi-blue-deep text-paper py-24 md:py-32 px-6 md:px-12">
+    <section id="roles" class="bg-paper py-24 md:py-32 px-6 md:px-12 border-t border-cloud">
       <div class="max-w-[88rem] mx-auto">
 
         <!-- Section header -->
         <div class="max-w-3xl reveal">
-          <span class="font-mono uppercase tracking-[0.32em] text-paper/55 block" style="font-size: 11px;">OPEN ROLES &mdash; ০৩</span>
-          <h2 class="font-serif text-paper mt-5" style="font-size: clamp(34px, 4.6vw, 52px); line-height: 1.05; font-weight: 600;">
-            Find your place in <em class="italic" style="color:#7FAA9C;">the wave</em>.
+          <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block" style="font-size: 11px;">OPEN ROLES &mdash; ০৩</span>
+          <h2 class="font-serif text-urmi-blue-deep mt-5" style="font-size: clamp(34px, 4.6vw, 52px); line-height: 1.05; font-weight: 600;">
+            Find your place in <em class="italic" style="color:#4A7864;">the wave</em>.
           </h2>
         </div>
 
         <!-- Filter bar -->
         <div class="mt-10 flex flex-wrap gap-3 reveal" data-delay="120" role="tablist" aria-label="Filter roles by department">
-          <button type="button" class="filter-pill is-active border border-paper/20 px-4 py-2 text-paper font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="ALL" aria-pressed="true">All</button>
-          <button type="button" class="filter-pill border border-paper/20 px-4 py-2 text-paper/60 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="PRODUCTION" aria-pressed="false">Production</button>
-          <button type="button" class="filter-pill border border-paper/20 px-4 py-2 text-paper/60 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="MERCHANDISING" aria-pressed="false">Merchandising</button>
-          <button type="button" class="filter-pill border border-paper/20 px-4 py-2 text-paper/60 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="DESIGN" aria-pressed="false">Design</button>
-          <button type="button" class="filter-pill border border-paper/20 px-4 py-2 text-paper/60 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="SUSTAINABILITY" aria-pressed="false">Sustainability</button>
-          <button type="button" class="filter-pill border border-paper/20 px-4 py-2 text-paper/60 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="TECHNOLOGY" aria-pressed="false">Technology</button>
-          <button type="button" class="filter-pill border border-paper/20 px-4 py-2 text-paper/60 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="MANAGEMENT" aria-pressed="false">Management</button>
+          <button type="button" class="filter-pill is-active border border-urmi-blue-deep px-4 py-2 text-paper bg-urmi-blue-deep font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="ALL" aria-pressed="true">All</button>
+          <button type="button" class="filter-pill border border-slate-text/25 px-4 py-2 text-slate-text/70 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="PRODUCTION" aria-pressed="false">Production</button>
+          <button type="button" class="filter-pill border border-slate-text/25 px-4 py-2 text-slate-text/70 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="MERCHANDISING" aria-pressed="false">Merchandising</button>
+          <button type="button" class="filter-pill border border-slate-text/25 px-4 py-2 text-slate-text/70 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="DESIGN" aria-pressed="false">Design</button>
+          <button type="button" class="filter-pill border border-slate-text/25 px-4 py-2 text-slate-text/70 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="SUSTAINABILITY" aria-pressed="false">Sustainability</button>
+          <button type="button" class="filter-pill border border-slate-text/25 px-4 py-2 text-slate-text/70 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="TECHNOLOGY" aria-pressed="false">Technology</button>
+          <button type="button" class="filter-pill border border-slate-text/25 px-4 py-2 text-slate-text/70 font-display uppercase tracking-[0.18em]" style="font-size: 11px;" data-filter="MANAGEMENT" aria-pressed="false">Management</button>
         </div>
 
         <!-- Job listings -->
         <div id="job-list" class="mt-10 reveal" data-delay="240">
 
-          <div class="job-row group flex items-center justify-between gap-6 border-b border-paper/10 py-5 cursor-pointer" data-job-id="1" data-job-dept="MERCHANDISING" tabindex="0" role="button" aria-label="View Senior Merchandiser role">
+          <div class="job-row group flex items-center justify-between gap-6 border-b border-cloud py-5 cursor-pointer" data-job-id="1" data-job-dept="MERCHANDISING" tabindex="0" role="button" aria-label="View Senior Merchandiser role">
             <div class="flex-1 min-w-0">
               <div class="flex items-center flex-wrap gap-2">
                 <span class="bg-wave-blue text-paper font-display font-semibold uppercase tracking-[0.16em] px-2 py-0.5" style="font-size: 10px;">New</span>
-                <span class="font-display text-paper" style="font-size: 18px; font-weight: 600;">Senior Merchandiser</span>
+                <span class="font-display text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">Senior Merchandiser</span>
               </div>
-              <span class="font-sans text-paper/55 mt-1.5 block" style="font-size: 13px;">Gulshan-1, Dhaka</span>
+              <span class="font-sans text-slate-text/65 mt-1.5 block" style="font-size: 13px;">Gulshan-1, Dhaka</span>
             </div>
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-              <span class="font-mono uppercase tracking-[0.18em] text-paper/45 border border-paper/15 px-3 py-1" style="font-size: 11px;">Merchandising</span>
-              <span class="font-sans text-paper/55" style="font-size: 13px;">Full-time</span>
-              <span class="job-arrow text-paper/45" aria-hidden="true">&rarr;</span>
+              <span class="font-mono uppercase tracking-[0.18em] text-slate-text/55 border border-slate-text/20 px-3 py-1" style="font-size: 11px;">Merchandising</span>
+              <span class="font-sans text-slate-text/65" style="font-size: 13px;">Full-time</span>
+              <span class="job-arrow text-slate-text/55" aria-hidden="true">&rarr;</span>
             </div>
           </div>
 
-          <div class="job-row group flex items-center justify-between gap-6 border-b border-paper/10 py-5 cursor-pointer" data-job-id="2" data-job-dept="SUSTAINABILITY" tabindex="0" role="button" aria-label="View Sustainability Manager role">
+          <div class="job-row group flex items-center justify-between gap-6 border-b border-cloud py-5 cursor-pointer" data-job-id="2" data-job-dept="SUSTAINABILITY" tabindex="0" role="button" aria-label="View Sustainability Manager role">
             <div class="flex-1 min-w-0">
               <div class="flex items-center flex-wrap gap-2">
                 <span class="bg-wave-blue text-paper font-display font-semibold uppercase tracking-[0.16em] px-2 py-0.5" style="font-size: 10px;">New</span>
-                <span class="font-display text-paper" style="font-size: 18px; font-weight: 600;">Sustainability Manager</span>
+                <span class="font-display text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">Sustainability Manager</span>
               </div>
-              <span class="font-sans text-paper/55 mt-1.5 block" style="font-size: 13px;">FTML, Sreepur, Gazipur</span>
+              <span class="font-sans text-slate-text/65 mt-1.5 block" style="font-size: 13px;">FTML, Sreepur, Gazipur</span>
             </div>
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-              <span class="font-mono uppercase tracking-[0.18em] text-paper/45 border border-paper/15 px-3 py-1" style="font-size: 11px;">Sustainability</span>
-              <span class="font-sans text-paper/55" style="font-size: 13px;">Full-time</span>
-              <span class="job-arrow text-paper/45" aria-hidden="true">&rarr;</span>
+              <span class="font-mono uppercase tracking-[0.18em] text-slate-text/55 border border-slate-text/20 px-3 py-1" style="font-size: 11px;">Sustainability</span>
+              <span class="font-sans text-slate-text/65" style="font-size: 13px;">Full-time</span>
+              <span class="job-arrow text-slate-text/55" aria-hidden="true">&rarr;</span>
             </div>
           </div>
 
-          <div class="job-row group flex items-center justify-between gap-6 border-b border-paper/10 py-5 cursor-pointer" data-job-id="3" data-job-dept="PRODUCTION" tabindex="0" role="button" aria-label="View Production Manager role">
+          <div class="job-row group flex items-center justify-between gap-6 border-b border-cloud py-5 cursor-pointer" data-job-id="3" data-job-dept="PRODUCTION" tabindex="0" role="button" aria-label="View Production Manager role">
             <div class="flex-1 min-w-0">
               <div class="flex items-center flex-wrap gap-2">
-                <span class="font-display text-paper" style="font-size: 18px; font-weight: 600;">Production Manager &mdash; Seamless Unit</span>
+                <span class="font-display text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">Production Manager &mdash; Seamless Unit</span>
               </div>
-              <span class="font-sans text-paper/55 mt-1.5 block" style="font-size: 13px;">FTML, Sreepur, Gazipur</span>
+              <span class="font-sans text-slate-text/65 mt-1.5 block" style="font-size: 13px;">FTML, Sreepur, Gazipur</span>
             </div>
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-              <span class="font-mono uppercase tracking-[0.18em] text-paper/45 border border-paper/15 px-3 py-1" style="font-size: 11px;">Production</span>
-              <span class="font-sans text-paper/55" style="font-size: 13px;">Full-time</span>
-              <span class="job-arrow text-paper/45" aria-hidden="true">&rarr;</span>
+              <span class="font-mono uppercase tracking-[0.18em] text-slate-text/55 border border-slate-text/20 px-3 py-1" style="font-size: 11px;">Production</span>
+              <span class="font-sans text-slate-text/65" style="font-size: 13px;">Full-time</span>
+              <span class="job-arrow text-slate-text/55" aria-hidden="true">&rarr;</span>
             </div>
           </div>
 
-          <div class="job-row group flex items-center justify-between gap-6 border-b border-paper/10 py-5 cursor-pointer" data-job-id="4" data-job-dept="DESIGN" tabindex="0" role="button" aria-label="View Fashion Designer role">
+          <div class="job-row group flex items-center justify-between gap-6 border-b border-cloud py-5 cursor-pointer" data-job-id="4" data-job-dept="DESIGN" tabindex="0" role="button" aria-label="View Fashion Designer role">
             <div class="flex-1 min-w-0">
               <div class="flex items-center flex-wrap gap-2">
-                <span class="font-display text-paper" style="font-size: 18px; font-weight: 600;">Fashion Designer &mdash; In-house Studio</span>
+                <span class="font-display text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">Fashion Designer &mdash; In-house Studio</span>
               </div>
-              <span class="font-sans text-paper/55 mt-1.5 block" style="font-size: 13px;">Gulshan-1, Dhaka</span>
+              <span class="font-sans text-slate-text/65 mt-1.5 block" style="font-size: 13px;">Gulshan-1, Dhaka</span>
             </div>
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-              <span class="font-mono uppercase tracking-[0.18em] text-paper/45 border border-paper/15 px-3 py-1" style="font-size: 11px;">Design</span>
-              <span class="font-sans text-paper/55" style="font-size: 13px;">Full-time</span>
-              <span class="job-arrow text-paper/45" aria-hidden="true">&rarr;</span>
+              <span class="font-mono uppercase tracking-[0.18em] text-slate-text/55 border border-slate-text/20 px-3 py-1" style="font-size: 11px;">Design</span>
+              <span class="font-sans text-slate-text/65" style="font-size: 13px;">Full-time</span>
+              <span class="job-arrow text-slate-text/55" aria-hidden="true">&rarr;</span>
             </div>
           </div>
 
-          <div class="job-row group flex items-center justify-between gap-6 border-b border-paper/10 py-5 cursor-pointer" data-job-id="5" data-job-dept="TECHNOLOGY" tabindex="0" role="button" aria-label="View RFID & Digital Systems Specialist role">
+          <div class="job-row group flex items-center justify-between gap-6 border-b border-cloud py-5 cursor-pointer" data-job-id="5" data-job-dept="TECHNOLOGY" tabindex="0" role="button" aria-label="View RFID & Digital Systems Specialist role">
             <div class="flex-1 min-w-0">
               <div class="flex items-center flex-wrap gap-2">
-                <span class="font-display text-paper" style="font-size: 18px; font-weight: 600;">RFID &amp; Digital Systems Specialist</span>
+                <span class="font-display text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">RFID &amp; Digital Systems Specialist</span>
               </div>
-              <span class="font-sans text-paper/55 mt-1.5 block" style="font-size: 13px;">FTML, Sreepur, Gazipur</span>
+              <span class="font-sans text-slate-text/65 mt-1.5 block" style="font-size: 13px;">FTML, Sreepur, Gazipur</span>
             </div>
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-              <span class="font-mono uppercase tracking-[0.18em] text-paper/45 border border-paper/15 px-3 py-1" style="font-size: 11px;">Technology</span>
-              <span class="font-sans text-paper/55" style="font-size: 13px;">Full-time</span>
-              <span class="job-arrow text-paper/45" aria-hidden="true">&rarr;</span>
+              <span class="font-mono uppercase tracking-[0.18em] text-slate-text/55 border border-slate-text/20 px-3 py-1" style="font-size: 11px;">Technology</span>
+              <span class="font-sans text-slate-text/65" style="font-size: 13px;">Full-time</span>
+              <span class="job-arrow text-slate-text/55" aria-hidden="true">&rarr;</span>
             </div>
           </div>
 
-          <div class="job-row group flex items-center justify-between gap-6 border-b border-paper/10 py-5 cursor-pointer" data-job-id="6" data-job-dept="PRODUCTION" tabindex="0" role="button" aria-label="View Quality Assurance Officer role">
+          <div class="job-row group flex items-center justify-between gap-6 border-b border-cloud py-5 cursor-pointer" data-job-id="6" data-job-dept="PRODUCTION" tabindex="0" role="button" aria-label="View Quality Assurance Officer role">
             <div class="flex-1 min-w-0">
               <div class="flex items-center flex-wrap gap-2">
-                <span class="font-display text-paper" style="font-size: 18px; font-weight: 600;">Quality Assurance Officer</span>
+                <span class="font-display text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">Quality Assurance Officer</span>
               </div>
-              <span class="font-sans text-paper/55 mt-1.5 block" style="font-size: 13px;">UHM, Siddhirganj, Narayanganj</span>
+              <span class="font-sans text-slate-text/65 mt-1.5 block" style="font-size: 13px;">UHM, Siddhirganj, Narayanganj</span>
             </div>
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-              <span class="font-mono uppercase tracking-[0.18em] text-paper/45 border border-paper/15 px-3 py-1" style="font-size: 11px;">Production</span>
-              <span class="font-sans text-paper/55" style="font-size: 13px;">Full-time</span>
-              <span class="job-arrow text-paper/45" aria-hidden="true">&rarr;</span>
+              <span class="font-mono uppercase tracking-[0.18em] text-slate-text/55 border border-slate-text/20 px-3 py-1" style="font-size: 11px;">Production</span>
+              <span class="font-sans text-slate-text/65" style="font-size: 13px;">Full-time</span>
+              <span class="job-arrow text-slate-text/55" aria-hidden="true">&rarr;</span>
             </div>
           </div>
 
-          <div class="job-row group flex items-center justify-between gap-6 border-b border-paper/10 py-5 cursor-pointer" data-job-id="7" data-job-dept="MANAGEMENT" tabindex="0" role="button" aria-label="View HR Business Partner role">
+          <div class="job-row group flex items-center justify-between gap-6 border-b border-cloud py-5 cursor-pointer" data-job-id="7" data-job-dept="MANAGEMENT" tabindex="0" role="button" aria-label="View HR Business Partner role">
             <div class="flex-1 min-w-0">
               <div class="flex items-center flex-wrap gap-2">
-                <span class="font-display text-paper" style="font-size: 18px; font-weight: 600;">HR Business Partner</span>
+                <span class="font-display text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">HR Business Partner</span>
               </div>
-              <span class="font-sans text-paper/55 mt-1.5 block" style="font-size: 13px;">Gulshan-1, Dhaka</span>
+              <span class="font-sans text-slate-text/65 mt-1.5 block" style="font-size: 13px;">Gulshan-1, Dhaka</span>
             </div>
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-              <span class="font-mono uppercase tracking-[0.18em] text-paper/45 border border-paper/15 px-3 py-1" style="font-size: 11px;">Management</span>
-              <span class="font-sans text-paper/55" style="font-size: 13px;">Full-time</span>
-              <span class="job-arrow text-paper/45" aria-hidden="true">&rarr;</span>
+              <span class="font-mono uppercase tracking-[0.18em] text-slate-text/55 border border-slate-text/20 px-3 py-1" style="font-size: 11px;">Management</span>
+              <span class="font-sans text-slate-text/65" style="font-size: 13px;">Full-time</span>
+              <span class="job-arrow text-slate-text/55" aria-hidden="true">&rarr;</span>
             </div>
           </div>
 
-          <div class="job-row group flex items-center justify-between gap-6 border-b border-paper/10 py-5 cursor-pointer" data-job-id="8" data-job-dept="SUSTAINABILITY" tabindex="0" role="button" aria-label="View ETP Plant Operator role">
+          <div class="job-row group flex items-center justify-between gap-6 border-b border-cloud py-5 cursor-pointer" data-job-id="8" data-job-dept="SUSTAINABILITY" tabindex="0" role="button" aria-label="View ETP Plant Operator role">
             <div class="flex-1 min-w-0">
               <div class="flex items-center flex-wrap gap-2">
-                <span class="font-display text-paper" style="font-size: 18px; font-weight: 600;">ETP Plant Operator</span>
+                <span class="font-display text-urmi-blue-deep" style="font-size: 18px; font-weight: 600;">ETP Plant Operator</span>
               </div>
-              <span class="font-sans text-paper/55 mt-1.5 block" style="font-size: 13px;">FTML, Sreepur, Gazipur</span>
+              <span class="font-sans text-slate-text/65 mt-1.5 block" style="font-size: 13px;">FTML, Sreepur, Gazipur</span>
             </div>
             <div class="hidden md:flex items-center gap-6 flex-shrink-0">
-              <span class="font-mono uppercase tracking-[0.18em] text-paper/45 border border-paper/15 px-3 py-1" style="font-size: 11px;">Sustainability</span>
-              <span class="font-sans text-paper/55" style="font-size: 13px;">Full-time</span>
-              <span class="job-arrow text-paper/45" aria-hidden="true">&rarr;</span>
+              <span class="font-mono uppercase tracking-[0.18em] text-slate-text/55 border border-slate-text/20 px-3 py-1" style="font-size: 11px;">Sustainability</span>
+              <span class="font-sans text-slate-text/65" style="font-size: 13px;">Full-time</span>
+              <span class="job-arrow text-slate-text/55" aria-hidden="true">&rarr;</span>
             </div>
           </div>
         </div>
 
         <!-- Empty state — shown when no roles match the active filter -->
         <div id="job-empty" class="hidden mt-16 text-center max-w-xl mx-auto">
-          <p class="font-serif italic text-paper/40" style="font-size: 22px; line-height: 1.4;">
+          <p class="font-serif italic text-slate-text/55" style="font-size: 22px; line-height: 1.4;">
             No open roles in this department right now.<br>
-            Send your CV anyway &mdash; <a href="mailto:careers@urmigroup.com" class="underline decoration-1 underline-offset-4 text-paper/70 hover:text-wave-blue-bright transition-colors">careers@urmigroup.com</a>
+            Send your CV anyway &mdash; <a href="mailto:careers@urmigroup.com" class="underline decoration-1 underline-offset-4 text-urmi-blue-deep hover:text-tide-deep transition-colors">careers@urmigroup.com</a>
           </p>
         </div>
       </div>
@@ -628,17 +780,113 @@
           pill.addEventListener('click', function(){
             filterPills.forEach(function(p){
               p.classList.remove('is-active');
+              // strip inline tailwind colour classes so CSS .filter-pill rules win
               p.classList.remove('text-paper');
-              p.classList.add('text-paper/60');
+              p.classList.remove('bg-urmi-blue-deep');
+              p.classList.remove('border-urmi-blue-deep');
+              if (!p.classList.contains('text-slate-text/70')) {
+                p.classList.add('text-slate-text/70');
+              }
+              if (!p.classList.contains('border-slate-text/25')) {
+                p.classList.add('border-slate-text/25');
+              }
               p.setAttribute('aria-pressed', 'false');
             });
             pill.classList.add('is-active');
-            pill.classList.remove('text-paper/60');
             pill.classList.add('text-paper');
+            pill.classList.add('bg-urmi-blue-deep');
+            pill.classList.add('border-urmi-blue-deep');
+            pill.classList.remove('text-slate-text/70');
+            pill.classList.remove('border-slate-text/25');
             pill.setAttribute('aria-pressed', 'true');
             applyFilter(pill.getAttribute('data-filter'));
           });
         });
+      })();
+
+      // Wavy connector — draw the SVG path in once the Life-at-Urmi section enters view
+      (function(){
+        var connector = document.querySelector('.wavy-connector');
+        if (!connector) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          connector.classList.add('is-drawn');
+          return;
+        }
+        if (!('IntersectionObserver' in window)) {
+          connector.classList.add('is-drawn');
+          return;
+        }
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){
+            if (e.isIntersecting) {
+              connector.classList.add('is-drawn');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.25 });
+        io.observe(connector);
+      })();
+
+      // Testimonial cycle — clicking a photo OR an arrow advances/retreats the active quote
+      (function(){
+        var quotes = [
+          {
+            text: "Before I joined the seamless line, I didn't know Bangladesh had this technology. Now I train new recruits. This factory gave me a skill that will stay with me everywhere I go.",
+            author: 'Floor Supervisor',
+            role: 'FTML Seamless Unit, Sreepur'
+          },
+          {
+            text: "The childcare centre means I don't have to choose between my daughter and my work. She's three minutes from my sewing machine. That changes everything.",
+            author: 'Senior Operator',
+            role: 'URMI Garments, Demra'
+          },
+          {
+            text: "I came as a trainee merchandiser. Within two years I was managing a buyer account. The work is real here — not assigned, not supervised. Owned.",
+            author: 'Merchandising Executive',
+            role: 'Corporate Office, Gulshan'
+          }
+        ];
+        var photos = document.querySelectorAll('.quote-photo');
+        var quoteText = document.getElementById('quote-text');
+        var authorEl = document.getElementById('quote-author');
+        var roleEl = document.getElementById('quote-role');
+        var prevBtn = document.getElementById('quote-prev');
+        var nextBtn = document.getElementById('quote-next');
+        var current = 1; // initial active = index 1 (matches markup)
+
+        function render(index, animate){
+          if (index < 0) index = quotes.length - 1;
+          if (index >= quotes.length) index = 0;
+          var q = quotes[index];
+
+          photos.forEach(function(p, i){
+            p.classList.toggle('is-active', i === index);
+          });
+
+          if (animate) {
+            var contents = document.querySelectorAll('.quote-content');
+            contents.forEach(function(c){ c.classList.add('is-leaving'); });
+            setTimeout(function(){
+              quoteText.textContent = q.text;
+              authorEl.textContent = q.author;
+              roleEl.textContent = q.role;
+              contents.forEach(function(c){ c.classList.remove('is-leaving'); });
+            }, 220);
+          } else {
+            quoteText.textContent = q.text;
+            authorEl.textContent = q.author;
+            roleEl.textContent = q.role;
+          }
+          current = index;
+        }
+
+        photos.forEach(function(p){
+          p.addEventListener('click', function(){
+            render(parseInt(p.getAttribute('data-quote-index'), 10), true);
+          });
+        });
+        if (prevBtn) prevBtn.addEventListener('click', function(){ render(current - 1, true); });
+        if (nextBtn) nextBtn.addEventListener('click', function(){ render(current + 1, true); });
       })();
 
       // Job modal — opens on row click/Enter, populates content from data-* + DOM, supports Escape and focus restore
@@ -655,7 +903,8 @@
         var lastTrigger = null;
 
         function openWith(row){
-          var title = row.querySelector('.font-display.text-paper').textContent.trim();
+          var titleEl = row.querySelector('.font-display.text-urmi-blue-deep') || row.querySelector('.font-display.text-paper');
+          var title = titleEl ? titleEl.textContent.trim() : '';
           var location = row.querySelectorAll('.font-sans')[0].textContent.trim();
           var dept = row.getAttribute('data-job-dept');
           var deptLabel = (dept || '').charAt(0) + (dept || '').slice(1).toLowerCase();
