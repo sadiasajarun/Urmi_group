@@ -149,7 +149,7 @@
           <a href="career.html" class="px-3 py-1.5 rounded-full hover:bg-paper/10 hover:text-paper transition-colors">Career</a>
           <a href="connect.html" class="ml-1 px-4 py-1.5 rounded-full bg-paper text-urmi-blue-deep hover:bg-wave-blue hover:text-paper transition-colors">Connect</a>
         </div>
-        <button type="button" aria-label="Open menu" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
+        <button type="button" data-mobile-open aria-label="Open menu" aria-controls="mobile-nav-drawer" class="lg:hidden p-1.5 rounded-full hover:bg-paper/10 transition-colors text-paper">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
       </div>
@@ -157,13 +157,13 @@
 
     <!-- Floating action chips (top-right) -->
     <div class="fixed top-4 md:top-6 right-4 md:right-6 z-50 flex items-center gap-2" aria-label="Quick actions">
-      <a href="index.html#factories" data-factory-visit class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+      <a href="index.html#factories" data-factory-visit class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 xl:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l5-3v3l5-3v3l5-3v15"/><path d="M3 21h18"/><path d="M9 21v-4M14 21v-4"/></svg>
-        <span class="hidden lg:inline">Visit Factory</span>
+        <span class="hidden xl:inline">Visit Factory</span>
       </a>
-      <a href="connect.html" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 lg:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
+      <a href="connect.html" class="inline-flex items-center gap-2 bg-urmi-blue-deep/80 backdrop-blur-md rounded-full px-3 xl:px-4 py-2 text-paper font-display font-semibold text-[10px] md:text-[11px] uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v5h5"/><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5z"/><path d="M9 13h6M9 17h4"/></svg>
-        <span class="hidden lg:inline">Request Quote</span>
+        <span class="hidden xl:inline">Request Quote</span>
       </a>
       <button type="button" aria-label="Search" class="inline-flex items-center justify-center bg-urmi-blue-deep/80 backdrop-blur-md rounded-full p-2.5 text-paper shadow-[0_8px_20px_rgba(6,21,40,0.30)] border border-paper/15 hover:bg-paper hover:text-urmi-blue-deep transition-colors">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
@@ -815,6 +815,56 @@
         document.querySelectorAll('[data-factory-close]').forEach(function(el){ el.addEventListener('click', closeModal); });
         document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
         if (form) { form.addEventListener('submit', function(e){ e.preventDefault(); form.classList.add('hidden'); if (success) success.classList.remove('hidden'); }); }
+      })();
+    </script>
+    <!-- ============================================================
+         MOBILE NAV DRAWER (slides in from right on <lg)
+         ============================================================ -->
+    <div id="mobile-nav-drawer" class="hidden fixed inset-0 z-[80] lg:hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+      <button type="button" data-mobile-close aria-label="Close menu" class="absolute inset-0 bg-urmi-blue-deep/85 backdrop-blur-sm cursor-default"></button>
+      <aside class="relative ml-auto h-full w-full max-w-sm bg-paper p-7 sm:p-9 pt-20 sm:pt-24 overflow-y-auto shadow-[-12px_0_40px_rgba(6,21,40,0.30)]">
+        <button type="button" data-mobile-close aria-label="Close" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-tide-mist hover:bg-cloud transition-colors flex items-center justify-center text-urmi-blue-deep">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+        </button>
+        <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block" style="font-size: 11px;">// MENU</span>
+        <nav class="mt-6" aria-label="Primary mobile">
+          <a href="index.html" class="block py-3.5 border-b border-cloud font-display font-semibold text-urmi-blue-deep uppercase tracking-[0.16em] hover:text-tide-deep transition-colors" style="font-size: 14px;">Home</a>
+          <a href="about.html" class="block py-3.5 border-b border-cloud font-display font-semibold text-urmi-blue-deep uppercase tracking-[0.16em] hover:text-tide-deep transition-colors" style="font-size: 14px;">About</a>
+          <a href="index.html#craft" class="block py-3.5 border-b border-cloud font-display font-semibold text-urmi-blue-deep uppercase tracking-[0.16em] hover:text-tide-deep transition-colors" style="font-size: 14px;">Craft</a>
+          <a href="portfolio.html" class="block py-3.5 border-b border-cloud font-display font-semibold text-urmi-blue-deep uppercase tracking-[0.16em] hover:text-tide-deep transition-colors" style="font-size: 14px;">Portfolio</a>
+          <a href="sustainability.html" class="block py-3.5 border-b border-cloud font-display font-semibold text-urmi-blue-deep uppercase tracking-[0.16em] hover:text-tide-deep transition-colors" style="font-size: 14px;">Sustainability</a>
+          <a href="career.html" class="block py-3.5 border-b border-cloud font-display font-semibold text-urmi-blue-deep uppercase tracking-[0.16em] hover:text-tide-deep transition-colors" style="font-size: 14px;">Career</a>
+        </nav>
+        <a href="connect.html" class="mt-7 inline-flex items-center justify-center gap-2 bg-urmi-blue-deep text-paper px-6 py-3.5 rounded-full font-display font-semibold uppercase tracking-[0.18em] hover:bg-urmi-blue transition-colors w-full" style="font-size: 12px;">
+          Connect
+          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <hr class="border-0 border-t border-cloud my-7" />
+        <span class="font-mono uppercase tracking-[0.32em] text-tide-deep block" style="font-size: 11px;">// QUICK ACTIONS</span>
+        <div class="mt-4 space-y-1">
+          <a href="index.html#factories" data-factory-visit class="flex items-center gap-3 py-3 text-urmi-blue-deep hover:text-tide-deep transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l5-3v3l5-3v3l5-3v15"/><path d="M3 21h18"/><path d="M9 21v-4M14 21v-4"/></svg>
+            <span class="font-display font-semibold uppercase tracking-[0.18em]" style="font-size: 12px;">Visit Factory</span>
+          </a>
+          <a href="connect.html" class="flex items-center gap-3 py-3 text-urmi-blue-deep hover:text-tide-deep transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v5h5"/><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5z"/><path d="M9 13h6M9 17h4"/></svg>
+            <span class="font-display font-semibold uppercase tracking-[0.18em]" style="font-size: 12px;">Request Quote</span>
+          </a>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      // Mobile nav drawer
+      (function(){
+        var drawer = document.getElementById('mobile-nav-drawer');
+        if (!drawer) return;
+        var openBtn = document.querySelector('[data-mobile-open]');
+        function openDrawer(){ drawer.classList.remove('hidden'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden'; }
+        function closeDrawer(){ drawer.classList.add('hidden'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }
+        if (openBtn) openBtn.addEventListener('click', openDrawer);
+        drawer.querySelectorAll('[data-mobile-close]').forEach(function(b){ b.addEventListener('click', closeDrawer); });
+        document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !drawer.classList.contains('hidden')) closeDrawer(); });
       })();
     </script>
 
